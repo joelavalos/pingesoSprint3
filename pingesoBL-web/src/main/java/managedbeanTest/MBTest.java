@@ -6,6 +6,7 @@
 
 package managedbeanTest;
 
+import entities.Consulta;
 import entities.Episodios;
 import entities.Paciente;
 import entities.RegistroClinico;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import sessionbeans.ConsultaFacadeLocal;
 import sessionbeans.EpisodiosFacadeLocal;
 import sessionbeans.PacienteFacadeLocal;
 import sessionbeans.PersonaFacadeLocal;
@@ -26,6 +28,8 @@ import sessionbeans.RegistroClinicoFacadeLocal;
 @ViewScoped
 public class MBTest {
     @EJB
+    private ConsultaFacadeLocal consultaFacade;
+    @EJB
     private EpisodiosFacadeLocal episodiosFacade;
     @EJB
     private RegistroClinicoFacadeLocal registroClinicoFacade;
@@ -37,6 +41,7 @@ public class MBTest {
     private List<Paciente> searchPaciente;
     private List<RegistroClinico> searchRegistroClinico;
     private List<Episodios> searchEpisode;
+    private List<Consulta> searchConsultas;
 
     private Integer PersonId;
     private String PersonRut = "69727697";
@@ -55,6 +60,9 @@ public class MBTest {
         System.out.println("Id registro clinico: " + searchRegistroClinico.get(0).getRegistroclinicoid());
         searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
         System.out.println("Id del episodio: " + searchEpisode.get(0).getEpisodioid());
+        searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
+        System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");
+        
     }
 
     public Integer getPersonId() {
@@ -96,4 +104,13 @@ public class MBTest {
     public void setSearchEpisode(List<Episodios> searchEpisode) {
         this.searchEpisode = searchEpisode;
     }
+
+    public List<Consulta> getSearchConsultas() {
+        return searchConsultas;
+    }
+
+    public void setSearchConsultas(List<Consulta> searchConsultas) {
+        this.searchConsultas = searchConsultas;
+    }
+    
 }

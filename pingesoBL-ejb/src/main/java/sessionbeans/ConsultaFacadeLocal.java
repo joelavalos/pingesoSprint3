@@ -7,6 +7,7 @@
 package sessionbeans;
 
 import entities.Consulta;
+import entities.Episodios;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,5 +31,7 @@ public interface ConsultaFacadeLocal {
     List<Consulta> findRange(int[] range);
 
     int count();
+
+    List<Consulta> searchByEpisodio(Episodios episodio);
     
 }

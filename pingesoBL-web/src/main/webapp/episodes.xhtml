@@ -19,16 +19,17 @@
                     <p:outputLabel value="Nombre del Paciente:"/>
                     <p:outputLabel value="#{episodes.name}" id="namePatientDE" style="font-weight: bold;"/>
                     <p:outputLabel for="IDEpisodeDE" value="Episodio:" />
-                    <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.episode}" >
-                        <f:selectItems value="#{episodes.episodes}" />
+                    <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.searchEpisode}" >
+                        <f:selectItems itemLabel="Seleccione" itemValue=""/>
+                        <f:selectItems value="#{episodes.searchEpisode}" var="epi"  itemLabel="#{epi.episodioid}" itemValue="#{epi}" />
                     </p:selectOneMenu>
                 </p:panelGrid>
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
                         <p:column>
                             <p:commandButton value="Consulta" icon="ui-icon-plusthick"  />
-                            <p:commandButton value="Ver Consultas" icon="ui-icon-search" update="adsf" onclick="PF('viewEpisodes').show();" >
-                                <f:setPropertyActionListener value="#{episodes.episode}" target="#{viewEpisodes.idEpisode}" />                             
+                            <p:commandButton value="Ver Consultas" icon="ui-icon-search" onclick="PF('viewEpisodes').show();" >
+                                <f:setPropertyActionListener value="#{epi}" target="#{viewEpisodes.episode}" />                             
                             </p:commandButton>
                         </p:column>
                     </p:row>
@@ -44,8 +45,8 @@
                 </p:panelGrid>
                 <br/>
                 <p:panelGrid styleClass="panelGridForm" columns="1">
-                    <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" selectionMode="single" 
-                                 selection="#{viewEpisodes.consultation}" rowKey="consultation"
+                    <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" 
+                                
                                  emptyMessage="No se registran consultas"
                                  filteredValue="#{viewEpisodes.filterConsultations}">
                         <f:facet name="header">

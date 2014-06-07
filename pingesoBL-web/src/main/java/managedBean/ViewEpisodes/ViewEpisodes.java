@@ -7,42 +7,49 @@
 package managedBean.ViewEpisodes;
 
 import entities.Consulta;
+import entities.Episodios;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import sessionbeans.ConsultaFacadeLocal;
 
 /**
  *
  * @author Gustavo Salvo Lara
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class ViewEpisodes {
-    private int idEpisode;
+    @EJB
+    private ConsultaFacadeLocal consultationFacade;
+    
+    private Episodios episode;
     private List<Consulta> consultations;
     private List<Consulta> filterConsultations;
     private Consulta consultation;
     
    @PostConstruct
     public void init(){
-        Date a= new Date();
-        Consulta aux1 = new Consulta(1, "paciente grave",a , false, false, "le dolia un pelo");
-        Consulta aux2 = new Consulta(1, "paciente grave2",a , false, false, "le dolia un pelo2");
-        consultations = new ArrayList<Consulta>();
-        consultations.add(aux1);
-        consultations.add(aux2);
+        consultations = consultationFacade.searchByEpisodio(episode);
+//        Date a= new Date();
+//        Consulta aux1 = new Consulta(1, "paciente grave",a , false, false, "le dolia un pelo");
+//        Consulta aux2 = new Consulta(1, "paciente grave2",a , false, false, "le dolia un pelo2");
+//        
+//        consultations.add(aux1);
+//        consultations.add(aux2);
     }
 
-    public int getIdEpisode() {
-        return idEpisode;
+    public Episodios getEpisode() {
+        return episode;
     }
 
-    public void setIdEpisode(int idEpisode) {
-        this.idEpisode = idEpisode;
-    }
+    public void setEpisode(Episodios episode) {
+        this.episode = episode;
+    }   
     
     public List<Consulta> getFilterConsultations() {
         return filterConsultations;

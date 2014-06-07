@@ -21,14 +21,16 @@
                     <p:outputLabel for="IDEpisodeDE" value="Episodio:" />
                     <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.episode}" >
                         <f:selectItems value="#{episodes.episodes}" />
+                        <p:ajax event="change" process="@this" listener="#{episodes.selectEpisode}"/>
                     </p:selectOneMenu>
                 </p:panelGrid>
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
                         <p:column>
                             <p:commandButton value="Consulta" icon="ui-icon-plusthick"  />
-                            <p:commandButton value="Ver Consultas" icon="ui-icon-search" update="adsf" onclick="PF('viewEpisodes').show();" >
-                                <f:setPropertyActionListener value="#{episodes.episode}" target="#{viewEpisodes.idEpisode}" />                             
+                            <p:commandButton value="Ver Consultas" icon="ui-icon-search" onclick="PF('viewEpisodes').show();" 
+                                             actionListener="#{viewEpisodes.loadConsultation}" update="viewConsultationsVE">
+                                <f:setPropertyActionListener value="#{episodes.episodeSelected}" target="#{viewEpisodes.episodeSelected}" />                             
                             </p:commandButton>
                         </p:column>
                     </p:row>
@@ -44,8 +46,8 @@
                 </p:panelGrid>
                 <br/>
                 <p:panelGrid styleClass="panelGridForm" columns="1">
-                    <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" selectionMode="single" 
-                                 selection="#{viewEpisodes.consultation}" rowKey="consultation"
+                    <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" 
+                                 selectionMode="single" selection="#{viewEpisodes.consultation}" rowKey="consultation"
                                  emptyMessage="No se registran consultas"
                                  filteredValue="#{viewEpisodes.filterConsultations}">
                         <f:facet name="header">

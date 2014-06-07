@@ -46,6 +46,7 @@ public class Episodes {
     private String rut;
     private String name;    
     private int episode;
+    private Episodios episodeSelected;
     private Map<String,String> episodes = new HashMap<String,String>();
     
     @PostConstruct
@@ -66,6 +67,25 @@ public class Episodes {
         }
     }
 
+    public void selectEpisode(){
+        for(int i=0; i<searchEpisode.size();i++){
+            if(searchEpisode.get(i).getEpisodioid() == episode){
+                episodeSelected = searchEpisode.get(i);
+                break;
+            }
+        }
+    }
+
+    public Episodios getEpisodeSelected() {
+        return episodeSelected;
+    }
+
+    public void setEpisodeSelected(Episodios episodeSelected) {
+        this.episodeSelected = episodeSelected;
+    }
+    
+    
+    
     public Map<String, String> getEpisodes() {
         return episodes;
     }
@@ -90,8 +110,4 @@ public class Episodes {
     public void setEpisode(int episode) {
         this.episode = episode;
     }
-    
-    
-    
-   
 }

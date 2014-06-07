@@ -7,9 +7,11 @@
 package sessionbeans;
 
 import entities.Persona;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +30,18 @@ public class PersonaFacade extends AbstractFacade<Persona> implements PersonaFac
     public PersonaFacade() {
         super(Persona.class);
     }
+
+    @Override
+    public Integer findByRut(String rut) {
+        List<Persona> searchPerson;
+        Query query;
+        query = em.createNamedQuery("Persona.findByPersRut").
+                setParameter("persRut", rut);
+        
+        searchPerson = query.getResultList();
+        
+        return searchPerson.get(0).getIdPersona();
+    }
+    
     
 }

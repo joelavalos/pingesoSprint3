@@ -30,5 +30,7 @@ public interface PersonaFacadeLocal {
     List<Persona> findRange(int[] range);
 
     int count();
+
+    Integer findByRut(String rut);
     
 }

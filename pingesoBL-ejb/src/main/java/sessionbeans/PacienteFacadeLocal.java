@@ -30,5 +30,7 @@ public interface PacienteFacadeLocal {
     List<Paciente> findRange(int[] range);
 
     int count();
+
+    List<Paciente> searchByPerson(int idPersona);
     
 }

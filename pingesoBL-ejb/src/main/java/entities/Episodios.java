@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entities;
 
 import java.io.Serializable;
@@ -33,8 +32,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Episodios.findAll", query = "SELECT e FROM Episodios e"),
-    @NamedQuery(name = "Episodios.findByEpisodioid", query = "SELECT e FROM Episodios e WHERE e.episodioid = :episodioid")})
+    @NamedQuery(name = "Episodios.findByEpisodioid", query = "SELECT e FROM Episodios e WHERE e.episodioid = :episodioid"),
+    @NamedQuery(name = "Episodios.findByRegistroClinico", query = "SELECT e FROM Episodios e WHERE e.registroclinicoid = :registroclinicoid")})
 public class Episodios implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -103,5 +104,5 @@ public class Episodios implements Serializable {
     public String toString() {
         return "entities.Episodios[ episodioid=" + episodioid + " ]";
     }
-    
+
 }

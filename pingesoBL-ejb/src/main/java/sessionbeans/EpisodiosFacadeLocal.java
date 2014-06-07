@@ -7,6 +7,7 @@
 package sessionbeans;
 
 import entities.Episodios;
+import entities.RegistroClinico;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,5 +31,7 @@ public interface EpisodiosFacadeLocal {
     List<Episodios> findRange(int[] range);
 
     int count();
+
+    List<Episodios> searchByClinicalRegister(RegistroClinico registroClinico);
     
 }

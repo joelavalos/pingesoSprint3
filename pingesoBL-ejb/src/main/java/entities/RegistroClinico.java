@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entities;
 
 import java.io.Serializable;
@@ -38,8 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "RegistroClinico.findAll", query = "SELECT r FROM RegistroClinico r"),
     @NamedQuery(name = "RegistroClinico.findByRegistroclinicoid", query = "SELECT r FROM RegistroClinico r WHERE r.registroclinicoid = :registroclinicoid"),
-    @NamedQuery(name = "RegistroClinico.findByRegistrofecha", query = "SELECT r FROM RegistroClinico r WHERE r.registrofecha = :registrofecha")})
+    @NamedQuery(name = "RegistroClinico.findByRegistrofecha", query = "SELECT r FROM RegistroClinico r WHERE r.registrofecha = :registrofecha"),
+    @NamedQuery(name = "RegistroClinico.findByPaciente", query = "SELECT r FROM RegistroClinico r WHERE r.idPersona = :idPersona")})
 public class RegistroClinico implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -126,5 +127,5 @@ public class RegistroClinico implements Serializable {
     public String toString() {
         return "entities.RegistroClinico[ registroclinicoid=" + registroclinicoid + " ]";
     }
-    
+
 }

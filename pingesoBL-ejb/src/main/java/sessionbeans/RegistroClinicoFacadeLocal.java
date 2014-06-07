@@ -6,6 +6,7 @@
 
 package sessionbeans;
 
+import entities.Paciente;
 import entities.RegistroClinico;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,5 +31,7 @@ public interface RegistroClinicoFacadeLocal {
     List<RegistroClinico> findRange(int[] range);
 
     int count();
+
+    List<RegistroClinico> searchByPaciente(Paciente idPaciente);
     
 }

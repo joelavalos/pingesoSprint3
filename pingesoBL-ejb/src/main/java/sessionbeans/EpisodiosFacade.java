@@ -7,9 +7,12 @@
 package sessionbeans;
 
 import entities.Episodios;
+import entities.RegistroClinico;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +31,15 @@ public class EpisodiosFacade extends AbstractFacade<Episodios> implements Episod
     public EpisodiosFacade() {
         super(Episodios.class);
     }
+
+    @Override
+    public List<Episodios> searchByClinicalRegister(RegistroClinico registroClinico) {
+        Query query;
+        query = em.createNamedQuery("Episodios.findByRegistroClinico").
+                setParameter("registroclinicoid", registroClinico);
+        
+        return query.getResultList();
+    }
+    
     
 }

@@ -45,7 +45,9 @@ public class Episodes {
     
     private String rut;
     private String name;    
-    private Episodes episode;
+    private int episode;
+    private Episodios episodeSelected;
+    private Map<String,String> episodes = new HashMap<String,String>();
     
     @PostConstruct
     public void init(){
@@ -56,10 +58,40 @@ public class Episodes {
         searchEpisode = episodesFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
         name = searchPatient.get(0).getPersona().getPersNombres() +" "+searchPatient.get(0).getPersona().getPersApepaterno() 
                 +" "+searchPatient.get(0).getPersona().getPersApematerno();
-                        
+        
+        episodes = new HashMap<String,String>();
+        episodes.put("Seleccione", "");
+        for(int i= 0; i<searchEpisode.size(); i++){
+            String aux = searchEpisode.get(i).getEpisodioid().toString();
+            episodes.put(aux, aux);
+        }
     }
 
+    public void selectEpisode(){
+        for(int i=0; i<searchEpisode.size();i++){
+            if(searchEpisode.get(i).getEpisodioid() == episode){
+                episodeSelected = searchEpisode.get(i);
+                break;
+            }
+        }
+    }
+
+    public Episodios getEpisodeSelected() {
+        return episodeSelected;
+    }
+
+    public void setEpisodeSelected(Episodios episodeSelected) {
+        this.episodeSelected = episodeSelected;
+    }
     
+    
+    
+    public Map<String, String> getEpisodes() {
+        return episodes;
+    }
+    public void setEpisodes(Map<String, String> episodes) {
+        this.episodes = episodes;
+    }
     public String getRut() {
         return rut;
     }
@@ -72,25 +104,10 @@ public class Episodes {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Episodes getEpisode() {
+    public int getEpisode() {
         return episode;
     }
-
-    public void setEpisode(Episodes episode) {
+    public void setEpisode(int episode) {
         this.episode = episode;
     }
-    
-
-    public List<Episodios> getSearchEpisode() {
-        return searchEpisode;
-    }
-
-    public void setSearchEpisode(List<Episodios> searchEpisode) {
-        this.searchEpisode = searchEpisode;
-    }
-    
-    
-    
-   
 }

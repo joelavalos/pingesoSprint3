@@ -21,6 +21,7 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 @RequestScoped
 public class ViewEpisodes {
+    private int idEpisode;
     private List<Consulta> consultations;
     private List<Consulta> filterConsultations;
     private Consulta consultation;
@@ -35,6 +36,14 @@ public class ViewEpisodes {
         consultations.add(aux2);
     }
 
+    public int getIdEpisode() {
+        return idEpisode;
+    }
+
+    public void setIdEpisode(int idEpisode) {
+        this.idEpisode = idEpisode;
+    }
+    
     public List<Consulta> getFilterConsultations() {
         return filterConsultations;
     }

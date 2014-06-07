@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Paciente.findByPaciFallecido", query = "SELECT p FROM Paciente p WHERE p.paciFallecido = :paciFallecido"),
     @NamedQuery(name = "Paciente.findByPaciOtraprevision", query = "SELECT p FROM Paciente p WHERE p.paciOtraprevision = :paciOtraprevision")})
 public class Paciente implements Serializable {
+    @OneToMany(mappedBy = "idPersona")
+    private Collection<Muesta> muestaCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -147,6 +149,15 @@ public class Paciente implements Serializable {
     @Override
     public String toString() {
         return "entities.Paciente[ idPersona=" + idPersona + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Muesta> getMuestaCollection() {
+        return muestaCollection;
+    }
+
+    public void setMuestaCollection(Collection<Muesta> muestaCollection) {
+        this.muestaCollection = muestaCollection;
     }
     
 }

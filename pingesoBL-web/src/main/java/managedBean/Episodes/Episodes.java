@@ -59,7 +59,7 @@ public class Episodes {
                 +" "+searchPatient.get(0).getPersona().getPersApematerno();
         
         episodes = new HashMap<String,String>();
-        episodes.put("Seleccione", "");
+        episodes.put("Seleccione", "0");
         for(int i= 0; i<searchEpisode.size(); i++){
             String aux = searchEpisode.get(i).getEpisodioid().toString();
             episodes.put(aux, aux);

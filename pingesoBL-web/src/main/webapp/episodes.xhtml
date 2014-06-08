@@ -12,62 +12,63 @@
     <h:body>
         <h:form>
             <p:commandButton value="Show Dialog" onclick="PF('dialogEpisodes').show();" type="button" />
+        </h:form>
             <p:dialog header="Episodios" id="idDialogEpisodes" widgetVar="dialogEpisodes" minimizable="true">
-                <p:panelGrid styleClass="panelGridForm" columns="2">
-                    <p:outputLabel value="RUT:"/>
-                    <p:outputLabel value="#{episodes.rut}" id="rutPatientDE" style="font-weight: bold;"/>
-                    <p:outputLabel value="Nombre del Paciente:"/>
-                    <p:outputLabel value="#{episodes.name}" id="namePatientDE" style="font-weight: bold;"/>
-                    <p:outputLabel for="IDEpisodeDE" value="Episodio:" />
-                    <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.episode}" >
-                        <f:selectItems value="#{episodes.episodes}" />
-                        <p:ajax event="change" process="@this" listener="#{episodes.selectEpisode}"/>
-                    </p:selectOneMenu>
-                </p:panelGrid>
-                <p:panelGrid styleClass="panelGridForm">
-                    <p:row>
-                        <p:column>
-                            <p:commandButton value="Consulta" icon="ui-icon-plusthick"  />
-                            <p:commandButton value="Ver Consultas" icon="ui-icon-search" onclick="PF('viewEpisodes').show();" 
-                                             actionListener="#{viewEpisodes.loadConsultation}" update="viewConsultationsVE">
-                                <f:setPropertyActionListener value="#{episodes.episodeSelected}" target="#{viewEpisodes.episodeSelected}" />                             
-                            </p:commandButton>
-                        </p:column>
-                    </p:row>
-                </p:panelGrid>
+                <h:form id="episodesForm">
+                    <p:panelGrid styleClass="panelGridForm" columns="2">
+                        <p:outputLabel value="RUT:"/>
+                        <p:outputLabel value="#{episodes.rut}" id="rutPatientDE" style="font-weight: bold;"/>
+                        <p:outputLabel value="Nombre del Paciente:"/>
+                        <p:outputLabel value="#{episodes.name}" id="namePatientDE" style="font-weight: bold;"/>
+                        <p:outputLabel for="IDEpisodeDE" value="Episodio:" />
+                        <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.selectedEpisode}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                            <f:selectItems value="#{episodes.searchEpisode}" var="episode" itemLabel="#{episode.episodioid}" itemValue="#{episode}" />                        
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:panelGrid styleClass="panelGridForm">
+                        <p:row>
+                            <p:column>
+                                <p:commandButton value="Consulta" icon="ui-icon-plusthick"  />
+                                <p:commandButton value="Ver Consultas" icon="ui-icon-search" actionListener="#{viewEpisodes.loadConsultation(episodes.selectedEpisode)}" onclick="viewEpisodes.show()" update=":viewEpisodesForm"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>    
             </p:dialog>
 
             <p:dialog header="Ver Episodio" widgetVar="viewEpisodes" minimizable="true">
-                <p:panelGrid styleClass="panelGridForm" columns="4">
-                    <p:outputLabel value="RUT:"/>
-                    <p:outputLabel value="#{episodes.rut}" id="rutPatientVE"/>
-                    <p:outputLabel value="Nombre del Paciente:"/>
-                    <p:outputLabel value="#{episodes.name}" id="namePatientVE"/>
-                </p:panelGrid>
-                <br/>
-                <p:panelGrid styleClass="panelGridForm" columns="1">
-                    <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" 
-                                 selectionMode="single" selection="#{viewEpisodes.consultation}" rowKey="consultation"
-                                 emptyMessage="No se registran consultas"
-                                 filteredValue="#{viewEpisodes.filterConsultations}">
-                        <f:facet name="header">
-                            Consultas
-                             <p:inputText id="globalFilterVE" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px" placeholder="Enter keyword"/>
-                        </f:facet>                        
-                        <p:column headerText="Fecha" sortBy="#{consultation.consultafecha}">
-                            <h:outputText value="#{consultation.consultafecha}" />
-                        </p:column>
-                        <p:column headerText="Motivo de la consulta">
-                            <h:outputText value="#{consultation.motivoConsulta}" />
-                        </p:column>                        
-                        <f:facet name="footer">
-                            <p:commandButton   icon="ui-icon-plusthick" value="Nueva Consulta" />
-                            <p:commandButton   icon="ui-icon-search" value="Ver Consulta" />                            
-                        </f:facet>
-                    </p:dataTable>
-                </p:panelGrid>
+                <h:form id="viewEpisodesForm">
+                    <p:panelGrid styleClass="panelGridForm" columns="4">
+                        <p:outputLabel value="RUT:"/>
+                        <p:outputLabel value="#{episodes.rut}" id="rutPatientVE"/>
+                        <p:outputLabel value="Nombre del Paciente:"/>
+                        <p:outputLabel value="#{episodes.name}" id="namePatientVE"/>
+                    </p:panelGrid>
+                    <br/>
+                    <p:panelGrid styleClass="panelGridForm" columns="1">
+                        <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" 
+                                     selectionMode="single" selection="#{viewEpisodes.consultation}" rowKey="consultation"
+                                     emptyMessage="No se registran consultas"
+                                     filteredValue="#{viewEpisodes.filterConsultations}">
+                            <f:facet name="header">
+                                Consultas
+                                 <p:inputText id="globalFilterVE" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px" placeholder="Enter keyword"/>
+                            </f:facet>                        
+                            <p:column headerText="Fecha" sortBy="#{consultation.consultafecha}">
+                                <h:outputText value="#{consultation.consultafecha}" />
+                            </p:column>
+                            <p:column headerText="Motivo de la consulta">
+                                <h:outputText value="#{consultation.motivoConsulta}" />
+                            </p:column>                        
+                            <f:facet name="footer">
+                                <p:commandButton   icon="ui-icon-plusthick" value="Nueva Consulta" />
+                                <p:commandButton   icon="ui-icon-search" value="Ver Consulta" />                            
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panelGrid>
+                </h:form>
             </p:dialog>
-        </h:form>
     </h:body>
 </html>
 

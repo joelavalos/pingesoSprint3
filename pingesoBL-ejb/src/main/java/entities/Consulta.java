@@ -6,8 +6,10 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,12 +19,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -44,6 +48,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Consulta.findByExploracionFisica", query = "SELECT c FROM Consulta c WHERE c.exploracionFisica = :exploracionFisica"),
     @NamedQuery(name = "Consulta.findByEpisodio", query = "SELECT c FROM Consulta c WHERE c.episodioid = :episodioid")})
 public class Consulta implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consultaid")
+    private Collection<Diagnostico> diagnosticoCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -206,6 +212,15 @@ public class Consulta implements Serializable {
     @Override
     public String toString() {
         return "entities.Consulta[ consultaid=" + consultaid + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Diagnostico> getDiagnosticoCollection() {
+        return diagnosticoCollection;
+    }
+
+    public void setDiagnosticoCollection(Collection<Diagnostico> diagnosticoCollection) {
+        this.diagnosticoCollection = diagnosticoCollection;
     }
 
 }

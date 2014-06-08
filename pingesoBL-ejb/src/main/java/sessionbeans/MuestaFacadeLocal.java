@@ -7,6 +7,8 @@
 package sessionbeans;
 
 import entities.Muesta;
+import entities.Paciente;
+import java.sql.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,5 +32,9 @@ public interface MuestaFacadeLocal {
     List<Muesta> findRange(int[] range);
 
     int count();
+
+    List<Muesta> searchByPatientAndDate(Paciente patient, Date fecha);
+
+    List<Muesta> searchByPatient(Paciente patient);
     
 }

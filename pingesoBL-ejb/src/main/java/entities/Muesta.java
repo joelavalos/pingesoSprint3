@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entities;
 
 import java.io.Serializable;
@@ -35,8 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Muesta.findAll", query = "SELECT m FROM Muesta m"),
     @NamedQuery(name = "Muesta.findByIdMuestra", query = "SELECT m FROM Muesta m WHERE m.idMuestra = :idMuestra"),
     @NamedQuery(name = "Muesta.findByFecha", query = "SELECT m FROM Muesta m WHERE m.fecha = :fecha"),
-    @NamedQuery(name = "Muesta.findByValor", query = "SELECT m FROM Muesta m WHERE m.valor = :valor")})
+    @NamedQuery(name = "Muesta.findByValor", query = "SELECT m FROM Muesta m WHERE m.valor = :valor"),
+    @NamedQuery(name = "Muesta.findByPacienteFecha", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona and m.fecha = :fecha"),
+    @NamedQuery(name = "Muesta.findByPaciente", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona")})
 public class Muesta implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -136,5 +138,5 @@ public class Muesta implements Serializable {
     public String toString() {
         return "entities.Muesta[ idMuestra=" + idMuestra + " ]";
     }
-    
+
 }

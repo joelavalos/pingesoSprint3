@@ -46,8 +46,9 @@ public class ViewEpisodes {
 //        consultations.add(aux2);
     }
 
-    public void loadConsultation(){
-        System.out.println("hola o");
+    public void loadConsultation(Episodios episodeSelected){
+        System.out.println("ENTRAAAAAAAAAAAAAA");
+        this.episodeSelected = episodeSelected;
         consultations = consultationFacade.searchByEpisodio(episodeSelected);
         System.out.println(consultations.size());
     }

@@ -42,12 +42,11 @@ public class Episodes {
     private List<Paciente> searchPatient;
     private List<RegistroClinico> searchClinicalRecord;
     private List<Episodios> searchEpisode;
+    private Episodios selectedEpisode;
     
     private String rut;
-    private String name;    
-    private int episode;
-    private Episodios episodeSelected;
-    private Map<String,String> episodes = new HashMap<String,String>();
+    private String name;  
+   
     
     @PostConstruct
     public void init(){
@@ -59,38 +58,54 @@ public class Episodes {
         name = searchPatient.get(0).getPersona().getPersNombres() +" "+searchPatient.get(0).getPersona().getPersApepaterno() 
                 +" "+searchPatient.get(0).getPersona().getPersApematerno();
         
-        episodes = new HashMap<String,String>();
-        episodes.put("Seleccione", "");
-        for(int i= 0; i<searchEpisode.size(); i++){
-            String aux = searchEpisode.get(i).getEpisodioid().toString();
-            episodes.put(aux, aux);
-        }
+       
     }
 
-    public void selectEpisode(){
-        for(int i=0; i<searchEpisode.size();i++){
-            if(searchEpisode.get(i).getEpisodioid() == episode){
-                episodeSelected = searchEpisode.get(i);
-                break;
-            }
-        }
-    }
-
-    public Episodios getEpisodeSelected() {
-        return episodeSelected;
-    }
-
-    public void setEpisodeSelected(Episodios episodeSelected) {
-        this.episodeSelected = episodeSelected;
-    }
     
     
+//    
+//    public Map<String, String> getEpisodes() {
+//        return episodes;
+//    }
+//    public void setEpisodes(Map<String, String> episodes) {
+//        this.episodes = episodes;
+//    }
     
-    public Map<String, String> getEpisodes() {
-        return episodes;
+    
+    //    public void selectEpisode(){
+////        for(int i=0; i<searchEpisode.size();i++){
+////            if(searchEpisode.get(i).getEpisodioid() == episode){
+////                episodeSelected = searchEpisode.get(i);
+////                break;
+////            }
+////        }
+//    }
+//    public Episodios getEpisodeSelected() {
+//        return episodeSelected;
+//    }
+//
+//    public void setEpisodeSelected(Episodios episodeSelected) {
+//        this.episodeSelected = episodeSelected;
+//    }
+//    public Map<String, String> getEpisodes() {
+//        return episodes;
+//    }
+//    public void setEpisodes(Map<String, String> episodes) {
+//        this.episodes = episodes;
+//    }
+    
+    
+    public List<Episodios> getSearchEpisode() {
+        return searchEpisode;
     }
-    public void setEpisodes(Map<String, String> episodes) {
-        this.episodes = episodes;
+    public void setSearchEpisode(List<Episodios> searchEpisode) {
+        this.searchEpisode = searchEpisode;
+    }
+    public Episodios getSelectedEpisode() {
+        return selectedEpisode;
+    }
+    public void setSelectedEpisode(Episodios selectedEpisode) {
+        this.selectedEpisode = selectedEpisode;
     }
     public String getRut() {
         return rut;
@@ -104,10 +119,10 @@ public class Episodes {
     public void setName(String name) {
         this.name = name;
     }
-    public int getEpisode() {
-        return episode;
-    }
-    public void setEpisode(int episode) {
-        this.episode = episode;
-    }
+//    public int getEpisode() {
+//        return episode;
+//    }
+//    public void setEpisode(int episode) {
+//        this.episode = episode;
+//    }
 }

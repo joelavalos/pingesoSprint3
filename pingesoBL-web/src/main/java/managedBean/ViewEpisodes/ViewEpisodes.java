@@ -7,7 +7,6 @@
 package managedBean.ViewEpisodes;
 
 import entities.Consulta;
-import entities.Episodios;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,56 +26,57 @@ public class ViewEpisodes {
     @EJB
     private ConsultaFacadeLocal consultationFacade;
     
-    private Episodios episodeSelected;
+    private int idEpisode;
     private List<Consulta> consultations;
     private List<Consulta> filterConsultations;
     private Consulta consultation;
     
    @PostConstruct
     public void init(){
-        
-//        consultations = consultationFacade.searchByEpisodio(episodeSelected);
-//        System.out.println("La cantidad" + consultations.size());
-//        //System.out.println("El episodio seleccionado: "+consultations.get(0).getNotas());
-//        Date a= new Date();
-//        Consulta aux1 = new Consulta(1, "paciente grave",a , false, false, "le dolia un pelo");
-//        Consulta aux2 = new Consulta(1, "paciente grave2",a , false, false, "le dolia un pelo2");
-//        //consultations = new ArrayList<Consulta>();
-//        consultations.add(aux1);
-//        consultations.add(aux2);
+        //consultations = consultationFacade.s;
+        Date a= new Date();
+        Consulta aux1 = new Consulta(1, "paciente grave",a , false, false, "le dolia un pelo");
+        Consulta aux2 = new Consulta(1, "paciente grave2",a , false, false, "le dolia un pelo2");
+        consultations = new ArrayList<Consulta>();
+        consultations.add(aux1);
+        consultations.add(aux2);
     }
 
-    public void loadConsultation(Episodios episodeSelected){
-        System.out.println("ENTRAAAAAAAAAAAAAA");
-        this.episodeSelected = episodeSelected;
-        consultations = consultationFacade.searchByEpisodio(episodeSelected);
-        System.out.println(consultations.size());
+    public void loadConsultations(int id){
+        System.out.println("Hola como estas tu");
+        System.out.println("El indice ingresado es: "+ id);
     }
     
-    public Episodios getEpisodeSelected() {
-        return episodeSelected;
-    }  
-    public void setEpisodeSelected(Episodios episodeSelected) {
-        this.episodeSelected = episodeSelected;
-    }      
+    public int getIdEpisode() {
+        return idEpisode;
+    }
+
+    public void setIdEpisode(int idEpisode) {
+        this.idEpisode = idEpisode;
+    }
+    
     public List<Consulta> getFilterConsultations() {
         return filterConsultations;
     }
+
     public void setFilterConsultations(List<Consulta> filterConsultations) {
         this.filterConsultations = filterConsultations;
     }
+
+    
     public List<Consulta> getConsultations() {
         return consultations;
     }
+
     public void setConsultations(List<Consulta> consultations) {
         this.consultations = consultations;
     }
+
     public Consulta getConsultation() {
         return consultation;
     }
+
     public void setConsultation(Consulta consultation) {
         this.consultation = consultation;
-    }
-    
-    
+    }    
 }

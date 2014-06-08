@@ -45,7 +45,7 @@ public class Episodes {
     
     private String rut;
     private String name;    
-    private int episode = 20;
+    private int episode = 0;
     private Map<String,String> episodes = new HashMap<String,String>();
     
     @PostConstruct
@@ -64,6 +64,10 @@ public class Episodes {
             String aux = searchEpisode.get(i).getEpisodioid().toString();
             episodes.put(aux, aux);
         }
+    }
+    
+    public void emptyView(){
+        episode = 0;
     }
 
     public Map<String, String> getEpisodes() {

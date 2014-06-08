@@ -49,7 +49,9 @@ public class ViewEpisodes {
 
     public void emptyView(){
         idEpisode = 0;
+        consultation = null;
         consultations.clear();
+        filterConsultations.clear();
     }
     
     public void loadConsultations(int id){

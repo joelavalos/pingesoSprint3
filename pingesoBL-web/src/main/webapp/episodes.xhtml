@@ -14,8 +14,9 @@
             <p:commandButton value="Show Dialog" onclick="PF('dialogEpisodes').show();" type="button" />
         </h:form>
             <p:dialog header="Episodios" id="idDialogEpisodes" widgetVar="dialogEpisodes" minimizable="true">
+                <p:ajax event="close" listener="#{episodes.emptyView()}" update=":episodesForm"/>
                 <p:growl id="episodesValidator"/>
-                <h:form id="episodes">
+                <h:form id="episodesForm">
                     <p:panelGrid styleClass="panelGridForm" columns="2">
                         <p:outputLabel value="RUT:"/>
                         <p:outputLabel value="#{episodes.rut}" id="rutPatientDE" style="font-weight: bold;"/>
@@ -54,7 +55,7 @@
                                      filteredValue="#{viewEpisodes.filterConsultations}">
                             <f:facet name="header">
                                 Consultas
-                                 <p:inputText id="globalFilterVE" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px" placeholder="Enter keyword"/>
+                                 <p:inputText id="globalFilter" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px" placeholder="Enter keyword"/>
                             </f:facet>                        
                             <p:column headerText="Fecha" sortBy="#{consultation.consultafecha}">
                                 <h:outputText value="#{consultation.consultafecha}" />

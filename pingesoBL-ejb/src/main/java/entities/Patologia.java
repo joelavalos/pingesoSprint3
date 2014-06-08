@@ -10,8 +10,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,10 +33,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Patologia implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
     @Column(name = "patologiaid")
-    private Integer patologiaid;
+    private String patologiaid;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -52,21 +51,21 @@ public class Patologia implements Serializable {
     public Patologia() {
     }
 
-    public Patologia(Integer patologiaid) {
+    public Patologia(String patologiaid) {
         this.patologiaid = patologiaid;
     }
 
-    public Patologia(Integer patologiaid, String patologianombre, boolean patologiages) {
+    public Patologia(String patologiaid, String patologianombre, boolean patologiages) {
         this.patologiaid = patologiaid;
         this.patologianombre = patologianombre;
         this.patologiages = patologiages;
     }
 
-    public Integer getPatologiaid() {
+    public String getPatologiaid() {
         return patologiaid;
     }
 
-    public void setPatologiaid(Integer patologiaid) {
+    public void setPatologiaid(String patologiaid) {
         this.patologiaid = patologiaid;
     }
 

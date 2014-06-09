@@ -53,6 +53,14 @@ public class NewConsultation {
     
     private List<Patologia> pathology;
     
+    //<--aqui-->
+    private List<Diagnostico> allDiagnosesConsultation = new ArrayList<Diagnostico>();
+    private List<Diagnostico> allDiagnoses;
+    private List<Consulta> searchConsultation;
+    private List<Diagnostico> filteredDiagnosesConsultation;
+    private List<Diagnostico> selectedDiagnosis;
+ //<!--aqui-->    
+    
     private Date diagnosticDate;
     private boolean diagnosticGes;
     private String diagnosticState;
@@ -104,6 +112,19 @@ public class NewConsultation {
             FacesContext.getCurrentInstance().addMessage("", fm);
         }
     }
+    
+        //<!--aqui-->
+    public void addAllDiagnostic(){
+        allDiagnosesConsultation.clear();
+        searchConsultation = consultationFacade.searchByEpisodio(searchEpisode.get(0));
+        for(int i=0; i<searchConsultation.size(); i++){
+            allDiagnoses = diagnosticFacade.searchByConsultation(searchConsultation.get(i));
+            for(int j=0; j<allDiagnoses.size(); j++){
+                allDiagnosesConsultation.add(allDiagnoses.get(j));
+            }
+        }
+    }
+    //<!--aqui-->
 
     public void addDiagnoses() {
         if(pathologyNotEmpty() && pathologyExists() && selectOneState()){
@@ -436,7 +457,33 @@ public class NewConsultation {
     public void setPertinence(boolean pertinence) {
         this.pertinence = pertinence;
     }
+    //<!--aqui-->
+    public List<Diagnostico> getSelectedDiagnosis() {
+        return selectedDiagnosis;
+    }
 
+    public void setSelectedDiagnosis(List<Diagnostico> selectedDiagnosis) {
+        this.selectedDiagnosis = selectedDiagnosis;
+    }
+    
+    
+    public List<Diagnostico> getFilteredDiagnosesConsultation() {
+        return filteredDiagnosesConsultation;
+    }
+
+    public void setFilteredDiagnosesConsultation(List<Diagnostico> filteredDiagnosesConsultation) {
+        this.filteredDiagnosesConsultation = filteredDiagnosesConsultation;
+    }
+
+     
+    public List<Diagnostico> getAllDiagnosesConsultation() {
+        return allDiagnosesConsultation;
+    }
+
+    public void setAllDiagnosesConsultation(List<Diagnostico> allDiagnosesConsultation) {
+        this.allDiagnosesConsultation = allDiagnosesConsultation;
+    }
+     //<!--aqui-->
     
     
     

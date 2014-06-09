@@ -89,7 +89,6 @@ public class NewConsultation {
                 +" "+ searchPatient.get(0).getPersona().getPersApematerno();
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
         searchEpisode = episodeFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
-        
     }
     
     public void pathologyToAdd() {
@@ -216,6 +215,7 @@ public class NewConsultation {
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta guardada exitosamente", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }
+            
             resetConsultation();
         }else{
             if(!notEmptyHipothesis()){

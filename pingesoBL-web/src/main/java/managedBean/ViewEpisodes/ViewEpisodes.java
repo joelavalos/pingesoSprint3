@@ -47,7 +47,7 @@ public class ViewEpisodes {
         consultations.add(aux2);*/
     }
 
-    public void emptyView(){
+    public void resetView(){
         idEpisode = 0;
         selectedConsultation = null;
         consultations.clear();
@@ -57,7 +57,7 @@ public class ViewEpisodes {
     public void loadConsultations(int id){
         Episodios episodeSelected = episodesFacade.find(id);
         consultations = consultationFacade.searchByEpisodio(episodeSelected);
-        RequestContext.getCurrentInstance().execute("viewEpisodes.show()");
+        RequestContext.getCurrentInstance().execute("viewEpisodesDialog.show()");
     }
     
     public int getIdEpisode() {

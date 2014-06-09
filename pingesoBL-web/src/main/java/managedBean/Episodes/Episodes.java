@@ -66,7 +66,7 @@ public class Episodes {
         }
     }
     
-    public void emptyView(){
+    public void resetEpisodes(){
         episode = 0;
     }
 

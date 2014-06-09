@@ -53,8 +53,7 @@
                 <p:row>
                     <p:column colspan="1">
                         <h:form id="newDiagnosticForm">
-                        <p:growl id="newDiagnosticValidation" life="5000"/>
-                        <p:growl id="newTrialValidation" life="10000" />
+                        <p:growl id="newDiagnosticValidation" life="3000"/>
                         <h:panelGrid columns="6" cellpadding="1">
                             <p:autoComplete id="pathologyAutocomplete" placeholder="Patología" value="#{newConsultation.pathologyName}" completeMethod="#{newConsultation.completeTextPathology}"/>
                             <p:commandButton value="Ver Más" onsuccess="pathologyListDialog.show();" icon="ui-icon-search" />
@@ -65,7 +64,7 @@
                             </p:selectOneMenu>
                             <p:outputLabel value="Es GES" />
                             <p:selectBooleanCheckbox value="#{newConsultation.diagnosticGes}"/>
-                            <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newDiagnosticValidation" process="newDiagnosticForm"/>
+                            <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newDiagnosticForm :newConsultationForm"/>
                         </h:panelGrid>
                         </h:form>
                     </p:column>
@@ -177,10 +176,10 @@
                 </p:row>
                 <p:row>
                     <p:column colspan="2">
-                        <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" update="newConsultationValidation">
+                        <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" update="newConsultationForm :newDiagnosticForm">
                         </p:commandButton>
-                        <p:commandButton value="Guardar Datos" icon="ui-icon-pause"  actionListener="#{newConsultation.addConsultation(false, true)}" />
-                        <p:commandButton value="Cancelar" icon="ui-icon-cancel"  actionListener="#{newConsultation.addConsultation(true, false)}" />
+                        <p:commandButton value="Guardar Datos" icon="ui-icon-pause" actionListener="#{newConsultation.addConsultation(false, true)}"  update="newConsultationForm :newDiagnosticForm"/>
+                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="cancelConsultationDialog.show()"/>
                     </p:column>
                 </p:row>
             </p:panelGrid>
@@ -202,11 +201,11 @@
                         <p:column filterBy="#{pathology.patologianombre}" headerText="Nombre" filterMatchMode="contains" >
                             <h:outputText value="#{pathology.patologianombre}" />
                         </p:column>                        
-                        <p:column filterBy="#{pathology.patologiages ? 'SI': 'NO'}" headerText="GES"  filterMatchMode="contains">
+                        <p:column filterBy="#{pathology.patologiages ? 'SI': 'NO'}" headerText="GES" filterMatchMode="contains">
                             <h:outputText value="#{pathology.patologiages ? 'SI': 'NO'}" />
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" update=":newConsultationForm"/>
+                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" oncomplete="pathologyListDialog.hide()" update=":newDiagnosticForm"/>
                             <p:commandButton icon="ui-icon-cancel" value="Cancelar" />                             
                         </f:facet> 
                     </p:dataTable>
@@ -216,16 +215,17 @@
 
         <h:form id="cancelConsultationForm">
             <p:dialog header="Cancelando Consulta" id="cancelConsultation" widgetVar="cancelConsultationDialog" >
+                <p:ajax event="close" listener="#{newConsultation.resetCancel()}"/>
                 <p:panelGrid columns="1" styleClass="panelGridForm">
                     <p:outputPanel deferred="true">
                         <h3>¿Está seguro que quiere cancelar la consulta?</h3>
                         <p>Todos los datos de la consulta serán eliminados</p>                        
                     </p:outputPanel>
-                    <p:inputTextarea id ="cause" cols="50" rows="4" autoResize="false"/>
+                    <p:inputTextarea id="cause" value="#{newConsultation.canceledReason}" cols="50" rows="4" autoResize="false"/>
                 </p:panelGrid>
                 <p:panelGrid columns="2" styleClass="panelGridForm">
-                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" />
-                    <p:commandButton id="No" value="No" icon="ui-icon-closethick"/>
+                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation(true, false)}" oncomplete="cancelConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm"/>
+                    <p:commandButton id="No" value="No" icon="ui-icon-closethick" onclick="cancelConsultationDialog.hide()"/>
                 </p:panelGrid>
             </p:dialog> 
         </h:form>

@@ -89,19 +89,25 @@ public class NewConsultation {
     
     public void pathologyToAdd() {
         if (selectedPathology != null) {
-            pathologyId = selectedPathology.getPatologiaid();
             pathologyName = selectedPathology.getPatologianombre();
+            pathologyGes = selectedPathology.getPatologiages();
+            diagnosticGes = selectedPathology.getPatologiages();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Diagnóstico seleccionado", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
         }
     }
 
     public void addDiagnoses() {
         if(pathologyNotEmpty() && pathologyExists() && selectOneState()){
-           diagnosticDate = new Date();
-           Patologia diagnosticPathology = pathologyFacade.searchByNombre(pathologyName).get(0);
-           pathologyId = diagnosticPathology.getPatologiaid();
-           pathologyGes = diagnosticPathology.getPatologiages();
-           diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
-           diagPathList.add(diagPath);   
+            diagnosticDate = new Date();
+            Patologia diagnosticPathology = pathologyFacade.searchByNombre(pathologyName).get(0);
+            pathologyId = diagnosticPathology.getPatologiaid();
+            pathologyGes = diagnosticPathology.getPatologiages();
+            diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
+            diagPathList.add(diagPath);   
+            resetDiagnostic();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Diagnóstico agregado", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
         }else{
             if(!pathologyNotEmpty()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una patología", "");
@@ -135,7 +141,7 @@ public class NewConsultation {
     public void addConsultation(boolean canceled, boolean paused){
         consultationCanceled = canceled;
         consultationPaused = paused;
-        if((notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()) || consultationCanceled || consultationPaused){
+        if((notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses())){
             //System.out.println("Id del episodio: " + searchEpisode.get(0).getEpisodioid());
             //searchConsulta = consultaFacade.searchByEpisodio(searchEpisode.get(0));
             //System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");
@@ -166,7 +172,7 @@ public class NewConsultation {
                 newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
                 diagnosticFacade.create(newDiagnostico);
             }
-            
+            resetConsultation();
         }else{
             if(!notEmptyHipothesis()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
@@ -194,6 +200,40 @@ public class NewConsultation {
         return !diagPathList.isEmpty();
     }
     /////////////////////////*Fin validación nueva consulta*////////////////////////////
+    
+    public void resetConsultation(){
+        pathology.clear();
+        diagnosticDate = null;
+        diagnosticGes = false;
+        diagnosticState = "";
+        pathologyId = "";
+        pathologyName = "";
+        pathologyGes = false;
+        //searchPatient.clear();
+        //searchClinicalRecord.clear();
+        //searchEpisode.clear();
+        diagPath = null;
+        diagPathList = new ArrayList<DiagnosesPathology>();
+        selectedPathology = null;
+        diagnosticHipothesis = "";
+        consultationReason = "";
+        consultationCanceled = false;
+        canceledReason = "";
+        consultationPaused = false;
+        consultationNotes = "";
+        physicalExamination = ""; 
+        resetDiagnostic();
+    }
+    
+    public void resetDiagnostic(){
+        pathologyName = "";
+        diagnosticState = "0";
+        diagnosticGes = false;
+    }
+    
+    public void resetCancel(){
+        canceledReason = "";
+    }
     
     public List<String> completeTextPathology(String query) {
         pathology = pathologyFacade.findAll();

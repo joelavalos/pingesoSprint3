@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import sessionbeans.PatologiaFacadeLocal;
 
 /**
@@ -36,26 +38,93 @@ public class NewConsultation {
     private DiagnosesPathology diagPath;
     private List<DiagnosesPathology> diagPathList = new ArrayList<DiagnosesPathology>();
     private Patologia selectedPathology;
+    
+    private String diagnosticHipothesis;
+    private String consultationReason;
+    
 
     public void pathologyToAdd() {
         if (selectedPathology != null) {
             pathologyId = selectedPathology.getPatologiaid();
             pathologyName = selectedPathology.getPatologianombre();
-        } else {
-            System.out.println("Debe seleccionar una patologia");
         }
     }
 
     public void addDiagnoses() {
-        diagnosticDate = new Date();
-        diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
-        diagPathList.add(diagPath);
-        diagnosticState = "";
-        pathologyId = "";
-        pathologyName = "";
-        diagnosticGes = false;
+        if(pathologyNotEmpty() && pathologyExists() && selectOneState()){
+           diagnosticDate = new Date();
+           diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
+           diagPathList.add(diagPath);
+           diagnosticState = "";
+           pathologyId = "";
+           pathologyName = "";
+           diagnosticGes = false;   
+        }else{
+            if(!pathologyNotEmpty()){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una patología", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }else if(!pathologyExists()){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "La patología no existe", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if(!selectOneState()){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar un estado", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+        }
     }
 
+    /////////////////////////*Validación nuevo diagnostico*////////////////////////////
+    public boolean pathologyNotEmpty(){
+        return !pathologyName.isEmpty();
+    }
+
+    public boolean pathologyExists(){
+        try{
+            pathologyFacade.searchByNombre(pathologyName);
+        }catch(Exception e){
+            return false;   
+        }
+        return true;
+    }
+    
+    public boolean selectOneState(){
+        return !diagnosticState.equals("0");
+    }
+    /////////////////////////*Fin validación nuevo diagnostico*////////////////////////////
+    
+        
+    public void addConsultation(){
+        if(notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()){
+            //TO-DO: Agregar consulta
+        }else{
+            if(notEmptyHipothesis()){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if(notEmptyReason()){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para la consulta", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if(notEmptyDiagnoses()){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnóstico", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }    
+        }
+    }
+    
+    /////////////////////////*Validación nueva consulta*////////////////////////////
+    public boolean notEmptyHipothesis(){
+        return !diagnosticHipothesis.isEmpty();
+    }
+    public boolean notEmptyReason(){
+        return !consultationReason.isEmpty();
+    }
+    public boolean notEmptyDiagnoses(){
+        return !diagPathList.isEmpty();
+    }
+    /////////////////////////*Fin validación nueva consulta*////////////////////////////
+    
     public List<String> completeTextPathology(String query) {
         pathology = pathologyFacade.findAll();
         List<String> results = new ArrayList<String>();
@@ -68,7 +137,7 @@ public class NewConsultation {
         }
         return results;
     }
-
+    
     public List<DiagnosesPathology> getDiagPathList() {
         return diagPathList;
     }

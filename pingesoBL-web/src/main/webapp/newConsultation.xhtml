@@ -150,12 +150,12 @@
                             </p:tab>
                             <p:tab title="Notas">
                                 <h:panelGrid columns="2" cellpadding="10">
-                                    <p:inputTextarea rows="5" cols="70"  autoResize="false" />
+                                    <p:inputTextarea value="#{newConsultation.consultationNotes}" rows="5" cols="70"  autoResize="false" />
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Exploración Física">
                                 <h:panelGrid columns="2" cellpadding="10">
-                                    <p:inputTextarea rows="5" cols="70"  autoResize="false" />
+                                    <p:inputTextarea value="#{newConsultation.physicalExamination}" rows="5" cols="70"  autoResize="false" />
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Tratamiento" disabled="true">
@@ -177,10 +177,10 @@
                 </p:row>
                 <p:row>
                     <p:column colspan="2">
-                        <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation()}" update="newConsultationValidation">
+                        <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" update="newConsultationValidation">
                         </p:commandButton>
-                        <p:commandButton value="Guardar Datos" icon="ui-icon-pause" />
-                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" />
+                        <p:commandButton value="Guardar Datos" icon="ui-icon-pause"  actionListener="#{newConsultation.addConsultation(false, true)}" />
+                        <p:commandButton value="Cancelar" icon="ui-icon-cancel"  actionListener="#{newConsultation.addConsultation(true, false)}" />
                     </p:column>
                 </p:row>
             </p:panelGrid>

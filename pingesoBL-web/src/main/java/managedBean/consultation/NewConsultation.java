@@ -5,17 +5,28 @@
  */
 package managedBean.consultation;
 
+import entities.Consulta;
 import entities.Diagnostico;
+import entities.Episodios;
+import entities.Paciente;
 import entities.Patologia;
+import entities.RegistroClinico;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import sessionbeans.ConsultaFacadeLocal;
+import sessionbeans.DiagnosticoFacadeLocal;
+import sessionbeans.EpisodiosFacadeLocal;
+import sessionbeans.PacienteFacadeLocal;
 import sessionbeans.PatologiaFacadeLocal;
+import sessionbeans.PersonaFacadeLocal;
+import sessionbeans.RegistroClinicoFacadeLocal;
 
 /**
  *
@@ -26,6 +37,19 @@ import sessionbeans.PatologiaFacadeLocal;
 public class NewConsultation {
     @EJB
     private PatologiaFacadeLocal pathologyFacade;
+    @EJB
+    private PacienteFacadeLocal patientFacade;
+    @EJB
+    private PersonaFacadeLocal personFacade;
+    @EJB
+    private ConsultaFacadeLocal consultationFacade;
+    @EJB
+    private DiagnosticoFacadeLocal diagnosticFacade;
+    @EJB
+    private EpisodiosFacadeLocal episodeFacade;
+    @EJB
+    private RegistroClinicoFacadeLocal clinicalRecordFacade;
+    
     private List<Patologia> pathology;
     
     private Date diagnosticDate;
@@ -34,6 +58,12 @@ public class NewConsultation {
     private String pathologyId;
     private String pathologyName;
     private boolean pathologyGes;
+    
+    private int personId;
+    private String rut;
+    private List<Paciente> searchPatient;
+    private List<RegistroClinico> searchClinicalRecord;
+    private List<Episodios> searchEpisode;
 
     private DiagnosesPathology diagPath;
     private List<DiagnosesPathology> diagPathList = new ArrayList<DiagnosesPathology>();
@@ -41,8 +71,22 @@ public class NewConsultation {
     
     private String diagnosticHipothesis;
     private String consultationReason;
+    private boolean consultationCanceled = false;
+    private String canceledReason;
+    private boolean consultationPaused = false;
+    private String consultationNotes;
+    private String physicalExamination;
     
-
+    @PostConstruct
+    public void init(){
+        rut = "69727697";
+        personId = personFacade.findByRut(rut);
+        searchPatient = patientFacade.searchByPerson(personId);
+        searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
+        searchEpisode = episodeFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
+        
+    }
+    
     public void pathologyToAdd() {
         if (selectedPathology != null) {
             pathologyId = selectedPathology.getPatologiaid();
@@ -53,12 +97,11 @@ public class NewConsultation {
     public void addDiagnoses() {
         if(pathologyNotEmpty() && pathologyExists() && selectOneState()){
            diagnosticDate = new Date();
+           Patologia diagnosticPathology = pathologyFacade.searchByNombre(pathologyName).get(0);
+           pathologyId = diagnosticPathology.getPatologiaid();
+           pathologyGes = diagnosticPathology.getPatologiages();
            diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
-           diagPathList.add(diagPath);
-           diagnosticState = "";
-           pathologyId = "";
-           pathologyName = "";
-           diagnosticGes = false;   
+           diagPathList.add(diagPath);   
         }else{
             if(!pathologyNotEmpty()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una patología", "");
@@ -89,9 +132,41 @@ public class NewConsultation {
     /////////////////////////*Fin validación nuevo diagnostico*////////////////////////////
     
         
-    public void addConsultation(){
-        if(notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()){
-            //TO-DO: Agregar consulta
+    public void addConsultation(boolean canceled, boolean paused){
+        consultationCanceled = canceled;
+        consultationPaused = paused;
+        if((notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()) || consultationCanceled || consultationPaused){
+            //System.out.println("Id del episodio: " + searchEpisode.get(0).getEpisodioid());
+            //searchConsulta = consultaFacade.searchByEpisodio(searchEpisode.get(0));
+            //System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");
+
+            Date date = new Date();
+
+            Consulta newConsultation = new Consulta(null);
+            
+            newConsultation.setEpisodioid(searchEpisode.get(0));
+            newConsultation.setHdiagnostica(diagnosticHipothesis);
+            newConsultation.setConsultafecha(date);
+            newConsultation.setCancelada(consultationCanceled);
+            newConsultation.setMotivocancel(canceledReason);
+            newConsultation.setPausada(consultationPaused);
+            newConsultation.setMotivoConsulta(consultationReason);
+            newConsultation.setNotas(consultationNotes);
+            newConsultation.setExploracionFisica(physicalExamination);
+
+            consultationFacade.create(newConsultation);            
+
+            for(DiagnosesPathology diagnostic: diagPathList){
+                Patologia newPatologia = pathologyFacade.searchById(diagnostic.getPathologyId()).get(0);
+                Diagnostico newDiagnostico = new Diagnostico(null);
+                newDiagnostico.setPatologiaid(newPatologia);
+                newDiagnostico.setConsultaid(newConsultation);
+                newDiagnostico.setDiagnosticofecha(diagnostic.getDiagnosticDate());
+                newDiagnostico.setDiagnosticoges(diagnostic.isDiagnosticGes());
+                newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
+                diagnosticFacade.create(newDiagnostico);
+            }
+            
         }else{
             if(!notEmptyHipothesis()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
@@ -211,6 +286,46 @@ public class NewConsultation {
 
     public void setConsultationReason(String consultationReason) {
         this.consultationReason = consultationReason;
+    }
+
+    public boolean isConsultationCanceled() {
+        return consultationCanceled;
+    }
+
+    public void setConsultationCanceled(boolean consultationCanceled) {
+        this.consultationCanceled = consultationCanceled;
+    }
+
+    public String getCanceledReason() {
+        return canceledReason;
+    }
+
+    public void setCanceledReason(String canceledReason) {
+        this.canceledReason = canceledReason;
+    }
+
+    public boolean isConsultationPaused() {
+        return consultationPaused;
+    }
+
+    public void setConsultationPaused(boolean consultationPaused) {
+        this.consultationPaused = consultationPaused;
+    }
+
+    public String getConsultationNotes() {
+        return consultationNotes;
+    }
+
+    public void setConsultationNotes(String consultationNotes) {
+        this.consultationNotes = consultationNotes;
+    }
+
+    public String getPhysicalExamination() {
+        return physicalExamination;
+    }
+
+    public void setPhysicalExamination(String physicalExamination) {
+        this.physicalExamination = physicalExamination;
     }
 
     

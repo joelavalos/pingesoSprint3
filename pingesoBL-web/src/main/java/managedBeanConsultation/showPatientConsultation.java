@@ -6,17 +6,22 @@
 package managedBeanConsultation;
 
 import entities.Consulta;
+import entities.Diagnostico;
 import entities.Episodios;
 import entities.Paciente;
+import entities.Patologia;
 import entities.RegistroClinico;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import sessionbeans.ConsultaFacadeLocal;
+import sessionbeans.DiagnosticoFacadeLocal;
 import sessionbeans.EpisodiosFacadeLocal;
 import sessionbeans.PacienteFacadeLocal;
+import sessionbeans.PatologiaFacadeLocal;
 import sessionbeans.PersonaFacadeLocal;
 import sessionbeans.RegistroClinicoFacadeLocal;
 
@@ -27,6 +32,10 @@ import sessionbeans.RegistroClinicoFacadeLocal;
 @ManagedBean
 @ViewScoped
 public class showPatientConsultation {
+    @EJB
+    private DiagnosticoFacadeLocal diagnosticoFacade;
+    @EJB
+    private PatologiaFacadeLocal patologiaFacade;
     @EJB
     private ConsultaFacadeLocal consultaFacade;
     @EJB
@@ -42,10 +51,11 @@ public class showPatientConsultation {
     private List<RegistroClinico> searchRegistroClinico;
     private List<Episodios> searchEpisode;
     private List<Consulta> searchConsultas;
+    private List<Patologia> searchPathology;
 
     private Integer PersonId;
     private String PersonRut = "69727697";
-    
+
     private String Hdiagnostica;
     private Date date;
     private boolean cancel;
@@ -54,11 +64,24 @@ public class showPatientConsultation {
     private String consultationReason;
     private String notes;
     private String physicalExamination;
-    
 
+    private String pathologyId;
+    private List<Patologia> selectedPathology;
+    private boolean gesDiagnoses;
+    private Date dateDiagnoses;
+    private String stateDiagnoses;
+
+    private List<Diagnostico> allDiagnoses;
     /**
      * Creates a new instance of showPatientConsultation
      */
+    @PostConstruct
+    public void init() {
+        searchPathology = patologiaFacade.findAll();
+        allDiagnoses = diagnosticoFacade.findAll();
+        searchConsultas = consultaFacade.findAll();
+    }
+
     public showPatientConsultation() {
     }
 
@@ -74,8 +97,8 @@ public class showPatientConsultation {
         searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
         //System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");      
     }
-    
-    public void createConsultation(){
+
+    public void createConsultation() {
         PersonId = personaFacade.findByRut(PersonRut);
         //System.out.println("Id del paciente: " + PersonId);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
@@ -85,12 +108,12 @@ public class showPatientConsultation {
         searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
         //System.out.println("Id del episodio: " + searchEpisode.get(0).getEpisodioid());
         searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
-        System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");    
-        
+        System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");
+
         date = new Date();
         cancel = false;
         pause = false;
-        
+
         Consulta newConsultation = new Consulta(null);
         newConsultation.setEpisodioid(searchEpisode.get(0));
         newConsultation.setHdiagnostica(Hdiagnostica);
@@ -101,11 +124,27 @@ public class showPatientConsultation {
         newConsultation.setMotivoConsulta(consultationReason);
         newConsultation.setNotas(notes);
         newConsultation.setExploracionFisica(physicalExamination);
-        
+
         consultaFacade.create(newConsultation);
-        
         searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
         System.out.println("Se ha creado la consulta");
+
+        //Variables para crear el diagnostico, se requiere que se cree la consulta antes
+        selectedPathology = patologiaFacade.searchById(pathologyId);
+        dateDiagnoses = new Date();
+        gesDiagnoses = false;
+        stateDiagnoses = "confirmado";
+
+        Diagnostico newDiagnostico = new Diagnostico(null);
+        newDiagnostico.setPatologiaid(selectedPathology.get(0));
+        newDiagnostico.setConsultaid(newConsultation);
+        newDiagnostico.setDiagnosticofecha(dateDiagnoses);
+        newDiagnostico.setDiagnosticoges(gesDiagnoses);
+        newDiagnostico.setDiagnosticoestado(stateDiagnoses);
+        
+        diagnosticoFacade.create(newDiagnostico);
+        
+        allDiagnoses = diagnosticoFacade.findAll();
         
     }
 
@@ -227,6 +266,62 @@ public class showPatientConsultation {
 
     public void setPhysicalExamination(String physicalExamination) {
         this.physicalExamination = physicalExamination;
+    }
+
+    public List<Patologia> getSearchPathology() {
+        return searchPathology;
+    }
+
+    public void setSearchPathology(List<Patologia> searchPathology) {
+        this.searchPathology = searchPathology;
+    }
+
+    public String getPathologyId() {
+        return pathologyId;
+    }
+
+    public void setPathologyId(String pathologyId) {
+        this.pathologyId = pathologyId;
+    }
+
+    public List<Patologia> getSelectedPathology() {
+        return selectedPathology;
+    }
+
+    public void setSelectedPathology(List<Patologia> selectedPathology) {
+        this.selectedPathology = selectedPathology;
+    }
+
+    public boolean isGesDiagnoses() {
+        return gesDiagnoses;
+    }
+
+    public void setGesDiagnoses(boolean gesDiagnoses) {
+        this.gesDiagnoses = gesDiagnoses;
+    }
+
+    public Date getDateDiagnoses() {
+        return dateDiagnoses;
+    }
+
+    public void setDateDiagnoses(Date dateDiagnoses) {
+        this.dateDiagnoses = dateDiagnoses;
+    }
+
+    public String getStateDiagnoses() {
+        return stateDiagnoses;
+    }
+
+    public void setStateDiagnoses(String stateDiagnoses) {
+        this.stateDiagnoses = stateDiagnoses;
+    }
+
+    public List<Diagnostico> getAllDiagnoses() {
+        return allDiagnoses;
+    }
+
+    public void setAllDiagnoses(List<Diagnostico> allDiagnoses) {
+        this.allDiagnoses = allDiagnoses;
     }
 
 }

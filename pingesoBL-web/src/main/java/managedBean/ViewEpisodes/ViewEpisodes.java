@@ -34,7 +34,7 @@ public class ViewEpisodes {
     private int idEpisode;
     private List<Consulta> consultations;
     private List<Consulta> filterConsultations;
-    private Consulta consultation;
+    private Consulta selectedConsultation;
     
    @PostConstruct
     public void init(){
@@ -49,7 +49,7 @@ public class ViewEpisodes {
 
     public void emptyView(){
         idEpisode = 0;
-        consultation = null;
+        selectedConsultation = null;
         consultations.clear();
         filterConsultations.clear();
     }
@@ -85,11 +85,13 @@ public class ViewEpisodes {
         this.consultations = consultations;
     }
 
-    public Consulta getConsultation() {
-        return consultation;
+    public Consulta getSelectedConsultation() {
+        return selectedConsultation;
     }
 
-    public void setConsultation(Consulta consultation) {
-        this.consultation = consultation;
-    }    
+    public void setSelectedConsultation(Consulta selectedConsultation) {
+        this.selectedConsultation = selectedConsultation;
+    }
+
+ 
 }

@@ -13,63 +13,64 @@
         <h:form>
             <p:commandButton value="Show Dialog" onclick="PF('dialogEpisodes').show();" type="button" />
         </h:form>
-            <p:dialog header="Episodios" id="idDialogEpisodes" widgetVar="dialogEpisodes" minimizable="true">
-                <p:ajax event="close" listener="#{episodes.emptyView()}" update=":episodesForm"/>
-                <p:growl id="episodesValidator"/>
-                <h:form id="episodesForm">
-                    <p:panelGrid styleClass="panelGridForm" columns="2">
-                        <p:outputLabel value="RUT:"/>
-                        <p:outputLabel value="#{episodes.rut}" id="rutPatientDE" style="font-weight: bold;"/>
-                        <p:outputLabel value="Nombre del Paciente:"/>
-                        <p:outputLabel value="#{episodes.name}" id="namePatientDE" style="font-weight: bold;"/>
-                        <p:outputLabel for="IDEpisodeDE" value="Episodio:" />
-                        <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.episode}" validator="#{validator.selectOneEpisode}">
-                            <f:selectItems value="#{episodes.episodes}" />                        
-                        </p:selectOneMenu>
-                    </p:panelGrid>
-                    <p:panelGrid styleClass="panelGridForm">
-                        <p:row>
-                            <p:column>
-                                <p:commandButton value="Episodio" icon="ui-icon-plusthick"  />
-                                <p:commandButton value="Ver Consultas" icon="ui-icon-search" actionListener="#{viewEpisodes.loadConsultations(episodes.episode)}" update=":viewEpisodesForm :episodesValidator" validateClient="true"/>
-                            </p:column>
-                        </p:row>
-                    </p:panelGrid>
-                </h:form>
-            </p:dialog>
+        <p:dialog header="Episodios" id="idDialogEpisodes" widgetVar="dialogEpisodes" minimizable="true">
+            <p:ajax event="close" listener="#{episodes.emptyView()}" update=":episodesForm"/>
+            <p:growl id="episodesValidator"/>
+            <h:form id="episodesForm">
+                <p:panelGrid styleClass="panelGridForm" columns="2">
+                    <p:outputLabel value="RUT:"/>
+                    <p:outputLabel value="#{episodes.rut}" id="rutPatientDE" style="font-weight: bold;"/>
+                    <p:outputLabel value="Nombre del Paciente:"/>
+                    <p:outputLabel value="#{episodes.name}" id="namePatientDE" style="font-weight: bold;"/>
+                    <p:outputLabel for="IDEpisodeDE" value="Episodio:" />
+                    <p:selectOneMenu id="IDEpisodeDE" value="#{episodes.episode}" validator="#{validator.selectOneEpisode}">
+                        <f:selectItems value="#{episodes.episodes}" />                        
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:panelGrid styleClass="panelGridForm">
+                    <p:row>
+                        <p:column>
+                            <p:commandButton value="Episodio" icon="ui-icon-plusthick"  />
+                            <p:commandButton value="Ver Consultas" icon="ui-icon-search" actionListener="#{viewEpisodes.loadConsultations(episodes.episode)}" update=":viewEpisodesForm :episodesValidator" validateClient="true"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
 
-            <p:dialog header="Ver Episodio" widgetVar="viewEpisodes" minimizable="true">
-                <p:ajax event="close" listener="#{viewEpisodes.emptyView()}" update=":viewEpisodesForm"/>
-                <h:form id="viewEpisodesForm">
-                    <p:panelGrid styleClass="panelGridForm" columns="4">
-                        <p:outputLabel value="RUT:"/>
-                        <p:outputLabel value="#{episodes.rut}" id="rutPatientVE"/>
-                        <p:outputLabel value="Nombre del Paciente:"/>
-                        <p:outputLabel value="#{episodes.name}" id="namePatientVE"/>
-                    </p:panelGrid>
-                    <br/>
-                    <p:panelGrid styleClass="panelGridForm" columns="1">
-                        <p:dataTable id="viewConsultationsVE" widgetVar="viewConsultationsWV" var="consultation" value="#{viewEpisodes.consultations}" 
-                                     selectionMode="single" selection="#{viewEpisodes.consultation}" rowKey="consultation"
-                                     emptyMessage="No se registran consultas"
-                                     filteredValue="#{viewEpisodes.filterConsultations}">
-                            <f:facet name="header">
-                                Consultas
-                                 <p:inputText id="globalFilter" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px" placeholder="Enter keyword"/>
-                            </f:facet>                        
-                            <p:column headerText="Fecha" sortBy="#{consultation.consultafecha}">
-                                <h:outputText value="#{consultation.consultafecha}" />
-                            </p:column>
-                            <p:column headerText="Motivo de la consulta">
-                                <h:outputText value="#{consultation.motivoConsulta}" />
-                            </p:column>                        
-                            <f:facet name="footer">
-                                <p:commandButton   icon="ui-icon-plusthick" value="Nueva Consulta" />
-                                <p:commandButton   icon="ui-icon-search" value="Ver Consulta" />                            
-                            </f:facet>
-                        </p:dataTable>
-                    </p:panelGrid>
-                </h:form>
-            </p:dialog>
+        <p:dialog header="Ver Episodio" widgetVar="viewEpisodes" minimizable="true">
+            <p:ajax event="close" listener="#{viewEpisodes.emptyView()}" update=":viewEpisodesForm"/>
+            <h:form id="viewEpisodesForm">
+                <p:panelGrid styleClass="panelGridForm" columns="2">
+                    <p:outputLabel value="RUT:"/>
+                    <p:outputLabel value="#{episodes.rut}" id="rutPatientVE" style="font-weight: bold;"/>
+                    <p:outputLabel value="Nombre del Paciente:"/>
+                    <p:outputLabel value="#{episodes.name}" id="namePatientVE" style="font-weight: bold;"/>
+                </p:panelGrid>
+                <br/>
+                <p:panelGrid styleClass="panelGridForm" columns="1">
+                    <p:dataTable var="consultation"  value="#{viewEpisodes.consultations}" widgetVar="viewConsultationsWV" 
+                                 emptyMessage="No se registran consultas" filteredValue="#{viewEpisodes.filterConsultations}"
+                                 selectionMode="single" selection="#{viewEpisodes.selectedConsultation}" rowKey="#{consultation}" 
+                                 style="width: 370px;" scrollHeight="300" scrollable="true">
+                        <f:facet name="header">
+                            <h:outputText value="Buscar: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px"/>
+                        </f:facet>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{consultation.consultafecha}" />
+                        </p:column>
+                        <p:column headerText="Motivo de la consulta">
+                            <h:outputText value="#{consultation.motivoConsulta}" />
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton   icon="ui-icon-plusthick" value="Nueva Consulta" />
+                            <p:commandButton   icon="ui-icon-search" value="Ver Consulta" />                               
+                        </f:facet> 
+                    </p:dataTable>
+
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
     </h:body>
 </html>

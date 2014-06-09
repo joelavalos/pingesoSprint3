@@ -11,7 +11,6 @@
     </h:head>
     <h:body>
         <h:form id="newConsultationForm">
-            <p:growl id="newConsultationValidation"/>
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
@@ -26,8 +25,8 @@
                                 <p:menuitem value="Formulario de concentimiento de información" url="#" />
                             </p:submenu>
                             <p:submenu label="Ver" >
-                                <p:menuitem value="Consultas Anteriores"  url="#" />
-                                <p:menuitem value="Evoluciones Clínicas" url="#" />
+                                <p:menuitem value="Consultas Anteriores"  onsuccess="cancelConsultationDialog.show();" />
+                                <p:menuitem value="Evoluciones Clínicas" onsuccess="viewEpisodes.show();"  />
                                 <p:menuitem value="Diagnósticos"  url="#" />
                                 <p:menuitem value="Signos vitales"  url="#" />
                             </p:submenu>
@@ -54,9 +53,9 @@
                 <p:row>
                     <p:column colspan="1">
                         <h:panelGrid columns="6" cellpadding="1">
-                            <p:autoComplete id="pathologyAutocomplete" placeholder="Patología" value="#{newConsultation.pathologyName}" completeMethod="#{newConsultation.completeTextPathology}" validator="#{validator.existentPathology}"/>
+                            <p:autoComplete placeholder="Patología" value="#{newConsultation.pathologyName}" completeMethod="#{newConsultation.completeTextPathology}" />
                             <p:commandButton value="Ver Más" onsuccess="pathologyListDialog.show();" icon="ui-icon-search" />
-                            <p:selectOneMenu id="selectState" value="#{newConsultation.diagnosticState}" validator="#{validator.selectOneState}">
+                            <p:selectOneMenu value="#{newConsultation.diagnosticState}">
                                 <f:selectItem itemLabel="Seleccione Estado" itemValue="0" noSelectionOption="true" />
                                 <f:selectItem itemLabel="sospecha" itemValue="sospecha" />
                                 <f:selectItem itemLabel="confirmado" itemValue="confirmado" />
@@ -99,7 +98,7 @@
                             <f:facet name="header">
                                 Hipótesis Diagnóstica
                             </f:facet>
-                            <p:inputTextarea rows="7" cols="60"  autoResize="false" validator="#{validator.insertHipothesis}" />
+                            <p:inputTextarea rows="7" cols="60"  autoResize="false" />
                         </p:panelGrid>                    
                     </p:column>
                 </p:row>
@@ -139,7 +138,7 @@
                         <p:tabView>
                             <p:tab title="Motivos de la Consulta">
                                 <h:panelGrid columns="2" cellpadding="10">
-                                    <p:inputTextarea rows="5" cols="70"  autoResize="false" validator="#{validator.insertReason}" />
+                                    <p:inputTextarea rows="5" cols="70"  autoResize="false" />
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Notas">
@@ -171,9 +170,9 @@
                 </p:row>
                 <p:row>
                     <p:column colspan="2">
-                        <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" update="newConsultationValidation" validateClient="true" />
-                        <p:commandButton value="Guardar Datos" icon="ui-icon-pause" />
-                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" />
+                        <p:commandButton value="Finalizar Consulta"   icon="ui-icon-disk" />
+                        <p:commandButton value="Guardar Datos"   icon="ui-icon-pause" />
+                        <p:commandButton value="Cancelar"   icon="ui-icon-cancel" />
                     </p:column>
                 </p:row>
             </p:panelGrid>
@@ -222,7 +221,41 @@
                 </p:panelGrid>
             </p:dialog> 
         </h:form>
+        
+        <p:dialog header="Ver Episodio" widgetVar="viewEpisodes" minimizable="true">
+            <p:ajax event="close" listener="#{viewEpisodes.emptyView()}" update=":viewEpisodesForm"/>
+            <h:form id="viewEpisodesForm">
+                <p:panelGrid styleClass="panelGridForm" columns="2">
+                    <p:outputLabel value="RUT:"/>
+                    <p:outputLabel value="#{episodes.rut}" id="rutPatientVE" style="font-weight: bold;"/>
+                    <p:outputLabel value="Nombre del Paciente:"/>
+                    <p:outputLabel value="#{episodes.name}" id="namePatientVE" style="font-weight: bold;"/>
+                </p:panelGrid>
+                <br/>
+                <p:panelGrid styleClass="panelGridForm" columns="1">
+                    <p:dataTable var="consultation"  value="#{viewEpisodes.consultations}" widgetVar="viewConsultationsWV" 
+                                 emptyMessage="No se registran consultas" filteredValue="#{viewEpisodes.filterConsultations}"
+                                 selectionMode="single" selection="#{viewEpisodes.selectedConsultation}" rowKey="#{consultation}" 
+                                 style="width: 370px;" scrollHeight="300" scrollable="true">
+                        <f:facet name="header">
+                            <h:outputText value="Buscar: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px"/>
+                        </f:facet>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{consultation.consultafecha}" />
+                        </p:column>
+                        <p:column headerText="Motivo de la consulta">
+                            <h:outputText value="#{consultation.motivoConsulta}" />
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton   icon="ui-icon-plusthick" value="Nueva Consulta" />
+                            <p:commandButton   icon="ui-icon-search" value="Ver Consulta" />                               
+                        </f:facet> 
+                    </p:dataTable>
 
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
     </h:body>
 </html>
 

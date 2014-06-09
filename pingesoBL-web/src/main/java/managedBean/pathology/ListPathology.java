@@ -53,6 +53,8 @@ public class ListPathology {
     public void setSelectedPathology(Patologia selectedPathology) {
         this.selectedPathology = selectedPathology;
     }
+    
+    
 
    
    

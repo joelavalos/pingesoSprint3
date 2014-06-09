@@ -10,15 +10,15 @@
         <title>Consulta Médica</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="newConsultationForm">
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
                         <p:menubar>
                             <p:menuitem value="Datos del Paciente" icon="ui-icon-person" url="#"/>
                             <p:submenu label="Antecedentes" >
-                                <p:menuitem value="Familiares" url="#" />
-                                <p:menuitem value="Personales" url="#" />
+                                <p:menuitem value="Familiares" url="#" disabled="true" />
+                                <p:menuitem value="Personales" url="#" disabled="true"/>
                             </p:submenu>
                             <p:submenu label="Formulario GES" >
                                 <p:menuitem value="Informe de proceso de diagnóstico" url="#" />
@@ -53,16 +53,16 @@
                 <p:row>
                     <p:column colspan="1">
                         <h:panelGrid columns="6" cellpadding="1">
-                            <p:autoComplete placeholder="Patología"/>
-                            <p:commandButton value="Ver" onsuccess="pathologyListDialog.show();" icon="ui-icon-search" />
-                            <p:selectOneMenu>
-                                <f:selectItem itemLabel="Seleccione Estado" itemValue="" noSelectionOption="true" />
+                            <p:autoComplete placeholder="Patología" value="#{newConsultation.pathologyName}" completeMethod="#{newConsultation.completeTextPathology}" />
+                            <p:commandButton value="Ver Más" onsuccess="pathologyListDialog.show();" icon="ui-icon-search" />
+                            <p:selectOneMenu value="#{newConsultation.diagnosticState}">
+                                <f:selectItem itemLabel="Seleccione Estado" itemValue="0" noSelectionOption="true" />
                                 <f:selectItem itemLabel="sospecha" itemValue="sospecha" />
                                 <f:selectItem itemLabel="confirmado" itemValue="confirmado" />
                             </p:selectOneMenu>
-                            <p:outputLabel value="Es GES"/>
-                            <p:selectBooleanCheckbox/>
-                            <p:commandButton icon="ui-icon-plus" />   
+                            <p:outputLabel value="Es GES" />
+                            <p:selectBooleanCheckbox value="#{newConsultation.diagnosticGes}"/>
+                            <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newConsultationForm" />    
                         </h:panelGrid>
                     </p:column>
                     <p:column colspan="1"/>
@@ -70,22 +70,22 @@
                 </p:row>
                 <p:row>
                     <p:column>
-                        <p:dataTable emptyMessage="El paciente no registra diagnósticos en esta consulta"
-                                     paginator="true" paginatorPosition="bottom" >
+                        <p:dataTable value="#{newConsultation.diagPathList}" var="diagPath" emptyMessage="El paciente no registra diagnósticos en esta consulta"
+                                     scrollable="true" scrollHeight="60" scrollWidth="657" style="width: 657px;">
                             <f:facet name="header">
                                 <h:outputText value="Diagnósticos Ingresados" />
                             </f:facet>
-                            <p:column headerText="CIE 10">
-
+                            <p:column headerText="CIE 10" sortBy="#{diagPath.pathologyId}" width="100">
+                                <h:outputText value="#{diagPath.pathologyId}" />
                             </p:column>
-                            <p:column headerText="Patología">
-
+                            <p:column headerText="Patología" sortBy="#{diagPath.pathologyName}">
+                                <h:outputText value="#{diagPath.pathologyName}" />
                             </p:column>
-                            <p:column headerText="Estado">
-
+                            <p:column headerText="Estado" sortBy="#{diagPath.diagnosticState}">
+                                <h:outputText value="#{diagPath.diagnosticState}" />
                             </p:column>
-                            <p:column headerText="Ges">
-
+                            <p:column headerText="Ges" sortBy="#{diagPath.diagnosticGes ? 'SI': 'NO'}">
+                              <h:outputText value="#{diagPath.diagnosticGes ? 'SI': 'NO'}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton value="Ver diagnósticos anteriores"   icon="ui-icon-calendar" />
@@ -182,23 +182,24 @@
                 <p:panelGrid columns="1" styleClass="panelGridForm">
                     <p:dataTable var="pathology" value="#{listPathology.pathologies}" widgetVar="pathologyListWV"
                                  emptyMessage="No se encuentran patologías en el sistema" filteredValue="#{listPathology.filterPathologies}"
-                                 selectionMode="single" selection="#{listPathology.selectedPathology}" rowKey="pathology">
+                                 selectionMode="single" selection="#{newConsultation.selectedPathology}" rowKey="#{pathology}" 
+                                 style="width: 370px;" scrollHeight="300" scrollable="true">
                         <f:facet name="header">
                             <h:outputText value="Buscar: " />
                             <p:inputText id="globalFilter" onkeyup="PF('pathologyListWV').filter()" style="width:150px"/>
                         </f:facet>
-                        <p:column filterBy="#{pathology.patologiaid}" headerText="CIE10" filterMatchMode="exact">
+                        <p:column filterBy="#{pathology.patologiaid}" headerText="CIE10" filterMatchMode="contains">
                             <h:outputText value="#{pathology.patologiaid}" />
                         </p:column>
                         <p:column filterBy="#{pathology.patologianombre}" headerText="Nombre" filterMatchMode="contains" >
                             <h:outputText value="#{pathology.patologianombre}" />
                         </p:column>                        
-                        <p:column filterBy="#{pathology.patologiages ? 'SI': 'NO'}" headerText="GES"  filterMatchMode="exact">
+                        <p:column filterBy="#{pathology.patologiages ? 'SI': 'NO'}" headerText="GES"  filterMatchMode="contains">
                             <h:outputText value="#{pathology.patologiages ? 'SI': 'NO'}" />
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton icon="ui-icon-search" value="Seleccionar"/>
-                            <p:commandButton icon="ui-icon-search" value="Cancelar" />                             
+                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" update=":newConsultationForm"/>
+                            <p:commandButton icon="ui-icon-cancel" value="Cancelar" />                             
                         </f:facet> 
                     </p:dataTable>
                 </p:panelGrid>

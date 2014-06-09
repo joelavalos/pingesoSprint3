@@ -38,9 +38,10 @@
             </h:form>
         </p:dialog>
 
-        <p:dialog header="Ver Episodio" widgetVar="viewEpisodes" minimizable="true">
-            <p:ajax event="close" listener="#{viewEpisodes.emptyView()}" update=":viewEpisodesForm"/>
-            <h:form id="viewEpisodesForm">
+        <h:form id="viewEpisodesForm">
+            <p:dialog header="Ver Episodio" widgetVar="viewEpisodes" minimizable="true">
+                <p:ajax event="close" listener="#{viewEpisodes.emptyView()}" update=":viewEpisodesForm"/>
+
                 <p:panelGrid styleClass="panelGridForm" columns="2">
                     <p:outputLabel value="RUT:"/>
                     <p:outputLabel value="#{episodes.rut}" id="rutPatientVE" style="font-weight: bold;"/>
@@ -52,15 +53,15 @@
                     <p:dataTable var="consultation"  value="#{viewEpisodes.consultations}" widgetVar="viewConsultationsWV" 
                                  emptyMessage="No se registran consultas" filteredValue="#{viewEpisodes.filterConsultations}"
                                  selectionMode="single" selection="#{viewEpisodes.selectedConsultation}" rowKey="#{consultation}" 
-                                 style="width: 370px;" scrollHeight="300" scrollable="true">
+                                 style="width: 400px;" scrollHeight="300" scrollable="true">
                         <f:facet name="header">
                             <h:outputText value="Buscar: " />
                             <p:inputText id="globalFilter" onkeyup="PF('viewConsultationsWV').filter()" style="width:150px"/>
                         </f:facet>
-                        <p:column headerText="Fecha">
+                        <p:column headerText="Fecha" sortBy="#{consultation.consultafecha}" filterBy="#{consultation.consultafecha}">
                             <h:outputText value="#{consultation.consultafecha}" />
                         </p:column>
-                        <p:column headerText="Motivo de la consulta">
+                        <p:column headerText="Motivo de la consulta" filterBy="#{consultation.motivoConsulta}" >
                             <h:outputText value="#{consultation.motivoConsulta}" />
                         </p:column>
                         <f:facet name="footer">
@@ -70,7 +71,8 @@
                     </p:dataTable>
 
                 </p:panelGrid>
-            </h:form>
-        </p:dialog>
+
+            </p:dialog>
+        </h:form>
     </h:body>
 </html>

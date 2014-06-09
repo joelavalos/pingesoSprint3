@@ -30,7 +30,7 @@ public class PatologiaFacade extends AbstractFacade<Patologia> implements Patolo
     public PatologiaFacade() {
         super(Patologia.class);
     }
-    
+    @Override
     public List<Patologia> searchByNombre(String nombre) {
         Query query;
         query = em.createNamedQuery("Patologia.findByPatologianombre").
@@ -38,5 +38,15 @@ public class PatologiaFacade extends AbstractFacade<Patologia> implements Patolo
         
         return query.getResultList();
     }
+
+    @Override
+    public List<Patologia> searchById(String id) {
+        Query query;
+        query = em.createNamedQuery("Patologia.findByPatologiaid").
+                setParameter("patologiaid", id);
+        
+        return query.getResultList();
+    }
+    
     
 }

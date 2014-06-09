@@ -11,6 +11,7 @@
     </h:head>
     <h:body>
         <h:form id="newConsultationForm">
+            <p:growl id="newConsultationValidation"/>
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
@@ -53,9 +54,9 @@
                 <p:row>
                     <p:column colspan="1">
                         <h:panelGrid columns="6" cellpadding="1">
-                            <p:autoComplete placeholder="Patología" value="#{newConsultation.pathologyName}" completeMethod="#{newConsultation.completeTextPathology}" />
+                            <p:autoComplete id="pathologyAutocomplete" placeholder="Patología" value="#{newConsultation.pathologyName}" completeMethod="#{newConsultation.completeTextPathology}" validator="#{validator.existentPathology}"/>
                             <p:commandButton value="Ver Más" onsuccess="pathologyListDialog.show();" icon="ui-icon-search" />
-                            <p:selectOneMenu value="#{newConsultation.diagnosticState}">
+                            <p:selectOneMenu id="selectState" value="#{newConsultation.diagnosticState}" validator="#{validator.selectOneState}">
                                 <f:selectItem itemLabel="Seleccione Estado" itemValue="0" noSelectionOption="true" />
                                 <f:selectItem itemLabel="sospecha" itemValue="sospecha" />
                                 <f:selectItem itemLabel="confirmado" itemValue="confirmado" />
@@ -98,7 +99,7 @@
                             <f:facet name="header">
                                 Hipótesis Diagnóstica
                             </f:facet>
-                            <p:inputTextarea rows="7" cols="60"  autoResize="false" />
+                            <p:inputTextarea rows="7" cols="60"  autoResize="false" validator="#{validator.insertHipothesis}" />
                         </p:panelGrid>                    
                     </p:column>
                 </p:row>
@@ -138,7 +139,7 @@
                         <p:tabView>
                             <p:tab title="Motivos de la Consulta">
                                 <h:panelGrid columns="2" cellpadding="10">
-                                    <p:inputTextarea rows="5" cols="70"  autoResize="false" />
+                                    <p:inputTextarea rows="5" cols="70"  autoResize="false" validator="#{validator.insertReason}" />
                                 </h:panelGrid>
                             </p:tab>
                             <p:tab title="Notas">
@@ -170,9 +171,9 @@
                 </p:row>
                 <p:row>
                     <p:column colspan="2">
-                        <p:commandButton value="Finalizar Consulta"   icon="ui-icon-disk" />
-                        <p:commandButton value="Guardar Datos"   icon="ui-icon-pause" />
-                        <p:commandButton value="Cancelar"   icon="ui-icon-cancel" />
+                        <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" update="newConsultationValidation" validateClient="true" />
+                        <p:commandButton value="Guardar Datos" icon="ui-icon-pause" />
+                        <p:commandButton value="Cancelar" icon="ui-icon-cancel" />
                     </p:column>
                 </p:row>
             </p:panelGrid>

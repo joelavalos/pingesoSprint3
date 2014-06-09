@@ -29,6 +29,8 @@ public interface PatologiaFacadeLocal {
 
     List<Patologia> findRange(int[] range);
 
+    List<Patologia> searchByNombre(String nombre);
+    
     int count();
     
 }

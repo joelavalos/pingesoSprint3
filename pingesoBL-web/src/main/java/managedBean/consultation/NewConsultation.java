@@ -20,6 +20,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import sessionbeans.ConsultaFacadeLocal;
 import sessionbeans.DiagnosticoFacadeLocal;
 import sessionbeans.EpisodiosFacadeLocal;
@@ -77,6 +78,7 @@ public class NewConsultation {
     private boolean consultationPaused = false;
     private String consultationNotes;
     private String physicalExamination;
+    private boolean pertinence;
     
     @PostConstruct
     public void init(){
@@ -96,6 +98,10 @@ public class NewConsultation {
             pathologyGes = selectedPathology.getPatologiages();
             diagnosticGes = selectedPathology.getPatologiages();
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Diagnóstico seleccionado", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+            RequestContext.getCurrentInstance().execute("pathologyListDialog.hide()");
+        }else{
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "No ha seleccionado patología", "");
             FacesContext.getCurrentInstance().addMessage("", fm);
         }
     }
@@ -144,7 +150,34 @@ public class NewConsultation {
     public void addConsultation(boolean canceled, boolean paused){
         consultationCanceled = canceled;
         consultationPaused = paused;
-        if((notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses())){
+        if(consultationCanceled){
+            if(!notEmptyHipothesis()){
+                diagnosticHipothesis = "no ingresada.";
+            }
+            if(!notEmptyReason()){
+                consultationReason = "no ingresado.";
+            }
+            Date date = new Date();
+
+            Consulta newConsultation = new Consulta(null);
+            
+            newConsultation.setEpisodioid(searchEpisode.get(0));
+            newConsultation.setHdiagnostica(diagnosticHipothesis);
+            newConsultation.setConsultafecha(date);
+            newConsultation.setCancelada(consultationCanceled);
+            newConsultation.setMotivocancel(canceledReason);
+            newConsultation.setPausada(consultationPaused);
+            newConsultation.setMotivoConsulta(consultationReason);
+            newConsultation.setNotas(consultationNotes);
+            newConsultation.setExploracionFisica(physicalExamination);
+
+            consultationFacade.create(newConsultation);
+            
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta cancelada", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+                
+            resetConsultation();
+        }else if((notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses())){        
             //System.out.println("Id del episodio: " + searchEpisode.get(0).getEpisodioid());
             //searchConsulta = consultaFacade.searchByEpisodio(searchEpisode.get(0));
             //System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");
@@ -174,6 +207,14 @@ public class NewConsultation {
                 newDiagnostico.setDiagnosticoges(diagnostic.isDiagnosticGes());
                 newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
                 diagnosticFacade.create(newDiagnostico);
+            }
+            
+            if(consultationPaused){
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta pausada", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }else{
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta guardada exitosamente", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
             }
             resetConsultation();
         }else{
@@ -225,6 +266,7 @@ public class NewConsultation {
         consultationPaused = false;
         consultationNotes = "";
         physicalExamination = ""; 
+        pertinence = false;
         resetDiagnostic();
     }
     
@@ -387,6 +429,15 @@ public class NewConsultation {
         this.physicalExamination = physicalExamination;
     }
 
+    public boolean isPertinence() {
+        return pertinence;
+    }
+
+    public void setPertinence(boolean pertinence) {
+        this.pertinence = pertinence;
+    }
+
+    
     
     
 }

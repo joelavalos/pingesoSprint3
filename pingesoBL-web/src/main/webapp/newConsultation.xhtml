@@ -64,7 +64,7 @@
                             </p:selectOneMenu>
                             <p:outputLabel value="Es GES" />
                             <p:selectBooleanCheckbox value="#{newConsultation.diagnosticGes}"/>
-                            <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newDiagnosticForm :newConsultationForm"/>
+                            <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newDiagnosticForm :newConsultationForm:diagnosticDataTable"/>
                         </h:panelGrid>
                         </h:form>
                     </p:column>
@@ -77,7 +77,7 @@
                 <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column>
-                        <p:dataTable value="#{newConsultation.diagPathList}" var="diagPath" emptyMessage="El paciente no registra diagnósticos en esta consulta"
+                        <p:dataTable id="diagnosticDataTable" value="#{newConsultation.diagPathList}" var="diagPath" emptyMessage="El paciente no registra diagnósticos en esta consulta"
                                      scrollable="true" scrollHeight="60" scrollWidth="657" style="width: 657px;">
                             <f:facet name="header">
                                 <h:outputText value="Diagnósticos Ingresados" />
@@ -170,7 +170,7 @@
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
-                        <p:selectBooleanCheckbox/>
+                        <p:selectBooleanCheckbox value="#{newConsultation.pertinence}"/>
                         <h:outputText value=" Pertinencia" style="font-weight: bold;"/>
                     </p:column>
                 </p:row>
@@ -205,8 +205,8 @@
                             <h:outputText value="#{pathology.patologiages ? 'SI': 'NO'}" />
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" oncomplete="pathologyListDialog.hide()" update=":newDiagnosticForm"/>
-                            <p:commandButton icon="ui-icon-cancel" value="Cancelar" />                             
+                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" update=":newDiagnosticForm"/>
+                            <p:commandButton icon="ui-icon-cancel" onclick="pathologyListDialog.hide()" value="Cancelar" />                             
                         </f:facet> 
                     </p:dataTable>
                 </p:panelGrid>
@@ -225,7 +225,7 @@
                 </p:panelGrid>
                 <p:panelGrid columns="2" styleClass="panelGridForm">
                     <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation(true, false)}" oncomplete="cancelConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm"/>
-                    <p:commandButton id="No" value="No" icon="ui-icon-closethick" onclick="cancelConsultationDialog.hide()"/>
+                    <p:commandButton id="No" value="No" icon="ui-icon-closethick" actionListener="#{newConsultation.resetCancel()}" onclick="cancelConsultationDialog.hide()"/>
                 </p:panelGrid>
             </p:dialog> 
         </h:form>

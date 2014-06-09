@@ -61,6 +61,7 @@ public class NewConsultation {
     
     private int personId;
     private String rut;
+    private String name;
     private List<Paciente> searchPatient;
     private List<RegistroClinico> searchClinicalRecord;
     private List<Episodios> searchEpisode;
@@ -82,6 +83,8 @@ public class NewConsultation {
         rut = "69727697";
         personId = personFacade.findByRut(rut);
         searchPatient = patientFacade.searchByPerson(personId);
+        name = searchPatient.get(0).getPersona().getPersNombres() +" "+ searchPatient.get(0).getPersona().getPersApepaterno()
+                +" "+ searchPatient.get(0).getPersona().getPersApematerno();
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
         searchEpisode = episodeFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
         
@@ -247,6 +250,22 @@ public class NewConsultation {
         }
         return results;
     }
+
+    public String getRut() {
+        return rut;
+    }
+
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }    
     
     public List<DiagnosesPathology> getDiagPathList() {
         return diagPathList;

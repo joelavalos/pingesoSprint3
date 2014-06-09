@@ -6,10 +6,13 @@
 
 package sessionbeans;
 
+import entities.Consulta;
 import entities.Diagnostico;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +31,15 @@ public class DiagnosticoFacade extends AbstractFacade<Diagnostico> implements Di
     public DiagnosticoFacade() {
         super(Diagnostico.class);
     }
+
+    @Override
+    public List<Diagnostico> searchByConsultation(Consulta consulta) {
+        Query query;
+        query = em.createNamedQuery("Diagnostico.findByConsulta").
+                setParameter("consultaid", consulta);
+        
+        return query.getResultList();
+    }
+    
     
 }

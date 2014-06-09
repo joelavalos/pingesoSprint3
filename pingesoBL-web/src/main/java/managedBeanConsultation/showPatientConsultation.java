@@ -11,6 +11,7 @@ import entities.Episodios;
 import entities.Paciente;
 import entities.Patologia;
 import entities.RegistroClinico;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -32,6 +33,7 @@ import sessionbeans.RegistroClinicoFacadeLocal;
 @ManagedBean
 @ViewScoped
 public class showPatientConsultation {
+
     @EJB
     private DiagnosticoFacadeLocal diagnosticoFacade;
     @EJB
@@ -71,15 +73,35 @@ public class showPatientConsultation {
     private Date dateDiagnoses;
     private String stateDiagnoses;
 
+    //PARTE NUEVA PARA LOS DIAGNOSTICOS DE TODAS LAS CONSULTAS DEL EPISODIO
+    private List<Diagnostico> allDiagnosesConsultation = new ArrayList<Diagnostico>();
+    //PARTE NUEVA PARA LOS DIAGNOSTICOS DE TODAS LAS CONSULTAS DEL EPISODIO
+
     private List<Diagnostico> allDiagnoses;
+
     /**
      * Creates a new instance of showPatientConsultation
      */
     @PostConstruct
     public void init() {
+        PersonId = personaFacade.findByRut(PersonRut);
+        searchPaciente = pacienteFacade.searchByPerson(PersonId);
+        searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
+        searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
+
+        searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
+        
+        //PARTE NUEVA PARA LOS DIAGNOSTICOS DE TODAS LAS CONSULTAS DEL EPISODIO
+        for (int j = 0; j < searchConsultas.size(); j++) {
+            allDiagnoses = diagnosticoFacade.searchByConsultation(searchConsultas.get(j));
+            for (int k = 0; k < allDiagnoses.size(); k++) {
+                allDiagnosesConsultation.add(allDiagnoses.get(k));
+            }
+        }
+        //PARTE NUEVA PARA LOS DIAGNOSTICOS DE TODAS LAS CONSULTAS DEL EPISODIO
         searchPathology = patologiaFacade.findAll();
-        allDiagnoses = diagnosticoFacade.findAll();
-        searchConsultas = consultaFacade.findAll();
+       
+
     }
 
     public showPatientConsultation() {
@@ -141,11 +163,20 @@ public class showPatientConsultation {
         newDiagnostico.setDiagnosticofecha(dateDiagnoses);
         newDiagnostico.setDiagnosticoges(gesDiagnoses);
         newDiagnostico.setDiagnosticoestado(stateDiagnoses);
-        
+
         diagnosticoFacade.create(newDiagnostico);
+
         
-        allDiagnoses = diagnosticoFacade.findAll();
-        
+        //PARTE NUEVA PARA LOS DIAGNOSTICOS DE TODAS LAS CONSULTAS DEL EPISODIO
+        allDiagnosesConsultation.clear();
+        for (int j = 0; j < searchConsultas.size(); j++) {
+            allDiagnoses = diagnosticoFacade.searchByConsultation(searchConsultas.get(j));
+            for (int k = 0; k < allDiagnoses.size(); k++) {
+                allDiagnosesConsultation.add(allDiagnoses.get(k));
+            }
+        }
+        //PARTE NUEVA PARA LOS DIAGNOSTICOS DE TODAS LAS CONSULTAS DEL EPISODIO
+
     }
 
     public RegistroClinicoFacadeLocal getRegistroClinicoFacade() {
@@ -322,6 +353,14 @@ public class showPatientConsultation {
 
     public void setAllDiagnoses(List<Diagnostico> allDiagnoses) {
         this.allDiagnoses = allDiagnoses;
+    }
+
+    public List<Diagnostico> getAllDiagnosesConsultation() {
+        return allDiagnosesConsultation;
+    }
+
+    public void setAllDiagnosesConsultation(List<Diagnostico> allDiagnosesConsultation) {
+        this.allDiagnosesConsultation = allDiagnosesConsultation;
     }
 
 }

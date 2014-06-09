@@ -36,8 +36,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Muesta.findByFecha", query = "SELECT m FROM Muesta m WHERE m.fecha = :fecha"),
     @NamedQuery(name = "Muesta.findByValor", query = "SELECT m FROM Muesta m WHERE m.valor = :valor"),
     @NamedQuery(name = "Muesta.findByPacienteFecha", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona and m.fecha = :fecha"),
-    @NamedQuery(name = "Muesta.findByPaciente", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona")})
+    @NamedQuery(name = "Muesta.findByPaciente", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona"),
+    @NamedQuery(name = "Muesta.findByPacienteGrupo", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona and m.grupo = :grupo")})
 public class Muesta implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "grupo")
+    private int grupo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -137,6 +143,14 @@ public class Muesta implements Serializable {
     @Override
     public String toString() {
         return "entities.Muesta[ idMuestra=" + idMuestra + " ]";
+    }
+
+    public int getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(int grupo) {
+        this.grupo = grupo;
     }
 
 }

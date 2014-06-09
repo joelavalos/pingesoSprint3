@@ -51,6 +51,16 @@ public class MuestaFacade extends AbstractFacade<Muesta> implements MuestaFacade
         
         return query.getResultList();
     }
+
+    @Override
+    public List<Muesta> searchByPatientGroup(Paciente patient, int group) {
+        Query query;
+        query = em.createNamedQuery("Muesta.findByPacienteGrupo").
+                setParameter("idPersona", patient).
+                setParameter("grupo", group);
+        
+        return query.getResultList();
+    }
     
     
 }

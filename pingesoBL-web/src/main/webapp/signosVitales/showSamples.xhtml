@@ -8,14 +8,14 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="form1">
 
             <p:panelGrid columns="2">
                 <p:outputPanel>
                     <p:outputLabel value="Fecha y hora"/>
                     <br/>
                     <p:selectOneMenu value="#{showSamples.samplesId}" effect="drop" > 
-                        <f:selectItems id="select" value="#{showSamples.searchSamples}" var="samples" itemLabel="#{samples.fecha}" itemValue="#{samples.idMuestra}"/>  
+                        <f:selectItems id="select" value="#{showSamples.grupos}" var="samples" itemLabel="#{samples}" itemValue="#{samples}"/>  
                     </p:selectOneMenu>
                 </p:outputPanel>
 
@@ -35,7 +35,7 @@
                 </p:outputPanel>
             </p:panelGrid>
 
-            <p:commandButton value="Mostrar" actionListener="#{showSamples.showSamples()}"/>
+            <p:commandButton value="Mostrar" actionListener="#{showSamples.showSamples()}" update="form1"/>
         </h:form>
     </h:body>
 </html>

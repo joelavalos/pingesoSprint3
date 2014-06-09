@@ -36,5 +36,7 @@ public interface MuestaFacadeLocal {
     List<Muesta> searchByPatientAndDate(Paciente patient, Date fecha);
 
     List<Muesta> searchByPatient(Paciente patient);
+
+    List<Muesta> searchByPatientGroup(Paciente patient, int group);
     
 }

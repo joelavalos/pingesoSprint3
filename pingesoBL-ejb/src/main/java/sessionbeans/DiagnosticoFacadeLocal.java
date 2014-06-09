@@ -6,6 +6,7 @@
 
 package sessionbeans;
 
+import entities.Consulta;
 import entities.Diagnostico;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,5 +31,7 @@ public interface DiagnosticoFacadeLocal {
     List<Diagnostico> findRange(int[] range);
 
     int count();
+
+    List<Diagnostico> searchByConsultation(Consulta consulta);
     
 }

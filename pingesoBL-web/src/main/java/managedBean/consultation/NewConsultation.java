@@ -80,12 +80,7 @@ public class NewConsultation {
     }
 
     public boolean pathologyExists(){
-        try{
-            pathologyFacade.searchByNombre(pathologyName);
-        }catch(Exception e){
-            return false;   
-        }
-        return true;
+            return !pathologyFacade.searchByNombre(pathologyName).isEmpty();
     }
     
     public boolean selectOneState(){
@@ -98,15 +93,15 @@ public class NewConsultation {
         if(notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()){
             //TO-DO: Agregar consulta
         }else{
-            if(notEmptyHipothesis()){
+            if(!notEmptyHipothesis()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }
-            if(notEmptyReason()){
+            if(!notEmptyReason()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para la consulta", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }
-            if(notEmptyDiagnoses()){
+            if(!notEmptyDiagnoses()){
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnóstico", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }    
@@ -202,4 +197,22 @@ public class NewConsultation {
         this.pathologyGes = pathologyGes;
     }
 
+    public String getDiagnosticHipothesis() {
+        return diagnosticHipothesis;
+    }
+
+    public void setDiagnosticHipothesis(String diagnosticHipothesis) {
+        this.diagnosticHipothesis = diagnosticHipothesis;
+    }
+
+    public String getConsultationReason() {
+        return consultationReason;
+    }
+
+    public void setConsultationReason(String consultationReason) {
+        this.consultationReason = consultationReason;
+    }
+
+    
+    
 }

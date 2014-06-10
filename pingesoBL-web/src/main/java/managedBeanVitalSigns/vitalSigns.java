@@ -74,7 +74,6 @@ public class vitalSigns {
      * Creates a new instance of vitalSigns
      */
     @PostConstruct
-
     public void init() {
         searchVitalSigns = signosVitalesFacade.findAll();
     }

@@ -5,14 +5,21 @@
  */
 package managedBean.vitalSigns;
 
-import entities.Persona;
+import entities.Muesta;
+import entities.Paciente;
+import entities.RegistroClinico;
 import entities.SignosVitales;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import sessionbeans.MuestaFacadeLocal;
+import sessionbeans.PacienteFacadeLocal;
+import sessionbeans.PersonaFacadeLocal;
+import sessionbeans.RegistroClinicoFacadeLocal;
 import sessionbeans.SignosVitalesFacadeLocal;
 
 /**
@@ -24,44 +31,238 @@ import sessionbeans.SignosVitalesFacadeLocal;
 public class AddVitalSigns {
 
     @EJB
+    private MuestaFacadeLocal sampleFacade;
+    @EJB
+    private RegistroClinicoFacadeLocal clinicalRecordFacade;
+    @EJB
+    private PacienteFacadeLocal patientFacade;
+    @EJB
+    private PersonaFacadeLocal personFacade;
+    @EJB
     private SignosVitalesFacadeLocal vitalSignsFacade;
-    private List<SignosVitales> searchVitalSigns;
-    
-    private int idVitalSings;
-    private int otherSigns;
 
-    private Persona selectedPerson;
-    private String name;
-    private String rut;
-    private int temperature;
-    private int pulse;
-    private int height;
-    private int diastolicPressure;
-    private int systolicPressure;
-    private int weight;
-    private int satO2;
-    
+    private List<SignosVitales> searchVitalSigns;
+    private String vitalSignsName;
+    private int vitalSignsMinRange;
+    private int vitalSignsMaxRange;
+
+    private List<SignosVitales> selectedVitalSign;
+    private int vitalSignsId;
+    private int vitalSignsValue;
+
+    private List<Paciente> searchPatient;
+    private List<RegistroClinico> searchClinicalRecord;
+
+    private Integer PersonId;
+    private String PersonRut = "69727697";
+
+    private List<Muesta> createSamples = new ArrayList<Muesta>();
+    private List<Muesta> createSamplesAlways = new ArrayList<Muesta>();
+    int max = 0;
+
+    private int peso;
+    private int altura;
+    private int temperatura;
+    private int saturacion;
+    private int presionSistolica;
+    private int presionDiastolica;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         searchVitalSigns = vitalSignsFacade.findAll();
     }
-    
-    public void addVS() {
-        System.out.println(selectedPerson.getIdPersona());
-        name = selectedPerson.getPersNombres() + " " + selectedPerson.getPersApepaterno() + " " + selectedPerson.getPersApematerno();
-        rut = selectedPerson.getPersRut();
+
+    public void addNewVitalSigns() {
+        SignosVitales newVitalSigns = new SignosVitales(null, vitalSignsName);
+        newVitalSigns.setRangoMin(vitalSignsMinRange);
+        newVitalSigns.setRangoMax(vitalSignsMaxRange);
+
+        vitalSignsFacade.create(newVitalSigns);
+        searchVitalSigns = vitalSignsFacade.findAll();
+        System.out.println("Se ha creado el nuevo signo vital");
     }
 
-    public int getOtherSigns() {
-        return otherSigns;
+    public void createVitalSignsPatients() {
+        PersonId = personFacade.findByRut(PersonRut);
+        searchPatient = patientFacade.searchByPerson(PersonId);
+        searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
+
+        List<Muesta> allSamples = sampleFacade.searchByPatient(searchPatient.get(0));
+        max = 0;
+        if (allSamples.isEmpty()) {
+            max = 0;
+        } else {
+            for (int i = 0; i < allSamples.size(); i++) {
+                if (allSamples.get(i).getGrupo() > max) {
+                    max = allSamples.get(i).getGrupo();
+                } else {
+
+                }
+            }
+            max++;
+        }
+
+        System.out.println("Valor del grupo: " + max);
+
+        Date fecha = new Date();
+
+        selectedVitalSign = vitalSignsFacade.searchByName("Peso");
+        Muesta newMuesta = new Muesta(null);
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(peso);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamplesAlways.add(newMuesta);
+
+        newMuesta = new Muesta(null);
+        selectedVitalSign = vitalSignsFacade.searchByName("Altura");
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(altura);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamplesAlways.add(newMuesta);
+
+        newMuesta = new Muesta(null);
+        selectedVitalSign = vitalSignsFacade.searchByName("Temperatura");
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(temperatura);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamplesAlways.add(newMuesta);
+
+        newMuesta = new Muesta(null);
+        selectedVitalSign = vitalSignsFacade.searchByName("Saturación O2");
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(saturacion);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamplesAlways.add(newMuesta);
+
+        newMuesta = new Muesta(null);
+        selectedVitalSign = vitalSignsFacade.searchByName("Presión Sistólica");
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(presionSistolica);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamplesAlways.add(newMuesta);
+
+        newMuesta = new Muesta(null);
+        selectedVitalSign = vitalSignsFacade.searchByName("Presión Diastólica");
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(presionDiastolica);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamplesAlways.add(newMuesta);
+
+        for (int i = 0; i < createSamplesAlways.size(); i++) {
+            if (createSamplesAlways.get(i).getValor() != 0) {
+                sampleFacade.create(createSamplesAlways.get(i));
+            }
+        }
+
+        createSamplesAlways.clear();
+
+        for (int i = 0; i < createSamples.size(); i++) {
+            sampleFacade.create(createSamples.get(i));
+        }
+
+        createSamples.clear();
+
+        max = 0;
+        peso = 0;
+        altura = 0;
+        temperatura = 0;
+        saturacion = 0;
+        presionSistolica = 0;
+        presionDiastolica = 0;
+        System.out.println("El id del signo vital es: " + selectedVitalSign.get(0).getNombreSvital());
+        System.out.println("El id del registro clinico es: " + searchClinicalRecord.get(0).getRegistroclinicoid());
+        System.out.println("Se ha creado la muestra");
+        max = 0;
     }
 
-    public void setOtherSigns(int otherSigns) {
-        this.otherSigns = otherSigns;
+    public void addVitalSignsPatients() {
+        PersonId = personFacade.findByRut(PersonRut);
+        searchPatient = patientFacade.searchByPerson(PersonId);
+        selectedVitalSign = vitalSignsFacade.searchById(vitalSignsId);
+
+        List<Muesta> allSamples = sampleFacade.searchByPatient(searchPatient.get(0));
+        max = 0;
+        if (allSamples.isEmpty()) {
+            max = 0;
+        } else {
+            for (int i = 0; i < allSamples.size(); i++) {
+                if (allSamples.get(i).getGrupo() > max) {
+                    max = allSamples.get(i).getGrupo();
+                } else {
+
+                }
+            }
+            max++;
+        }
+        Date fecha = new Date();
+        Muesta newMuesta = new Muesta(null, fecha, vitalSignsValue);
+        newMuesta.setIdPersona(searchPatient.get(0));
+        newMuesta.setIdSvitales(selectedVitalSign.get(0));
+        newMuesta.setGrupo(max);
+        createSamples.add(newMuesta);
+        System.out.println("El valor maximo del grupo es: " + max);
     }
 
-    
+    public int getPeso() {
+        return peso;
+    }
+
+    public void setPeso(int peso) {
+        this.peso = peso;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public int getTemperatura() {
+        return temperatura;
+    }
+
+    public void setTemperatura(int temperatura) {
+        this.temperatura = temperatura;
+    }
+
+    public int getSaturacion() {
+        return saturacion;
+    }
+
+    public void setSaturacion(int saturacion) {
+        this.saturacion = saturacion;
+    }
+
+    public int getPresionSistolica() {
+        return presionSistolica;
+    }
+
+    public void setPresionSistolica(int presionSistolica) {
+        this.presionSistolica = presionSistolica;
+    }
+
+    public int getPresionDiastolica() {
+        return presionDiastolica;
+    }
+
+    public void setPresionDiastolica(int presionDiastolica) {
+        this.presionDiastolica = presionDiastolica;
+    }
+
     public List<SignosVitales> getSearchVitalSigns() {
         return searchVitalSigns;
     }
@@ -70,94 +271,29 @@ public class AddVitalSigns {
         this.searchVitalSigns = searchVitalSigns;
     }
 
+    public int getVitalSignsId() {
+        return vitalSignsId;
+    }
+
+    public void setVitalSignsId(int vitalSignsId) {
+        this.vitalSignsId = vitalSignsId;
+    }
+
+    public int getVitalSignsValue() {
+        return vitalSignsValue;
+    }
+
+    public void setVitalSignsValue(int vitalSignsValue) {
+        this.vitalSignsValue = vitalSignsValue;
+    }
+
+    public List<Muesta> getCreateSamples() {
+        return createSamples;
+    }
+
+    public void setCreateSamples(List<Muesta> createSamples) {
+        this.createSamples = createSamples;
+    }
     
-    public int getIdVitalSings() {
-        return idVitalSings;
-    }
-
-    public void setIdVitalSings(int idVitalSings) {
-        this.idVitalSings = idVitalSings;
-    }
-
     
-    public int getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
-    }
-
-    public int getPulse() {
-        return pulse;
-    }
-
-    public void setPulse(int pulse) {
-        this.pulse = pulse;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getDiastolicPressure() {
-        return diastolicPressure;
-    }
-
-    public void setDiastolicPressure(int diastolicPressure) {
-        this.diastolicPressure = diastolicPressure;
-    }
-
-    public int getSystolicPressure() {
-        return systolicPressure;
-    }
-
-    public void setSystolicPressure(int systolicPressure) {
-        this.systolicPressure = systolicPressure;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public int getSatO2() {
-        return satO2;
-    }
-
-    public void setSatO2(int satO2) {
-        this.satO2 = satO2;
-    }
-
-    public Persona getSelectedPerson() {
-        return selectedPerson;
-    }
-
-    public void setSelectedPerson(Persona selectedPerson) {
-        this.selectedPerson = selectedPerson;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRut() {
-        return rut;
-    }
-
-    public void setRut(String rut) {
-        this.rut = rut;
-    }
-
 }

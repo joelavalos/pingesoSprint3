@@ -7,7 +7,6 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,12 +15,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,8 +34,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "SignosVitales.findByRangoMin", query = "SELECT s FROM SignosVitales s WHERE s.rangoMin = :rangoMin"),
     @NamedQuery(name = "SignosVitales.findByRangoMax", query = "SELECT s FROM SignosVitales s WHERE s.rangoMax = :rangoMax")})
 public class SignosVitales implements Serializable {
-    @OneToMany(mappedBy = "idSvitales")
-    private Collection<Muesta> muestaCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +42,7 @@ public class SignosVitales implements Serializable {
     private Integer idSvitales;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 100)
     @Column(name = "nombre_svital")
     private String nombreSvital;
     @Column(name = "rango_min")
@@ -122,15 +117,6 @@ public class SignosVitales implements Serializable {
     @Override
     public String toString() {
         return "entities.SignosVitales[ idSvitales=" + idSvitales + " ]";
-    }
-
-    @XmlTransient
-    public Collection<Muesta> getMuestaCollection() {
-        return muestaCollection;
-    }
-
-    public void setMuestaCollection(Collection<Muesta> muestaCollection) {
-        this.muestaCollection = muestaCollection;
     }
     
 }

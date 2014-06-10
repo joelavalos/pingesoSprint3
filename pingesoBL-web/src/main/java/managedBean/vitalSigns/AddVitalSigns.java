@@ -103,7 +103,8 @@ public class AddVitalSigns {
         }
 
         System.out.println("Valor del grupo: " + max);
-
+        System.out.println("PASO POR ACA CTM !!!");
+        
         Date fecha = new Date();
 
         selectedVitalSign = vitalSignsFacade.searchByName("Peso");
@@ -115,6 +116,8 @@ public class AddVitalSigns {
         newMuesta.setGrupo(max);
         createSamplesAlways.add(newMuesta);
 
+        System.out.println("PASO POR ACA CTM !!!");
+        
         newMuesta = new Muesta(null);
         selectedVitalSign = vitalSignsFacade.searchByName("Altura");
         newMuesta.setFecha(fecha);
@@ -159,6 +162,8 @@ public class AddVitalSigns {
         newMuesta.setIdSvitales(selectedVitalSign.get(0));
         newMuesta.setGrupo(max);
         createSamplesAlways.add(newMuesta);
+
+        System.out.println("lol pls");
 
         for (int i = 0; i < createSamplesAlways.size(); i++) {
             if (createSamplesAlways.get(i).getValor() != 0) {
@@ -294,6 +299,5 @@ public class AddVitalSigns {
     public void setCreateSamples(List<Muesta> createSamples) {
         this.createSamples = createSamples;
     }
-    
-    
+
 }

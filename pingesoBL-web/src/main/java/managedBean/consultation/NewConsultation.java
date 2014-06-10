@@ -137,7 +137,7 @@ public class NewConsultation {
             FacesContext.getCurrentInstance().addMessage("", fm);
             RequestContext.getCurrentInstance().execute("pathologyListDialog.hide()");
         } else {
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "No ha seleccionado patología", "");
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No ha seleccionado patología", "");
             FacesContext.getCurrentInstance().addMessage("", fm);
         }
     }

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package managedBean.viewConsultation;
 
 import entities.Consulta;
@@ -14,9 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import managedBean.consultation.DiagnosesPathology;
+import org.primefaces.context.RequestContext;
 import sessionbeans.DiagnosticoFacadeLocal;
 import sessionbeans.PacienteFacadeLocal;
 import sessionbeans.PatologiaFacadeLocal;
@@ -29,13 +31,14 @@ import sessionbeans.PersonaFacadeLocal;
 @ManagedBean
 @ViewScoped
 public class ViewConsultation {
+
     @EJB
     private DiagnosticoFacadeLocal diagnosisFacade;
     @EJB
     private PersonaFacadeLocal personFacade;
     @EJB
     private PacienteFacadeLocal patientFacade;
-    
+
     private String rut;
     private String nombre;
     private Diagnostico selectedDiagnosis;
@@ -47,14 +50,14 @@ public class ViewConsultation {
     private List<Diagnostico> diagnosis;
     private List<DiagnosesPathology> diagPathList = new ArrayList<DiagnosesPathology>();
     private boolean pertinence;
-    
+
     private List<Paciente> searchPatient;
-    
-private Diagnostico diagnoses;
+
+    private Diagnostico diagnoses;
     private Consulta consultation;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         rut = "69727697";
         searchPatient = patientFacade.searchByPerson(personFacade.findByRut(rut));
         nombre = searchPatient.get(0).getPersona().getPersNombres() + " " + searchPatient.get(0).getPersona().getPersApepaterno()
@@ -77,7 +80,7 @@ private Diagnostico diagnoses;
         this.nombre = nombre;
     }
 
-    public void completeDataConsultation(){
+    public void completeDataConsultation() {
         Consulta selectedConsultation = selectedDiagnosis.getConsultaid();
         consultationReason = selectedConsultation.getMotivoConsulta();
         consultationNotes = selectedConsultation.getNotas();
@@ -85,23 +88,29 @@ private Diagnostico diagnoses;
         diagnosisHipothesis = selectedConsultation.getHdiagnostica();
         pertinence = selectedConsultation.getPertinencia();
         diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
-        for(Diagnostico diag: diagnosis){
+        for (Diagnostico diag : diagnosis) {
             diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
         }
     }
-    
-    public void completeData(){
-        consultationReason = selectedConsultation.getMotivoConsulta();
-        consultationNotes = selectedConsultation.getNotas();
-        physicalExamination = selectedConsultation.getExploracionFisica();
-        diagnosisHipothesis = selectedConsultation.getHdiagnostica();
-        pertinence = selectedConsultation.getPertinencia();
-        diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
-        for(Diagnostico diag: diagnosis){
-            diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
+
+    public void completeData() {
+        if (selectedConsultation != null) {
+            consultationReason = selectedConsultation.getMotivoConsulta();
+            consultationNotes = selectedConsultation.getNotas();
+            physicalExamination = selectedConsultation.getExploracionFisica();
+            diagnosisHipothesis = selectedConsultation.getHdiagnostica();
+            pertinence = selectedConsultation.getPertinencia();
+            diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
+            for (Diagnostico diag : diagnosis) {
+                diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
+            }
+            RequestContext.getCurrentInstance().execute("viewConsultationWV.show()");
+        }else{
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe seleccionar una consulta", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
         }
     }
-    
+
     public Diagnostico getDiagnoses() {
         return diagnoses;
     }

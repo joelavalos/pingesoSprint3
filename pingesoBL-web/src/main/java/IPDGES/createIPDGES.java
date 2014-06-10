@@ -15,8 +15,10 @@ import entities.RegistroClinico;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import sessionbeans.ConsultaFacadeLocal;
 import sessionbeans.EpisodiosFacadeLocal;
 import sessionbeans.IpdGesFacadeLocal;
@@ -69,34 +71,63 @@ public class createIPDGES {
     }
     
     public void createIPDGES(){
-        PersonId = personaFacade.findByRut(PersonRut);
-        searchPaciente = pacienteFacade.searchByPerson(PersonId);
-        searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
-        searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
+        if(hayProblema() && haySubProblema() && hayDiagnostico() && hayFundamento() && hayTratamiento() && hayFechaLimite()){
+            PersonId = personaFacade.findByRut(PersonRut);
+            searchPaciente = pacienteFacade.searchByPerson(PersonId);
+            searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
+            searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
 
-        searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
-        
-        IpdGes newIPDGES = new IpdGes(null);
-        newIPDGES.setConsultaid(searchConsultas.get(0));
-        newIPDGES.setProblemaauge(augeProblem);
-        newIPDGES.setSubproblemaauge(augeSubProblem);
-        newIPDGES.setDiagnostico(diagnosis);
-        newIPDGES.setFundamentodiagnostico(fundamentDiagnosis);
-        newIPDGES.setTratamientoind(treatment);
-        newIPDGES.setConfirmages(confirmsGES);
-        newIPDGES.setFechalimite(deadline);
-        
-        ipdGesFacade.create(newIPDGES);
-        
-        augeProblem = "";
-        augeSubProblem = "";
-        diagnosis = "";
-        fundamentDiagnosis = "";
-        treatment = "";
-        confirmsGES = false;
-        deadline = null;
+            searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
+
+            IpdGes newIPDGES = new IpdGes(null);
+            newIPDGES.setConsultaid(searchConsultas.get(0));
+            newIPDGES.setProblemaauge(augeProblem);
+            newIPDGES.setSubproblemaauge(augeSubProblem);
+            newIPDGES.setDiagnostico(diagnosis);
+            newIPDGES.setFundamentodiagnostico(fundamentDiagnosis);
+            newIPDGES.setTratamientoind(treatment);
+            newIPDGES.setConfirmages(confirmsGES);
+            newIPDGES.setFechalimite(deadline);
+
+            ipdGesFacade.create(newIPDGES);
+
+            augeProblem = "";
+            augeSubProblem = "";
+            diagnosis = "";
+            fundamentDiagnosis = "";
+            treatment = "";
+            confirmsGES = false;
+            deadline = null;
+
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Formulario IPD agregado", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }
     }
 
+    private boolean hayProblema(){
+        return !augeProblem.equals("");
+    }
+    
+    private boolean haySubProblema(){
+        return !augeSubProblem.equals("");
+    }
+    
+    private boolean hayDiagnostico(){
+        return !diagnosis.equals("");
+    }
+    
+    private boolean hayFundamento(){
+        return !fundamentDiagnosis.equals("");
+    }
+    
+    private boolean hayTratamiento(){
+        return !treatment.equals("");
+    }
+    
+    private boolean hayFechaLimite(){
+        return deadline != null;
+    }
+    
     public String getAugeProblem() {
         return augeProblem;
     }

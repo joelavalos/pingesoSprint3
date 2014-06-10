@@ -58,7 +58,6 @@ public class showSamples {
         int maxGroup = 0;
         
         for(int i = 0; i<searchSamples.size(); i++){
-            
             for(int j = 0; j<grupos.size(); j++){
                 if(grupos.get(j) == searchSamples.get(i).getGrupo()){
                     existe = true;

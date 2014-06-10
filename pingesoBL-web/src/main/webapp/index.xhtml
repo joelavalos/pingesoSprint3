@@ -243,8 +243,8 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" oncomplete="newConsultationDialog.hide()" update="newConsultationForm :newDiagnosticForm :viewEpisodesForm"/>
-                            <p:commandButton value="Guardar Datos" icon="ui-icon-pause" actionListener="#{newConsultation.addConsultation(false, true)}" oncomplete="newConsultationDialog.hide()" update="newConsultationForm :newDiagnosticForm :viewEpisodesForm"/>
+                            <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
+                            <p:commandButton value="Guardar Datos" icon="ui-icon-pause" actionListener="#{newConsultation.addConsultation(false, true)}" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
                             <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="cancelConsultationDialog.show()"/>
                         </p:column>
                     </p:row>
@@ -283,7 +283,7 @@
         </p:dialog> 
 
         <!-- Cancelar consulta - ID: 5 -->
-        <p:dialog header="Cancelar Consulta" id="cancelConsultation" widgetVar="cancelConsultationDialog">
+        <p:dialog header="Cancelar Consulta" id="cancelConsultation" widgetVar="cancelConsultationDialog" appendTo="newConsultation">
             <h:form id="cancelConsultationForm">
                 <p:panelGrid columns="1" styleClass="panelGridForm">
                     <p:outputPanel deferred="true">
@@ -293,7 +293,7 @@
                     <p:inputTextarea id="cause" value="#{newConsultation.canceledReason}" cols="50" rows="4" autoResize="false"/>
                 </p:panelGrid>
                 <p:panelGrid columns="2" styleClass="panelGridForm">
-                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation(true, false)}" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm"/>
+                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation(true, false)}" onstart="cancelConsultationDialog.hide()" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
                     <p:commandButton id="No" value="No" icon="ui-icon-closethick" actionListener="#{newConsultation.resetCancel()}" onclick="cancelConsultationDialog.hide()"/>
                 </p:panelGrid>
             </h:form>
@@ -306,7 +306,7 @@
                     <p:dataTable id="tableAllDiagnoses" var="allDiagnoses" value="#{newConsultation.allDiagnosesConsultation}" widgetVar="previousDiagnosesDT"
                                  emptyMessage="No se registran diagnósticos anteriores" filteredValue="#{newConsultation.filteredDiagnosesConsultation}"
                                  style="width: 550px;" scrollHeight="300" scrollable="true"
-                                 selectionMode="single" selection="#{newConsultation.selectedDiagnosis}" rowKey="#{allDiagnoses.diagnosticoid}">
+                                 selectionMode="single" selection="#{viewConsultation.selectedDiagnosis}" rowKey="#{allDiagnoses.diagnosticoid}">
                         <f:facet name="header">
                             <h:outputText value="Buscar: " />
                             <p:inputText id="globalFilter" onkeyup="PF('previousDiagnosesDT').filter()" style="width:150px"/>
@@ -324,7 +324,7 @@
                             <h:outputText value="#{allDiagnoses.diagnosticoges ? 'SI': 'NO'}" />
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton icon="ui-icon-check" value="Seleccionar" onsuccess="viewConsultationWV.show();" actionListener="#{viewConsultation.completeDataConsultation}"/>                                
+                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{viewConsultation.completeDataConsultation()}" oncomplete="viewConsultationWV.show()" update=":viewConsultationForm"/>
                             <p:commandButton icon="ui-icon-cancel" onclick="previousDiagnosesWV.hide()" value="Cancelar" />
                         </f:facet> 
                     </p:dataTable>
@@ -341,8 +341,8 @@
                             <p:panelGrid columns="4" style="font-weight: bold">
                                 <p:outputLabel value="Rut paciente:"/>
                                 <p:outputLabel value="#{viewConsultation.rut}"/>
+                                <p:outputLabel value="Nombre paciente:"/>
                                 <p:outputLabel value="#{viewConsultation.nombre}"/>
-                                <p:outputLabel value="-"/>
                             </p:panelGrid>
                         </p:column>
                     </p:row>
@@ -354,7 +354,7 @@
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
                         <p:column>
-                            <p:dataTable id="diagnosticDataTable" value="#{newConsultation.diagPathList}" var="diagPath" emptyMessage="El paciente no registra diagnósticos en esta consulta"
+                            <p:dataTable id="diagnosticDataTable" value="#{viewConsultation.diagPathList}" var="diagPath" emptyMessage="El paciente no registra diagnósticos en esta consulta"
                                          scrollable="true" scrollHeight="65" scrollWidth="657" style="width: 657px;">
                                 <f:facet name="header">
                                     <h:outputText value="Diagnósticos Ingresados" />
@@ -381,7 +381,9 @@
                                 <f:facet name="header">
                                     Hipótesis Diagnóstica
                                 </f:facet>
-                                <p:scrollPanel mode="native" style="width:377px;height:122px"/>                            
+                                <p:scrollPanel mode="native" style="width:377px;height:122px">
+                                    <p:outputLabel value="#{viewConsultation.diagnosisHipothesis}"/> 
+                                </p:scrollPanel>
                             </p:panelGrid>                    
                         </p:column>
                     </p:row>
@@ -395,17 +397,23 @@
                             <p:tabView>
                                 <p:tab title="Motivos de la Consulta">
                                     <h:panelGrid columns="2" cellpadding="10">
-                                        <p:scrollPanel mode="native" style="width:438px;height:80px"/>
+                                        <p:scrollPanel mode="native" style="width:438px;height:80px">
+                                            <p:outputLabel value="#{viewConsultation.consultationReason}"/>
+                                        </p:scrollPanel>
                                     </h:panelGrid>
                                 </p:tab>
                                 <p:tab title="Notas">
                                     <h:panelGrid columns="2" cellpadding="10">
-                                        <p:scrollPanel mode="native" style="width:438px;height:80px"/>
+                                        <p:scrollPanel mode="native" style="width:438px;height:80px">
+                                           <p:outputLabel value="#{viewConsultation.consultationNotes}"/> 
+                                        </p:scrollPanel>
                                     </h:panelGrid>
                                 </p:tab>
                                 <p:tab title="Exploración Física">
                                     <h:panelGrid columns="2" cellpadding="10">
-                                        <p:scrollPanel mode="native" style="width:438px;height:80px"/>
+                                        <p:scrollPanel mode="native" style="width:438px;height:80px">
+                                            <p:outputLabel value="#{viewConsultation.physicalExamination}"/> 
+                                        </p:scrollPanel>
                                     </h:panelGrid>
                                 </p:tab>
                                 <p:tab title="Tratamiento" disabled="true">
@@ -417,8 +425,8 @@
                         </p:column>
                         <p:column>
                             <p:panelGrid styleClass="panelGridForm" columns="2">
-                                <p:selectBooleanCheckbox value="#{newConsultation.pertinence}"/>
-                                <h:outputText value=" Pertinencia" style="font-weight: bold;"/>                           
+                                <p:selectBooleanCheckbox value="#{viewConsultation.pertinence}"/>
+                                <h:outputText value="Pertinencia" style="font-weight: bold;"/>                           
                             </p:panelGrid>
                             <p:panelGrid styleClass="panelGridForm" columns="1">
                                 <p:commandButton value="Signos Vitales a la Fecha" icon="ui-icon-calendar"/>                         

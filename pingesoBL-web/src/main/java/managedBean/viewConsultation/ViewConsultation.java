@@ -39,6 +39,7 @@ public class ViewConsultation {
     private String rut;
     private String nombre;
     private Diagnostico selectedDiagnosis;
+    private Consulta selectedConsultation;
     private String consultationReason;
     private String consultationNotes;
     private String physicalExamination;
@@ -82,7 +83,19 @@ private Diagnostico diagnoses;
         consultationNotes = selectedConsultation.getNotas();
         physicalExamination = selectedConsultation.getExploracionFisica();
         diagnosisHipothesis = selectedConsultation.getHdiagnostica();
-        //pertinence = selectedConsultation.getPertinence();
+        pertinence = selectedConsultation.getPertinencia();
+        diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
+        for(Diagnostico diag: diagnosis){
+            diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
+        }
+    }
+    
+    public void completeData(){
+        consultationReason = selectedConsultation.getMotivoConsulta();
+        consultationNotes = selectedConsultation.getNotas();
+        physicalExamination = selectedConsultation.getExploracionFisica();
+        diagnosisHipothesis = selectedConsultation.getHdiagnostica();
+        pertinence = selectedConsultation.getPertinencia();
         diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
         for(Diagnostico diag: diagnosis){
             diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
@@ -169,5 +182,12 @@ private Diagnostico diagnoses;
         this.diagnosis = diagnosis;
     }
 
-    
+    public Consulta getSelectedConsultation() {
+        return selectedConsultation;
+    }
+
+    public void setSelectedConsultation(Consulta selectedConsultation) {
+        this.selectedConsultation = selectedConsultation;
+    }
+
 }

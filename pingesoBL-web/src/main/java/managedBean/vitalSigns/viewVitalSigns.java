@@ -50,18 +50,34 @@ public class viewVitalSigns {
         //Date fecha = new Date(1990, 17, 9);
         boolean exist = false;
         int maxGroup = 0;
-        searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
-        for (int i = 0; i < searchSamples.size(); i++) {
-            for (int j = 0; j < groups.size(); j++) {
-                if (groups.get(j) == searchSamples.get(i).getGrupo()) {
+        /*for (Muesta searchSample : searchSamples) {
+            for (Integer group : groups) {
+                if (group == searchSample.getGrupo()) {
                     exist = true;
                 }
             }
             if (exist == false) {
-                groups.add(searchSamples.get(i).getGrupo());
+                groups.add(searchSample.getGrupo());
+                String dateAux = searchSample.getFecha().toString();
+                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
             }
             exist = false;
-            maxGroup = searchSamples.get(i).getGrupo();
+            maxGroup = searchSample.getGrupo();
+        }
+        searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);*/
+
+        searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
+        for (Muesta searchSample : searchSamples) {
+            for (Integer group : groups) {
+                if (group == searchSample.getGrupo()) {
+                    exist = true;
+                }
+            }
+            if (exist == false) {
+                groups.add(searchSample.getGrupo());
+            }
+            exist = false;
+            maxGroup = searchSample.getGrupo();
         }
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
     }
@@ -110,7 +126,5 @@ public class viewVitalSigns {
     public void setSearchSamples(List<Muesta> searchSamples) {
         this.searchSamples = searchSamples;
     }
-    
-    
 
 }

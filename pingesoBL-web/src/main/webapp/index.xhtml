@@ -64,7 +64,7 @@
                 <p:panelGrid styleClass="panelGridForm" columns="1">
                     <p:dataTable var="consultation"  value="#{viewEpisodes.consultations}" widgetVar="viewConsultationsWV" 
                                  emptyMessage="No se registran consultas" filteredValue="#{viewEpisodes.filterConsultations}"
-                                 selectionMode="single" selection="#{viewEpisodes.selectedConsultation}" rowKey="#{consultation}" 
+                                 selectionMode="single" selection="#{viewConsultation.selectedConsultation}" rowKey="#{consultation}" 
                                  style="width: 400px;" scrollHeight="300" scrollable="true">
                         <f:facet name="header">
                             <h:outputText value="Buscar: " />
@@ -78,7 +78,7 @@
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton icon="ui-icon-plusthick" value="Nueva Consulta" onclick="newConsultationDialog.show()"/>
-                            <p:commandButton icon="ui-icon-search" value="Ver Consulta" />                               
+                            <p:commandButton icon="ui-icon-search" value="Ver Consulta" actionListener="#{viewConsultation.completeData()}" onclick="viewConsultationWV.show()" update=":viewConsultationForm" />                               
                         </f:facet> 
                     </p:dataTable>
                 </p:panelGrid>
@@ -200,7 +200,7 @@
                                     <h:outputText value="#{samplePatients.valor}" />
                                 </p:column>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Historial Signos Vitales" icon="ui-icon-calendar" onsuccess="vitalSignsRecordWV.show();" />
+                                    <p:commandButton value="Historial Signos Vitales" icon="ui-icon-calendar" onclick="previousVitalSignsDialog.show();" />
                                 </f:facet>
                             </p:dataTable> 
                         </p:column>
@@ -616,6 +616,48 @@
                             <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{createIPDGES.createIPDGES()}" oncomplete="newIPDDialog.hide()" update="newIPDForm" />
                             <p:commandButton value="Cancelar" icon="ui-icon-close" onclick="newIPDDialog.hide()"/>
                         </p:column>                   
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <!-- Historial de signos vitales - ID: 12 -->
+        <p:dialog header="Historial de Signos Vitales" id="previousVitalSigns" widgetVar="previousVitalSignsDialog" minimizable="true">
+            <h:form id="previousVitalSignsForm">
+                <p:panelGrid styleClass="panelGridForm" columns="4">
+                    <p:panelGrid columns="2">
+                        <p:outputPanel>
+                            <p:outputLabel value="Fecha"/>
+                            <br/>
+                            <p:selectOneMenu value="#{showSamples.samplesId}" > 
+                                <f:selectItems id="select" value="#{viewVitalSigns.dateGroup}" var="samples" itemLabel="(#{samples.groups})  #{samples.dates}" itemValue="#{samples.groups}"/>  
+                            </p:selectOneMenu>
+                        </p:outputPanel>
+
+                        <p:outputPanel>
+                            <p:dataTable var="samplePatients" value="#{showSamples.searchSamples}" scrollable="true" scrollHeight="100" style="width: 300px;" >
+                                <f:facet name="header">
+                                    Signos vitales
+                                </f:facet>
+                                <p:column headerText="Signo vital">
+                                    <h:outputText value="#{samplePatients.idSvitales.nombreSvital}" />
+                                </p:column>
+
+                                <p:column headerText="Valor">
+                                    <h:outputText value="#{samplePatients.valor}" />
+                                </p:column>
+                                <f:facet name="footer">
+                                    <p:outputLabel value="" />
+                                </f:facet>
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </p:panelGrid>
+                </p:panelGrid>
+                <p:panelGrid styleClass="panelGridForm">
+                    <p:row>
+                        <p:column>
+                            <p:commandButton value="Mostrar" actionListener="#{showSamples.showSamples()}" update="previousVitalSignsForm"/>
+                        </p:column>
                     </p:row>
                 </p:panelGrid>
             </h:form>

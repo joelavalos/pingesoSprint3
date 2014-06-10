@@ -7,6 +7,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -18,12 +19,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -45,6 +48,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Consulta.findByExploracionFisica", query = "SELECT c FROM Consulta c WHERE c.exploracionFisica = :exploracionFisica"),
     @NamedQuery(name = "Consulta.findByEpisodio", query = "SELECT c FROM Consulta c WHERE c.episodioid = :episodioid")})
 public class Consulta implements Serializable {
+    @OneToMany(mappedBy = "consultaid")
+    private Collection<ConsentimientoGes> consentimientoGesCollection;
+    @OneToMany(mappedBy = "consultaid")
+    private Collection<IpdGes> ipdGesCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -206,6 +213,24 @@ public class Consulta implements Serializable {
     @Override
     public String toString() {
         return "entities.Consulta[ consultaid=" + consultaid + " ]";
+    }
+
+    @XmlTransient
+    public Collection<IpdGes> getIpdGesCollection() {
+        return ipdGesCollection;
+    }
+
+    public void setIpdGesCollection(Collection<IpdGes> ipdGesCollection) {
+        this.ipdGesCollection = ipdGesCollection;
+    }
+
+    @XmlTransient
+    public Collection<ConsentimientoGes> getConsentimientoGesCollection() {
+        return consentimientoGesCollection;
+    }
+
+    public void setConsentimientoGesCollection(Collection<ConsentimientoGes> consentimientoGesCollection) {
+        this.consentimientoGesCollection = consentimientoGesCollection;
     }
     
 }

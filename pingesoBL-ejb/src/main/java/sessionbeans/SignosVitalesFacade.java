@@ -39,4 +39,15 @@ public class SignosVitalesFacade extends AbstractFacade<SignosVitales> implement
         
         return query.getResultList();
     }
+
+    @Override
+    public List<SignosVitales> searchByName(String nombre) {
+        Query query;
+        query = em.createNamedQuery("SignosVitales.findByNombreSvital").
+                setParameter("nombreSvital", nombre);
+        
+        return query.getResultList();
+    }
+    
+    
 }

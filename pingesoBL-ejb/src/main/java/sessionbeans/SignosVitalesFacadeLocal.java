@@ -32,5 +32,7 @@ public interface SignosVitalesFacadeLocal {
     int count();
 
     List<SignosVitales> searchById(int id);
+
+    List<SignosVitales> searchByName(String nombre);
     
 }

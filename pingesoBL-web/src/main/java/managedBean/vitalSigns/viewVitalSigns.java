@@ -7,6 +7,7 @@ package managedBean.vitalSigns;
 
 import entities.Muesta;
 import entities.Paciente;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -35,10 +36,11 @@ public class viewVitalSigns {
     private List<Paciente> searchPaciente;
     private List<Muesta> searchSamples;
     private Integer PersonId;
-    private String PersonRut= "69727697";
+    private String PersonRut = "69727697";
     private Integer personID;
     private int samplesId;
     private List<Integer> groups = new ArrayList<Integer>();
+    private List<DateGroup> dateGroup = new ArrayList<DateGroup>();
 
     @PostConstruct
     public void init() {
@@ -48,18 +50,40 @@ public class viewVitalSigns {
         searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
         boolean exists = false;
         int maxGroup = 0;
-
-        for (int i = 0; i < searchSamples.size(); i++) {
-            for (int j = 0; j < groups.size(); j++) {
-                if (groups.get(j) == searchSamples.get(i).getGrupo()) {
+        for (Muesta searchSample : searchSamples) {
+            for (Integer group : groups) {
+                if (group == searchSample.getGrupo()) {
                     exists = true;
                 }
             }
             if (exists == false) {
-                groups.add(searchSamples.get(i).getGrupo());
+                groups.add(searchSample.getGrupo());
+                String dateAux = searchSample.getFecha().toString();
+                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
             }
             exists = false;
-            maxGroup = searchSamples.get(i).getGrupo();
+            maxGroup = searchSample.getGrupo();
+        }
+        searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
+    }
+
+    public void update() {
+        boolean exists = false;
+        int maxGroup = 0;
+
+        for (Muesta searchSample : searchSamples) {
+            for (Integer group : groups) {
+                if (group == searchSample.getGrupo()) {
+                    exists = true;
+                }
+            }
+            if (exists == false) {
+                groups.add(searchSample.getGrupo());
+                String dateAux = searchSample.getFecha().toString();
+                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
+            }
+            exists = false;
+            maxGroup = searchSample.getGrupo();
         }
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
     }
@@ -71,4 +95,13 @@ public class viewVitalSigns {
         System.out.println("Fecha seleccionada: " + samplesId);
 
     }
+
+    public List<DateGroup> getDateGroup() {
+        return dateGroup;
+    }
+
+    public void setDateGroup(List<DateGroup> dateGroup) {
+        this.dateGroup = dateGroup;
+    }
+
 }

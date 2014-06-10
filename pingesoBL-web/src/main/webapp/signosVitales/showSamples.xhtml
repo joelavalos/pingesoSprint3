@@ -15,7 +15,7 @@
                     <p:outputLabel value="Fecha y hora"/>
                     <br/>
                     <p:selectOneMenu value="#{showSamples.samplesId}" effect="drop" > 
-                        <f:selectItems id="select" value="#{showSamples.grupos}" var="samples" itemLabel="#{samples}" itemValue="#{samples}"/>  
+                        <f:selectItems id="select" value="#{viewVitalSigns.dateGroup}" var="samples" itemLabel="#{samples.dates}" itemValue="#{samples.groups}"/>  
                     </p:selectOneMenu>
                 </p:outputPanel>
 

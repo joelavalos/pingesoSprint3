@@ -64,7 +64,7 @@ public class NewConsultation {
     private List<Diagnostico> selectedDiagnosis;
 
     private List<Muesta> searchSamples;
-    private List<Integer> grupos = new ArrayList<Integer>();
+    private List<Integer> groups = new ArrayList<Integer>();
     //<!--aqui-->    
     private List<Patologia> pathology;
 
@@ -106,23 +106,23 @@ public class NewConsultation {
         searchEpisode = episodeFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
 
         //<!--aqui-->
-        boolean existe = false;
+        boolean exist = false;
         int maxGroup = 0;
         searchSamples = sampleFacade.searchByPatient(searchPatient.get(0));
         for (int i = 0; i < searchSamples.size(); i++) {
-            for (int j = 0; j < grupos.size(); j++) {
-                if (grupos.get(j) == searchSamples.get(i).getGrupo()) {
-                    existe = true;
+            for (int j = 0; j < groups.size(); j++) {
+                if (groups.get(j) == searchSamples.get(i).getGrupo()) {
+                    exist = true;
                 }
             }
-            if (existe == false) {
-                grupos.add(searchSamples.get(i).getGrupo());
+            if (exist == false) {
+                groups.add(searchSamples.get(i).getGrupo());
             }
-            existe = false;
+            exist = false;
             maxGroup = searchSamples.get(i).getGrupo();
         }
         searchSamples = sampleFacade.searchByPatientGroup(searchPatient.get(0), maxGroup);
-
+        //<!--aqui-->
     }
 
     public void pathologyToAdd() {
@@ -486,6 +486,15 @@ public class NewConsultation {
     }
 
     //<!--aqui-->
+    
+    public List<Muesta> getSearchSamples() {
+        return searchSamples;
+    }
+
+    public void setSearchSamples(List<Muesta> searchSamples) {
+        this.searchSamples = searchSamples;
+    }
+
     public List<Diagnostico> getSelectedDiagnosis() {
         return selectedDiagnosis;
     }

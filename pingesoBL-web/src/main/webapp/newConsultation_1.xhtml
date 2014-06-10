@@ -117,7 +117,7 @@
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column>
-                        <p:dataTable var="samplePatients" value="#{showSamples.searchSamples}" scrollHeight="112" scrollable="true" 
+                        <p:dataTable var="samplePatients" value="#{newConsultation.searchSamples}" scrollHeight="100" scrollable="true" 
                                      style="width: 255px;">
                             <f:facet name="header">
                                 Signos vitales
@@ -130,7 +130,7 @@
                                 <h:outputText value="#{samplePatients.valor}" />
                             </p:column>
                             <f:facet name="footer">
-                                <p:commandButton value="Historial Signos Vitales"   icon="ui-icon-calendar" />
+                                <p:commandButton value="Historial Signos Vitales"   icon="ui-icon-calendar" onsuccess="vitalSignsRecordWV.show();" />
                             </f:facet>
                         </p:dataTable> 
                     </p:column>
@@ -160,7 +160,7 @@
                     </p:column>
                 </p:row>
             </p:panelGrid>
-
+            <!--aqui-->
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
@@ -362,6 +362,14 @@
                             <p:commandButton value="Cancelar" actionListener="#{viewConsultation.completeDataConsultation}" onclick="viewConsultationWV.hide()" icon="ui-icon-cancel" />
                         </p:column>
                     </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="vitalSignsRecord">
+            <p:dialog header="Resumen Consulta" id="vitalSignsRecordDialog" widgetVar="vitalSignsRecordWV" >
+                <p:panelGrid styleClass="panelGridForm">
+                    Hola profe hermoso
                 </p:panelGrid>
             </p:dialog>
         </h:form>

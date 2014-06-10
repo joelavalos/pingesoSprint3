@@ -34,6 +34,7 @@
                 <p:panelGrid columns="4" styleClass="panelGridForm" >
                     <p:outputLabel value="Nombre signo vital: "/>
                     <p:selectOneMenu value="#{addVitalSigns.vitalSignsId}"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="0"/>  
                         <f:selectItems id="resGrp" value="#{addVitalSigns.searchVitalSigns}" var="grp" itemLabel="#{grp.nombreSvital}" itemValue="#{grp.idSvitales}"/>  
                     </p:selectOneMenu>
                     <p:inputText value="#{addVitalSigns.vitalSignsValue}"/>
@@ -59,6 +60,7 @@
                     <p:row>
                         <p:column>
                             <p:commandButton icon="ui-icon-disk" value="Terminar" actionListener="#{addVitalSigns.createVitalSignsPatients}" update="newVitalSignsForm"/>
+                            <p:commandButton icon="ui-icon-cancel" value="Cancelar" onsuccess="newVitalSignsDialog.hide()"/>
                         </p:column>
                     </p:row>
                 </p:panelGrid>

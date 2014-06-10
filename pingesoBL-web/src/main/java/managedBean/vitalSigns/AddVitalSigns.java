@@ -69,7 +69,18 @@ public class AddVitalSigns {
 
     @PostConstruct
     public void init() {
+        String[] vitalSignsO = {"Peso","Altura","Temperatura","Saturación O2",
+        "Presión Sistólica", "Presión Diastólica"};
         searchVitalSigns = vitalSignsFacade.findAll();
+        for(int i=0; i<searchVitalSigns.size(); i++){
+            for(int j = 0; j< vitalSignsO.length;j++){
+                if(searchVitalSigns.get(i).getNombreSvital().equals(vitalSignsO[j])){
+                    searchVitalSigns.remove(i);
+                    i--;
+                    break;
+                }
+            }
+        }
     }
 
     public void addNewVitalSigns() {
@@ -79,7 +90,6 @@ public class AddVitalSigns {
 
         vitalSignsFacade.create(newVitalSigns);
         searchVitalSigns = vitalSignsFacade.findAll();
-        System.out.println("Se ha creado el nuevo signo vital");
     }
 
     public void createVitalSignsPatients() {
@@ -101,9 +111,6 @@ public class AddVitalSigns {
             }
             max++;
         }
-
-        System.out.println("Valor del grupo: " + max);
-        System.out.println("PASO POR ACA CTM !!!");
         
         Date fecha = new Date();
 
@@ -116,7 +123,6 @@ public class AddVitalSigns {
         newMuesta.setGrupo(max);
         createSamplesAlways.add(newMuesta);
 
-        System.out.println("PASO POR ACA CTM !!!");
         
         newMuesta = new Muesta(null);
         selectedVitalSign = vitalSignsFacade.searchByName("Altura");
@@ -163,7 +169,6 @@ public class AddVitalSigns {
         newMuesta.setGrupo(max);
         createSamplesAlways.add(newMuesta);
 
-        System.out.println("lol pls");
 
         for (int i = 0; i < createSamplesAlways.size(); i++) {
             if (createSamplesAlways.get(i).getValor() != 0) {
@@ -186,9 +191,6 @@ public class AddVitalSigns {
         saturacion = 0;
         presionSistolica = 0;
         presionDiastolica = 0;
-        System.out.println("El id del signo vital es: " + selectedVitalSign.get(0).getNombreSvital());
-        System.out.println("El id del registro clinico es: " + searchClinicalRecord.get(0).getRegistroclinicoid());
-        System.out.println("Se ha creado la muestra");
         max = 0;
     }
 
@@ -217,7 +219,7 @@ public class AddVitalSigns {
         newMuesta.setIdSvitales(selectedVitalSign.get(0));
         newMuesta.setGrupo(max);
         createSamples.add(newMuesta);
-        System.out.println("El valor maximo del grupo es: " + max);
+
     }
 
     public int getPeso() {

@@ -81,6 +81,7 @@ public class NewConsultation {
     private List<Paciente> searchPatient;
     private List<RegistroClinico> searchClinicalRecord;
     private List<Episodios> searchEpisode;
+    private Paciente patient;
 
     private DiagnosesPathology diagPath;
     private List<DiagnosesPathology> diagPathList = new ArrayList<DiagnosesPathology>();
@@ -100,6 +101,7 @@ public class NewConsultation {
         rut = "69727697";
         personId = personFacade.findByRut(rut);
         searchPatient = patientFacade.searchByPerson(personId);
+        patient= searchPatient.get(0);
         name = searchPatient.get(0).getPersona().getPersNombres() + " " + searchPatient.get(0).getPersona().getPersApepaterno()
                 + " " + searchPatient.get(0).getPersona().getPersApematerno();
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
@@ -481,8 +483,16 @@ public class NewConsultation {
     public void setPertinence(boolean pertinence) {
         this.pertinence = pertinence;
     }
-
+    
     //<!--aqui-->
+    public Paciente getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Paciente patient) {
+        this.patient = patient;
+    }
+    
     
     public List<Muesta> getSearchSamples() {
         return searchSamples;

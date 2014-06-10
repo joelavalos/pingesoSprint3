@@ -51,20 +51,20 @@ public class viewVitalSigns {
         boolean exist = false;
         int maxGroup = 0;
         /*for (Muesta searchSample : searchSamples) {
-            for (Integer group : groups) {
-                if (group == searchSample.getGrupo()) {
-                    exist = true;
-                }
-            }
-            if (exist == false) {
-                groups.add(searchSample.getGrupo());
-                String dateAux = searchSample.getFecha().toString();
-                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
-            }
-            exist = false;
-            maxGroup = searchSample.getGrupo();
-        }
-        searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);*/
+         for (Integer group : groups) {
+         if (group == searchSample.getGrupo()) {
+         exist = true;
+         }
+         }
+         if (exist == false) {
+         groups.add(searchSample.getGrupo());
+         String dateAux = searchSample.getFecha().toString();
+         dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
+         }
+         exist = false;
+         maxGroup = searchSample.getGrupo();
+         }
+         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);*/
 
         searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
         for (Muesta searchSample : searchSamples) {
@@ -75,6 +75,8 @@ public class viewVitalSigns {
             }
             if (exist == false) {
                 groups.add(searchSample.getGrupo());
+                String dateAux = searchSample.getFecha().toString();
+                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
             }
             exist = false;
             maxGroup = searchSample.getGrupo();

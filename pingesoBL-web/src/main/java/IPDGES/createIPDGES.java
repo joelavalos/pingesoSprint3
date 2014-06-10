@@ -101,6 +101,24 @@ public class createIPDGES {
 
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Formulario IPD agregado", "");
             FacesContext.getCurrentInstance().addMessage("", fm);
+        }else if(!hayProblema()){
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un problema", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }else if(!haySubProblema()){
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un subproblema", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }else if(!hayDiagnostico()){
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnostico", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }else if(!hayFundamento()){
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un fundamento diagnostico", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }else if(!hayTratamiento()){
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un tratamiento", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }else if(!hayFechaLimite()){
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una fecha limite", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
         }
     }
 

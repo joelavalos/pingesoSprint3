@@ -139,19 +139,17 @@ public class NewConsultation {
         }
     }
 
-    //<!--aqui-->
     public void addAllDiagnostic() {
         allDiagnosesConsultation.clear();
         searchConsultation = consultationFacade.searchByEpisodio(searchEpisode.get(0));
-        for (int i = 0; i < searchConsultation.size(); i++) {
-            allDiagnoses = diagnosticFacade.searchByConsultation(searchConsultation.get(i));
-            for (int j = 0; j < allDiagnoses.size(); j++) {
-                allDiagnosesConsultation.add(allDiagnoses.get(j));
+        for (Consulta searchConsultation1 : searchConsultation) {
+            allDiagnoses = diagnosticFacade.searchByConsultation(searchConsultation1);
+            for (Diagnostico allDiagnose : allDiagnoses) {
+                allDiagnosesConsultation.add(allDiagnose);
             }
         }
     }
-    //<!--aqui-->
-
+    
     public void addDiagnoses() {
         if (pathologyNotEmpty() && pathologyExists() && selectOneState()) {
             diagnosticDate = new Date();
@@ -294,7 +292,6 @@ public class NewConsultation {
     /////////////////////////*Fin validación nueva consulta*////////////////////////////
 
     public void resetConsultation() {
-        pathology.clear();
         diagnosticDate = null;
         diagnosticGes = false;
         diagnosticState = "";

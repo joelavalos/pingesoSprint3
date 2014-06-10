@@ -48,6 +48,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Consulta.findByExploracionFisica", query = "SELECT c FROM Consulta c WHERE c.exploracionFisica = :exploracionFisica"),
     @NamedQuery(name = "Consulta.findByEpisodio", query = "SELECT c FROM Consulta c WHERE c.episodioid = :episodioid")})
 public class Consulta implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consulta")
+    private Collection<ConsentimientoGes> consentimientoGesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consulta")
+    private Collection<IpdGes> ipdGesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "consultaid")
     private Collection<Diagnostico> diagnosticoCollection;
 
@@ -221,6 +225,24 @@ public class Consulta implements Serializable {
 
     public void setDiagnosticoCollection(Collection<Diagnostico> diagnosticoCollection) {
         this.diagnosticoCollection = diagnosticoCollection;
+    }
+
+    @XmlTransient
+    public Collection<IpdGes> getIpdGesCollection() {
+        return ipdGesCollection;
+    }
+
+    public void setIpdGesCollection(Collection<IpdGes> ipdGesCollection) {
+        this.ipdGesCollection = ipdGesCollection;
+    }
+
+    @XmlTransient
+    public Collection<ConsentimientoGes> getConsentimientoGesCollection() {
+        return consentimientoGesCollection;
+    }
+
+    public void setConsentimientoGesCollection(Collection<ConsentimientoGes> consentimientoGesCollection) {
+        this.consentimientoGesCollection = consentimientoGesCollection;
     }
 
 }

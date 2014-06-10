@@ -76,10 +76,7 @@ public class createIPDGES {
 
         searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
         
-        //deadline = new Date();
-        
         IpdGes newIPDGES = new IpdGes(null);
-        
         newIPDGES.setConsultaid(searchConsultas.get(0));
         newIPDGES.setProblemaauge(augeProblem);
         newIPDGES.setSubproblemaauge(augeSubProblem);
@@ -90,7 +87,14 @@ public class createIPDGES {
         newIPDGES.setFechalimite(deadline);
         
         ipdGesFacade.create(newIPDGES);
-        System.out.println("Se ha creado el IPD");
+        
+        augeProblem = "";
+        augeSubProblem = "";
+        diagnosis = "";
+        fundamentDiagnosis = "";
+        treatment = "";
+        confirmsGES = false;
+        deadline = null;
     }
 
     public String getAugeProblem() {

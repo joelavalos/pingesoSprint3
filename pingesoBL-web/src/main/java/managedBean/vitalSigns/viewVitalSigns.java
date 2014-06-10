@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.primefaces.context.RequestContext;
 import sessionbeans.MuestaFacadeLocal;
 import sessionbeans.PacienteFacadeLocal;
 import sessionbeans.PersonaFacadeLocal;
@@ -47,45 +48,43 @@ public class viewVitalSigns {
         PersonId = personFacade.findByRut(PersonRut);
         searchPaciente = patientFacade.searchByPerson(PersonId);
         //Date fecha = new Date(1990, 17, 9);
-        searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
-        boolean exists = false;
+        boolean exist = false;
         int maxGroup = 0;
-        for (Muesta searchSample : searchSamples) {
-            for (Integer group : groups) {
-                if (group == searchSample.getGrupo()) {
-                    exists = true;
+        searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
+        for (int i = 0; i < searchSamples.size(); i++) {
+            for (int j = 0; j < groups.size(); j++) {
+                if (groups.get(j) == searchSamples.get(i).getGrupo()) {
+                    exist = true;
                 }
             }
-            if (exists == false) {
-                groups.add(searchSample.getGrupo());
-                String dateAux = searchSample.getFecha().toString();
-                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
+            if (exist == false) {
+                groups.add(searchSamples.get(i).getGrupo());
             }
-            exists = false;
-            maxGroup = searchSample.getGrupo();
+            exist = false;
+            maxGroup = searchSamples.get(i).getGrupo();
         }
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
     }
 
     public void update() {
-        boolean exists = false;
+        boolean exist = false;
         int maxGroup = 0;
-
+        searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
         for (Muesta searchSample : searchSamples) {
             for (Integer group : groups) {
                 if (group == searchSample.getGrupo()) {
-                    exists = true;
+                    exist = true;
                 }
             }
-            if (exists == false) {
+            if (exist == false) {
                 groups.add(searchSample.getGrupo());
-                String dateAux = searchSample.getFecha().toString();
-                dateGroup.add(new DateGroup(searchSample.getGrupo(), dateAux));
             }
-            exists = false;
+            exist = false;
             maxGroup = searchSample.getGrupo();
         }
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
+        RequestContext.getCurrentInstance().execute("newConsultationDialog.show()");
+        System.out.println(searchSamples);
     }
 
     public void showSamples() {
@@ -103,5 +102,15 @@ public class viewVitalSigns {
     public void setDateGroup(List<DateGroup> dateGroup) {
         this.dateGroup = dateGroup;
     }
+
+    public List<Muesta> getSearchSamples() {
+        return searchSamples;
+    }
+
+    public void setSearchSamples(List<Muesta> searchSamples) {
+        this.searchSamples = searchSamples;
+    }
+    
+    
 
 }

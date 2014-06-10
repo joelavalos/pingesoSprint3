@@ -94,6 +94,7 @@ public class NewConsultation {
     private boolean consultationPaused = false;
     private String consultationNotes;
     private String physicalExamination;
+    private int episodeId;
     private boolean pertinence;
 
     @PostConstruct
@@ -106,7 +107,7 @@ public class NewConsultation {
                 + " " + searchPatient.get(0).getPersona().getPersApematerno();
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
         searchEpisode = episodeFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
-
+        episodeId = searchEpisode.get(0).getEpisodioid();
         //<!--aqui-->
         boolean exist = false;
         int maxGroup = 0;
@@ -215,6 +216,7 @@ public class NewConsultation {
             newConsultation.setMotivoConsulta(consultationReason);
             newConsultation.setNotas(consultationNotes);
             newConsultation.setExploracionFisica(physicalExamination);
+            newConsultation.setPertinencia(pertinence);
 
             consultationFacade.create(newConsultation);
 
@@ -240,6 +242,7 @@ public class NewConsultation {
             newConsultation.setMotivoConsulta(consultationReason);
             newConsultation.setNotas(consultationNotes);
             newConsultation.setExploracionFisica(physicalExamination);
+            newConsultation.setPertinencia(pertinence);
 
             consultationFacade.create(newConsultation);
 
@@ -525,6 +528,13 @@ public class NewConsultation {
     public void setAllDiagnosesConsultation(List<Diagnostico> allDiagnosesConsultation) {
         this.allDiagnosesConsultation = allDiagnosesConsultation;
     }
-    //<!--aqui-->
+
+    public int getEpisodeId() {
+        return episodeId;
+    }
+
+    public void setEpisodeId(int episodeId) {
+        this.episodeId = episodeId;
+    }
 
 }

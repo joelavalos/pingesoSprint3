@@ -43,7 +43,7 @@
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
                         <p:column>
-                            <p:commandButton value="Episodio" icon="ui-icon-plusthick"  />
+                            <p:commandButton value="Episodio" icon="ui-icon-plusthick" disabled="true"/>
                             <p:commandButton value="Ver Consultas" icon="ui-icon-search" actionListener="#{viewEpisodes.loadConsultations(episodes.episode)}" update=":viewEpisodesForm :episodesValidator" validateClient="true"/>
                         </p:column>
                     </p:row>
@@ -54,7 +54,6 @@
         <!-- Ver episodios - ID: 2 -->
         <p:dialog header="Ver Episodio" widgetVar="viewEpisodesDialog" minimizable="true">
             <p:ajax event="close" listener="#{viewEpisodes.resetView()}" update=":viewEpisodesForm"/>
-
             <h:form id="viewEpisodesForm">
                 <p:panelGrid styleClass="panelGridForm" columns="2">
                     <p:outputLabel value="RUT:"/>
@@ -88,25 +87,22 @@
 
         <!-- Nueva Consulta - ID: 3 -->
         <p:dialog id="newConsultation" header="Nueva consulta" widgetVar="newConsultationDialog" minimizable="true" closable="false">
+            <p:ajax event="close" listener="#{viewEpisodes.loadConsultations()}" update=":viewEpisodesForm"/>
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
                         <h:form id="menuConsultation">
                             <p:menubar>
-                                <p:menuitem value="Datos del Paciente" icon="ui-icon-person" url="#"/>
-                                <p:submenu label="Antecedentes" >
-                                    <p:menuitem value="Familiares" url="#" disabled="true" />
-                                    <p:menuitem value="Personales" url="#" disabled="true"/>
-                                </p:submenu>
+                                <p:menuitem value="Datos del Paciente" icon="ui-icon-person" onclick="patientDataDialog.show()" url="#"/>
+                                <p:menuitem value="Ingresar signos vitales" onclick="newVitalSignsDialog.show()" icon="ui-icon-plusthick" url="#"/>
                                 <p:submenu label="Formulario GES" >
-                                    <p:menuitem value="Informe de proceso de diagnóstico" url="#" />
-                                    <p:menuitem value="Formulario de concentimiento de información" url="#" />
+                                    <p:menuitem value="Informe de proceso de diagnóstico" onclick="newIPDDialog.show()" url="#" />
+                                    <p:menuitem value="Formulario de consentimiento de información" url="#" disabled="true"/>
                                 </p:submenu>
                                 <p:submenu label="Ver" >
-                                    <p:menuitem value="Consultas Anteriores"  url="#" />
-                                    <p:menuitem value="Evoluciones Clínicas" url="#" />
-                                    <p:menuitem value="Diagnósticos"  url="#" />
-                                    <p:menuitem value="Signos vitales"  url="#" />
+                                    <p:menuitem value="Consultas Anteriores" url="#"/>
+                                    <p:menuitem value="Diagnósticos"  url="#"/>
+                                    <p:menuitem value="Signos vitales"  url="#"/>
                                 </p:submenu>
                             </p:menubar>
                         </h:form>
@@ -191,7 +187,7 @@
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
                         <p:column>
-                            <p:dataTable var="samplePatients" value="#{newConsultation.searchSamples}" scrollHeight="100" scrollable="true" 
+                            <p:dataTable id="samplePatientsTable" var="samplePatients" value="#{viewVitalSigns.searchSamples}" scrollHeight="100" scrollable="true" 
                                          style="width: 255px;">
                                 <f:facet name="header">
                                     Signos vitales
@@ -405,7 +401,7 @@
                                 <p:tab title="Notas">
                                     <h:panelGrid columns="2" cellpadding="10">
                                         <p:scrollPanel mode="native" style="width:438px;height:80px">
-                                           <p:outputLabel value="#{viewConsultation.consultationNotes}"/> 
+                                            <p:outputLabel value="#{viewConsultation.consultationNotes}"/> 
                                         </p:scrollPanel>
                                     </h:panelGrid>
                                 </p:tab>
@@ -453,6 +449,178 @@
             </h:form>
         </p:dialog>
 
+        <!-- Datos del paciente - ID: 9 -->
+        <p:dialog header="Datos del Paciente" id="patientData" widgetVar="patientDataDialog" minimizable="true">
+            <h:form id="patientDataForm">
+                <p:panelGrid styleClass="panelGridForm" columns="4">
+                    <p:outputLabel value="Rut: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persRut}"/>
+                    <p:outputLabel value="Nombres: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persNombres}"/>
+                    <p:outputLabel value="Apellido Paterno: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persApepaterno}"/>
+                    <p:outputLabel value="Apellido Materno: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persApematerno}"/>
+                    <p:outputLabel value="Fecha de Nacimiento: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persFnacimiento}"/>
+                    <p:outputLabel value="Nacionalidad: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persNacionalidad}"/>
+                    <p:outputLabel value="Pasaporte: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persPasaporte}"/>
+                    <p:outputLabel value="Email: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persEmail}"/>
+                    <p:outputLabel value="Teléfono: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persTelefono}"/>
+                    <p:outputLabel value="Celular: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persCelular}"/>
+                    <p:outputLabel value="Teléfono de Contacto: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persTelcontacto}"/>
+                    <p:outputLabel value="Dirección: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persDireccion}"/>
+                    <p:outputLabel value="Ocupación: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persOcupacion}"/>
+                    <p:outputLabel value="Actividad: "/>
+                    <p:outputLabel value="#{newConsultation.patient.persona.persActividad}"/>
+                </p:panelGrid>
+                <p:panelGrid styleClass="panelGridForm">
+                    <p:row>
+                        <p:column>
+                            <p:commandButton onclick="patientDataDialog.hide()" icon="ui-icon-cancel" value="Cancelar"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <!-- Nuevos signos vitales - ID: 10 -->
+        <p:dialog header="Nuevos Signos Vitales" id="newVitalSigns" widgetVar="newVitalSignsDialog" minimizable="true">
+            <p:ajax event="close" listener="#{viewVitalSigns.update()}" update=":newConsultationForm:samplePatientsTable"/>
+            <h:form id="newVitalSignsForm">
+                <p:panelGrid styleClass="panelGridForm" columns="4">
+                    <p:outputLabel value="Peso: "/>
+                    <p:inputText value="#{addVitalSigns.peso}"/>
+                    <p:outputLabel value="Altura: "/>
+                    <p:inputText value="#{addVitalSigns.altura}"/>
+                    <p:outputLabel value="Temperatura: "/>
+                    <p:inputText value="#{addVitalSigns.temperatura}"/>
+                    <p:outputLabel value="Saturación O2: "/>
+                    <p:inputText value="#{addVitalSigns.saturacion}"/>
+                    <p:outputLabel value="Presión Sistólica: "/>
+                    <p:inputText value="#{addVitalSigns.presionSistolica}"/>
+                    <p:outputLabel value="Presión Diastólica: "/>
+                    <p:inputText value="#{addVitalSigns.presionDiastolica}"/>
+                </p:panelGrid>
+                <p:separator/>
+                <p:panelGrid columns="4" styleClass="panelGridForm" >
+                    <p:outputLabel value="Nombre signo vital: "/>
+                    <p:selectOneMenu value="#{addVitalSigns.vitalSignsId}"> 
+                        <f:selectItem itemLabel="Seleccione" itemValue="0"/>  
+                        <f:selectItems id="resGrp" value="#{addVitalSigns.searchVitalSigns}" var="grp" itemLabel="#{grp.nombreSvital}" itemValue="#{grp.idSvitales}"/>  
+                    </p:selectOneMenu>
+                    <p:inputText value="#{addVitalSigns.vitalSignsValue}"/>
+
+                    <p:commandButton icon="ui-icon-plus" value="Añadir" actionListener="#{addVitalSigns.addVitalSignsPatients()}" update="newVitalSignsForm"/>
+                </p:panelGrid>
+                <p:panelGrid styleClass="panelGridForm" columns="1">
+                    <p:dataTable id="tableVitalSigns" var="vSigns" value="#{addVitalSigns.createSamples}" 
+                                 emptyMessage="No se han ingresado otros signos vitales." scrollable="true" scrollHeight="80"
+                                 style="width:600px ">
+                        <f:facet name="header">
+                            Otros signos vitales
+                        </f:facet>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{vSigns.idSvitales.nombreSvital}" />
+                        </p:column>
+                        <p:column headerText="Valor">
+                            <h:outputText value="#{vSigns.valor}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panelGrid>
+                <p:panelGrid styleClass="panelGridForm">
+                    <p:row>
+                        <p:column>
+                            <p:commandButton icon="ui-icon-disk" value="Terminar" action="#{addVitalSigns.createVitalSignsPatients}" oncomplete="newVitalSignsDialog.hide()" update="newVitalSignsForm"/>
+                            <p:commandButton icon="ui-icon-cancel" value="Cancelar" onsuccess="newVitalSignsDialog.hide()"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <!-- Nuevo IPD - ID: 11 -->
+        <p:dialog header="Nuevo IPD" id="newIPD" widgetVar="newIPDDialog" minimizable="true">
+            <h:form id="newIPDForm">
+                <p:panelGrid styleClass="panelGridForm">
+                    <p:row>
+                        <p:column>
+                            <br/>
+                            <p:outputLabel value="Confirma que el diagnóstico pertenece al AUGE: " for="confirmIPD"/>
+                            <p:selectBooleanCheckbox id="confirmIPD" value="#{createIPDGES.confirmsGES}"/>
+                            <br/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Problema salud AUGE:" for="augeProblem"/>                        
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Subproblema AUGE:" for="augeSubproblem"/>                        
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:inputTextarea id="augeProblem" value="#{createIPDGES.augeProblem}" cols="50" rows="3" autoResize="false"/>     
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="augeSubproblem" value="#{createIPDGES.augeSubProblem}" cols="50" rows="3" autoResize="false"/>               
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="Diagnóstico:" for="diagnosticIPD"/>                     
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="Fundamento Diagnóstico:" for="diagnosticfIPD"/>                     
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:inputTextarea id="diagnosticIPD" value="#{createIPDGES.diagnosis}" cols="50" rows="3" autoResize="false"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="diagnosticfIPD" value="#{createIPDGES.fundamentDiagnosis}" cols="50" rows="3" autoResize="false"/>     
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:outputLabel value="Tratamiento e indicaciones:" for="treatmentIPD"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:inputTextarea id="treatmentIPD" value="#{createIPDGES.treatment}" cols="109" rows="3" autoResize="false"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:outputLabel value="Fecha Limite: " for="limitDateIPD"/>
+                        </p:column>                    
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:calendar id="limitDateIPD" value="#{createIPDGES.deadline}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{createIPDGES.createIPDGES()}" oncomplete="newIPDDialog.hide()" update="newIPDForm" />
+                            <p:commandButton value="Cancelar" icon="ui-icon-close" onclick="newIPDDialog.hide()"/>
+                        </p:column>                   
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        
     </h:body>
 </html>
 

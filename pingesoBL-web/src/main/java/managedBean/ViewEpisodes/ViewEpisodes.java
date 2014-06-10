@@ -54,8 +54,17 @@ public class ViewEpisodes {
     }
     
     public void loadConsultations(int id){
-        Episodios episodeSelected = episodesFacade.find(id);
+        idEpisode = id;
+        Episodios episodeSelected = episodesFacade.find(idEpisode);
         consultations = consultationFacade.searchByEpisodio(episodeSelected);
+        System.out.println(consultations);
+        RequestContext.getCurrentInstance().execute("viewEpisodesDialog.show()");
+    }
+    
+    public void loadConsultations(){
+        Episodios episodeSelected = episodesFacade.find(idEpisode);
+        consultations = consultationFacade.searchByEpisodio(episodeSelected);
+        System.out.println(consultations);
         RequestContext.getCurrentInstance().execute("viewEpisodesDialog.show()");
     }
     

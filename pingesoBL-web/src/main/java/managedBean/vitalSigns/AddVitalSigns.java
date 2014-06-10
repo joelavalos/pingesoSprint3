@@ -102,11 +102,10 @@ public class AddVitalSigns {
         if (allSamples.isEmpty()) {
             max = 0;
         } else {
-            for (int i = 0; i < allSamples.size(); i++) {
-                if (allSamples.get(i).getGrupo() > max) {
-                    max = allSamples.get(i).getGrupo();
+            for (Muesta allSample : allSamples) {
+                if (allSample.getGrupo() > max) {
+                    max = allSample.getGrupo();
                 } else {
-
                 }
             }
             max++;
@@ -178,20 +177,11 @@ public class AddVitalSigns {
 
         createSamplesAlways.clear();
 
-        for (int i = 0; i < createSamples.size(); i++) {
-            sampleFacade.create(createSamples.get(i));
+        for (Muesta createSample : createSamples) {
+            sampleFacade.create(createSample);
         }
-
-        createSamples.clear();
-
-        max = 0;
-        peso = 0;
-        altura = 0;
-        temperatura = 0;
-        saturacion = 0;
-        presionSistolica = 0;
-        presionDiastolica = 0;
-        max = 0;
+        
+        resetVitalSigns();
     }
 
     public void addVitalSignsPatients() {
@@ -219,9 +209,22 @@ public class AddVitalSigns {
         newMuesta.setIdSvitales(selectedVitalSign.get(0));
         newMuesta.setGrupo(max);
         createSamples.add(newMuesta);
-
     }
 
+    public void resetVitalSigns(){
+        createSamples.clear();
+        max = 0;
+        peso = 0;
+        altura = 0;
+        temperatura = 0;
+        saturacion = 0;
+        presionSistolica = 0;
+        presionDiastolica = 0;
+        max = 0;
+        vitalSignsId = 0;
+        vitalSignsValue = 0;
+    }
+    
     public int getPeso() {
         return peso;
     }

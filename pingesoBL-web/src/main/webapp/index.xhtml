@@ -240,7 +240,7 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
+                            <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation(false, false)}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
                             <p:commandButton value="Guardar Datos" icon="ui-icon-pause" actionListener="#{newConsultation.addConsultation(false, true)}" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
                             <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="cancelConsultationDialog.show()"/>
                         </p:column>
@@ -424,10 +424,11 @@
                             <p:panelGrid styleClass="panelGridForm" columns="2">
                                 <p:selectBooleanCheckbox value="#{viewConsultation.pertinence}" disabled="true"/>
                                 <h:outputText value="Pertinencia" style="font-weight: bold;"/>                           
+                                <p:selectBooleanCheckbox value="#{viewConsultation.consultationCanceled}" disabled="true"/>
+                                <h:outputText value="Cancelada" style="font-weight: bold;"/>
+                                <p:selectBooleanCheckbox value="#{viewConsultation.consultationPaused}" disabled="true"/>
+                                <h:outputText value="Pausada" style="font-weight: bold;"/>
                             </p:panelGrid>
-                            <p:panelGrid styleClass="panelGridForm" columns="1">
-                                <p:commandButton value="Signos Vitales a la Fecha" icon="ui-icon-calendar"/>                         
-                            </p:panelGrid>                         
                         </p:column>
                     </p:row>
                 </p:panelGrid>
@@ -550,6 +551,7 @@
 
         <!-- Nuevo IPD - ID: 11 -->
         <p:dialog header="Nuevo IPD" id="newIPD" widgetVar="newIPDDialog" minimizable="true">
+            <p:growl id="newIPDValidation"/>
             <h:form id="newIPDForm">
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
@@ -614,7 +616,7 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{createIPDGES.createIPDGES()}" oncomplete="newIPDDialog.hide()" update="newIPDForm" />
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{createIPDGES.createIPDGES()}" update="newIPDForm :newConsultationForm:newConsultationValidation :newIPDValidation" />
                             <p:commandButton value="Cancelar" icon="ui-icon-close" onclick="newIPDDialog.hide()"/>
                         </p:column>                   
                     </p:row>

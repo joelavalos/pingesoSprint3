@@ -264,7 +264,7 @@ public class NewConsultation {
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta guardada exitosamente", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }
-
+            RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
             resetConsultation();
         } else {
             if (!notEmptyHipothesis()) {

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package IPDGES;
 
 import entities.Consulta;
@@ -19,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import sessionbeans.ConsultaFacadeLocal;
 import sessionbeans.EpisodiosFacadeLocal;
 import sessionbeans.IpdGesFacadeLocal;
@@ -33,6 +33,7 @@ import sessionbeans.RegistroClinicoFacadeLocal;
 @ManagedBean
 @ViewScoped
 public class createIPDGES {
+
     @EJB
     private IpdGesFacadeLocal ipdGesFacade;
     @EJB
@@ -54,8 +55,7 @@ public class createIPDGES {
 
     private Integer PersonId;
     private String PersonRut = "69727697";
-    
-    
+
     private String augeProblem;
     private String augeSubProblem;
     private String diagnosis;
@@ -63,15 +63,15 @@ public class createIPDGES {
     private String treatment;
     private boolean confirmsGES;
     private Date deadline;
-    
+
     /**
      * Creates a new instance of createIPDGES
      */
     public createIPDGES() {
     }
-    
-    public void createIPDGES(){
-        if(hayProblema() && haySubProblema() && hayDiagnostico() && hayFundamento() && hayTratamiento() && hayFechaLimite()){
+
+    public void createIPDGES() {
+        if (hayProblema() && haySubProblema() && hayDiagnostico() && hayFundamento() && hayTratamiento() && hayFechaLimite()) {
             PersonId = personaFacade.findByRut(PersonRut);
             searchPaciente = pacienteFacade.searchByPerson(PersonId);
             searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
@@ -101,51 +101,59 @@ public class createIPDGES {
 
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Formulario IPD agregado", "");
             FacesContext.getCurrentInstance().addMessage("", fm);
-        }else if(!hayProblema()){
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un problema", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-        }else if(!haySubProblema()){
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un subproblema", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-        }else if(!hayDiagnostico()){
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnostico", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-        }else if(!hayFundamento()){
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un fundamento diagnostico", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-        }else if(!hayTratamiento()){
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un tratamiento", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-        }else if(!hayFechaLimite()){
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una fecha limite", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
+            RequestContext.getCurrentInstance().execute("newIPDDialog.hide()");
+        } else {
+            if (!hayProblema()) {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un problema", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if (!haySubProblema()) {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un subproblema", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if (!hayDiagnostico()) {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnostico", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if (!hayFundamento()) {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un fundamento diagnostico", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if (!hayTratamiento()) {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un tratamiento", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+            if (!hayFechaLimite()) {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una fecha limite", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
         }
     }
 
-    private boolean hayProblema(){
+    private boolean hayProblema() {
         return !augeProblem.equals("");
     }
-    
-    private boolean haySubProblema(){
+
+    private boolean haySubProblema() {
         return !augeSubProblem.equals("");
     }
-    
-    private boolean hayDiagnostico(){
+
+    private boolean hayDiagnostico() {
         return !diagnosis.equals("");
     }
-    
-    private boolean hayFundamento(){
+
+    private boolean hayFundamento() {
         return !fundamentDiagnosis.equals("");
     }
-    
-    private boolean hayTratamiento(){
+
+    private boolean hayTratamiento() {
         return !treatment.equals("");
     }
-    
-    private boolean hayFechaLimite(){
+
+    private boolean hayFechaLimite() {
         return deadline != null;
     }
-    
+
     public String getAugeProblem() {
         return augeProblem;
     }
@@ -201,6 +209,5 @@ public class createIPDGES {
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
     }
-    
-    
+
 }

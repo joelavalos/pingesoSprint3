@@ -47,6 +47,8 @@ public class ViewConsultation {
     private String consultationNotes;
     private String physicalExamination;
     private String diagnosisHipothesis;
+    private boolean consultationCanceled = false;
+    private boolean consultationPaused = false;
     private List<Diagnostico> diagnosis;
     private List<DiagnosesPathology> diagPathList = new ArrayList<DiagnosesPathology>();
     private boolean pertinence;
@@ -87,6 +89,8 @@ public class ViewConsultation {
         physicalExamination = selectedConsultation.getExploracionFisica();
         diagnosisHipothesis = selectedConsultation.getHdiagnostica();
         pertinence = selectedConsultation.getPertinencia();
+        consultationCanceled = selectedConsultation.getCancelada();
+        consultationPaused = selectedConsultation.getPausada();
         diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
         for (Diagnostico diag : diagnosis) {
             diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
@@ -101,6 +105,8 @@ public class ViewConsultation {
             diagnosisHipothesis = selectedConsultation.getHdiagnostica();
             pertinence = selectedConsultation.getPertinencia();
             diagnosis = diagnosisFacade.searchByConsultation(selectedConsultation);
+            consultationCanceled = selectedConsultation.getCancelada();
+            consultationPaused = selectedConsultation.getPausada();
             for (Diagnostico diag : diagnosis) {
                 diagPathList.add(new DiagnosesPathology(diag.getDiagnosticofecha(), diag.getDiagnosticoges(), diag.getDiagnosticoestado(), diag.getPatologiaid().getPatologiaid(), diag.getPatologiaid().getPatologianombre(), diag.getPatologiaid().getPatologiages()));
             }
@@ -197,6 +203,22 @@ public class ViewConsultation {
 
     public void setSelectedConsultation(Consulta selectedConsultation) {
         this.selectedConsultation = selectedConsultation;
+    }
+
+    public boolean isConsultationCanceled() {
+        return consultationCanceled;
+    }
+
+    public void setConsultationCanceled(boolean consultationCanceled) {
+        this.consultationCanceled = consultationCanceled;
+    }
+
+    public boolean isConsultationPaused() {
+        return consultationPaused;
+    }
+
+    public void setConsultationPaused(boolean consultationPaused) {
+        this.consultationPaused = consultationPaused;
     }
 
 }

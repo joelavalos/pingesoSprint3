@@ -51,7 +51,6 @@ public class ViewEpisodes {
         idEpisode = 0;
         selectedConsultation = null;
         consultations.clear();
-        filterConsultations.clear();
     }
     
     public void loadConsultations(int id){

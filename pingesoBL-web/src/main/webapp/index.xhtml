@@ -92,11 +92,11 @@
             <p:panelGrid styleClass="panelGridForm">
                 <p:row>
                     <p:column colspan="2">
-                        <h:form id="menuConsultation">
-                            <p:menubar>
+                        <h:form id="menuConsultationForm">
+                            <p:menubar id="consultationMenu">
                                 <p:menuitem value="Datos del Paciente" icon="ui-icon-person" onclick="patientDataDialog.show()" url="#"/>
                                 <p:menuitem value="Ingresar signos vitales" onclick="newVitalSignsDialog.show()" icon="ui-icon-plusthick" url="#"/>
-                                <p:submenu label="Formulario GES" >
+                                <p:submenu label="Formulario GES" rendered="#{newConsultation.isGes}">
                                     <p:menuitem value="Informe de proceso de diagnóstico" onclick="newIPDDialog.show()" url="#" />
                                     <p:menuitem value="Formulario de consentimiento de información" url="#" disabled="true"/>
                                 </p:submenu>
@@ -138,7 +138,7 @@
                                 </p:selectOneMenu>
                                 <p:outputLabel value="Es GES" />
                                 <p:selectBooleanCheckbox value="#{newConsultation.diagnosticGes}"/>
-                                <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newDiagnosticForm :newConsultationForm:diagnosticDataTable"/>
+                                <p:commandButton icon="ui-icon-plus" actionListener="#{newConsultation.addDiagnoses}" update="newDiagnosticForm :newConsultationForm:diagnosticDataTable :menuConsultationForm:consultationMenu"/>
                             </h:panelGrid>
                         </h:form>
                     </p:column>
@@ -551,6 +551,7 @@
 
         <!-- Nuevo IPD - ID: 11 -->
         <p:dialog header="Nuevo IPD" id="newIPD" widgetVar="newIPDDialog" minimizable="true">
+            <p:ajax event="close" listener="#{createIPDGES.resetIPD()}" update="newIPD"/>
             <p:growl id="newIPDValidation"/>
             <h:form id="newIPDForm">
                 <p:panelGrid styleClass="panelGridForm">

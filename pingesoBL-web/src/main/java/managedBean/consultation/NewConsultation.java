@@ -96,7 +96,8 @@ public class NewConsultation {
     private String physicalExamination;
     private int episodeId;
     private boolean pertinence;
-
+    private boolean isGes = false;
+    
     @PostConstruct
     public void init() {
         rut = "69727697";
@@ -160,6 +161,9 @@ public class NewConsultation {
             pathologyId = diagnosticPathology.getPatologiaid();
             pathologyGes = diagnosticPathology.getPatologiages();
             diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
+            if(diagnosticGes == true && diagnosticState.equals("confirmado")){
+                isGes = true;
+            }
             diagPathList.add(diagPath);
             resetDiagnostic();
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Diagnóstico agregado", "");
@@ -317,6 +321,7 @@ public class NewConsultation {
         consultationNotes = "";
         physicalExamination = "";
         pertinence = false;
+        isGes = false;
         resetDiagnostic();
     }
 
@@ -343,6 +348,14 @@ public class NewConsultation {
         return results;
     }
 
+    public boolean isIsGes() {
+        return isGes;
+    }
+
+    public void setIsGes(boolean isGes) {
+        this.isGes = isGes;
+    }
+    
     public String getRut() {
         return rut;
     }

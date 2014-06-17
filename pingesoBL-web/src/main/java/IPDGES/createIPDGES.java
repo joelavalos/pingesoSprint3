@@ -11,6 +11,7 @@ import entities.IpdGes;
 import entities.Paciente;
 import entities.Patologia;
 import entities.RegistroClinico;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -72,36 +73,36 @@ public class createIPDGES {
 
     public void createIPDGES() {
         if (hayProblema() && haySubProblema() && hayDiagnostico() && hayFundamento() && hayTratamiento() && hayFechaLimite()) {
-            PersonId = personaFacade.findByRut(PersonRut);
-            searchPaciente = pacienteFacade.searchByPerson(PersonId);
-            searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
-            searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
+            Date today = new Date();
+            if(deadline.after(today)){
+                PersonId = personaFacade.findByRut(PersonRut);
+                searchPaciente = pacienteFacade.searchByPerson(PersonId);
+                searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
+                searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
 
-            searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
+                searchConsultas = consultaFacade.searchByEpisodio(searchEpisode.get(0));
 
-            IpdGes newIPDGES = new IpdGes(null);
-            newIPDGES.setConsultaid(searchConsultas.get(0));
-            newIPDGES.setProblemaauge(augeProblem);
-            newIPDGES.setSubproblemaauge(augeSubProblem);
-            newIPDGES.setDiagnostico(diagnosis);
-            newIPDGES.setFundamentodiagnostico(fundamentDiagnosis);
-            newIPDGES.setTratamientoind(treatment);
-            newIPDGES.setConfirmages(confirmsGES);
-            newIPDGES.setFechalimite(deadline);
+                IpdGes newIPDGES = new IpdGes(null);
+                newIPDGES.setConsultaid(searchConsultas.get(0));
+                newIPDGES.setProblemaauge(augeProblem);
+                newIPDGES.setSubproblemaauge(augeSubProblem);
+                newIPDGES.setDiagnostico(diagnosis);
+                newIPDGES.setFundamentodiagnostico(fundamentDiagnosis);
+                newIPDGES.setTratamientoind(treatment);
+                newIPDGES.setConfirmages(confirmsGES);
+                newIPDGES.setFechalimite(deadline);
 
-            ipdGesFacade.create(newIPDGES);
+                ipdGesFacade.create(newIPDGES);
 
-            augeProblem = "";
-            augeSubProblem = "";
-            diagnosis = "";
-            fundamentDiagnosis = "";
-            treatment = "";
-            confirmsGES = false;
-            deadline = null;
+                resetIPD();
 
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Formulario IPD agregado", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-            RequestContext.getCurrentInstance().execute("newIPDDialog.hide()");
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Formulario IPD agregado", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+                RequestContext.getCurrentInstance().execute("newIPDDialog.hide()");
+            }else{
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una fecha posterior a hoy", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
         } else {
             if (!hayProblema()) {
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un problema", "");
@@ -128,6 +129,16 @@ public class createIPDGES {
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }
         }
+    }
+    
+    public void resetIPD(){
+        augeProblem = "";
+        augeSubProblem = "";
+        diagnosis = "";
+        fundamentDiagnosis = "";
+        treatment = "";
+        confirmsGES = false;
+        deadline = null;
     }
 
     private boolean hayProblema() {

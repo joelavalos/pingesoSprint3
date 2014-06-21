@@ -290,7 +290,7 @@
                     <p:inputTextarea id="cause" value="#{newConsultation.canceledReason}" cols="50" rows="4" autoResize="false"/>
                 </p:panelGrid>
                 <p:panelGrid columns="2" styleClass="panelGridForm">
-                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation(true, false)}" onstart="cancelConsultationDialog.hide()" oncomplete="newConsultationDialog.hide()" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
+                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation(true, false)}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
                     <p:commandButton id="No" value="No" icon="ui-icon-closethick" actionListener="#{newConsultation.resetCancel()}" onclick="cancelConsultationDialog.hide()"/>
                 </p:panelGrid>
             </h:form>

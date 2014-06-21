@@ -4,18 +4,34 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
-    <context-param>	
-        <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>	
-        <param-value>true</param-value> 
+    <context-param>
+        <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
+        <param-value>true</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>testPDF</servlet-name>
+        <servlet-class>managedbeanTest.testPDF</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>concentForm</servlet-name>
+        <servlet-class>managedbeanTest.concentForm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>testPDF</servlet-name>
+        <url-pattern>/testPDF</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>concentForm</servlet-name>
+        <url-pattern>/concentForm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

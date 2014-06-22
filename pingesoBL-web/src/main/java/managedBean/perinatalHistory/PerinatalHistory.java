@@ -150,19 +150,65 @@ public class PerinatalHistory {
         if (reasonAbortion.equals("")) {
 
         } else {
+            newAntmedido = new Antmedidos();
             System.out.println(reasonAbortion);
+            
+            searchAntecedente = antecedentesFacade.searchByName("Abortos");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(reasonAbortion);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
         }
 
         for (int i = 0; i < bornCheck.length; i++) {
+            newAntmedido = new Antmedidos();
+            
             System.out.println(bornCheck[i]);
+            
+            searchAntecedente = antecedentesFacade.searchByName(bornCheck[i]);
+
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor("Seleccionado");
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
         }
 
         for (int i = 0; i < estimated.length; i++) {
+            newAntmedido = new Antmedidos();
+            
             System.out.println(estimated[i]);
+            
+            searchAntecedente = antecedentesFacade.searchByName(estimated[i]);
+
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor("Seleccionado");
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
         }
 
         for (int i = 0; i < HCTOCheck.length; i++) {
+            newAntmedido = new Antmedidos();
+            
             System.out.println(HCTOCheck[i]);
+            
+            searchAntecedente = antecedentesFacade.searchByName(HCTOCheck[i]);
+
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor("Seleccionado");
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
         }
 
         System.out.println("Personales: " + listAntMedidos.size());

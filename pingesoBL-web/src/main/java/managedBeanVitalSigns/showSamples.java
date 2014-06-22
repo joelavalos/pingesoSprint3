@@ -40,6 +40,7 @@ public class showSamples {
     
     private Integer PersonId;
     private String PersonRut = "69727697";
+    private Integer Rut = 6972769;
 
     private List<Integer> grupos = new ArrayList<Integer>(); 
     /**
@@ -50,7 +51,7 @@ public class showSamples {
     
     @PostConstruct
     public void init(){
-        PersonId = personaFacade.findByRut(PersonRut);
+        PersonId = personaFacade.findByRut(Rut);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
         //Date fecha = new Date(1990, 17, 9);
         searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
@@ -73,7 +74,7 @@ public class showSamples {
     }
 
     public void showSamples(){
-        PersonId = personaFacade.findByRut(PersonRut);
+        PersonId = personaFacade.findByRut(Rut);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), samplesId);
         System.out.println("Fecha seleccionada: " + samplesId);

@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +49,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Consulta.findByExploracionFisica", query = "SELECT c FROM Consulta c WHERE c.exploracionFisica = :exploracionFisica"),
     @NamedQuery(name = "Consulta.findByEpisodio", query = "SELECT c FROM Consulta c WHERE c.episodioid = :episodioid")})
 public class Consulta implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Column(name = "estado")
+    private String estado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "consultaid")
+    private Collection<Diagnostico> diagnosticoCollection;
     @Basic(optional = false)
     @NotNull
     @Column(name = "pertinencia")
@@ -243,6 +251,23 @@ public class Consulta implements Serializable {
 
     public void setPertinencia(boolean pertinencia) {
         this.pertinencia = pertinencia;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @XmlTransient
+    public Collection<Diagnostico> getDiagnosticoCollection() {
+        return diagnosticoCollection;
+    }
+
+    public void setDiagnosticoCollection(Collection<Diagnostico> diagnosticoCollection) {
+        this.diagnosticoCollection = diagnosticoCollection;
     }
     
 }

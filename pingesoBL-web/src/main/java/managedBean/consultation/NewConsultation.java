@@ -77,6 +77,7 @@ public class NewConsultation {
 
     private int personId;
     private String rut;
+    private Integer Rut = 6972769;
     private String name;
     private List<Paciente> searchPatient;
     private List<RegistroClinico> searchClinicalRecord;
@@ -101,7 +102,7 @@ public class NewConsultation {
     @PostConstruct
     public void init() {
         rut = "69727697";
-        personId = personFacade.findByRut(rut);
+        personId = personFacade.findByRut(Rut);
         searchPatient = patientFacade.searchByPerson(personId);
         patient= searchPatient.get(0);
         name = searchPatient.get(0).getPersona().getPersNombres() + " " + searchPatient.get(0).getPersona().getPersApepaterno()
@@ -222,6 +223,7 @@ public class NewConsultation {
                 newConsultation.setNotas(consultationNotes);
                 newConsultation.setExploracionFisica(physicalExamination);
                 newConsultation.setPertinencia(pertinence);
+                newConsultation.setEstado("Creada");
 
                 consultationFacade.create(newConsultation);
                 RequestContext.getCurrentInstance().execute("cancelConsultationDialog.hide()");
@@ -253,6 +255,7 @@ public class NewConsultation {
             newConsultation.setNotas(consultationNotes);
             newConsultation.setExploracionFisica(physicalExamination);
             newConsultation.setPertinencia(pertinence);
+            newConsultation.setEstado("Creada");
 
             consultationFacade.create(newConsultation);
 

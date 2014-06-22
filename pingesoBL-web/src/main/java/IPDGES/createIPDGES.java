@@ -56,6 +56,7 @@ public class createIPDGES {
 
     private Integer PersonId;
     private String PersonRut = "69727697";
+    private Integer Rut = 6972769;
 
     private String augeProblem;
     private String augeSubProblem;
@@ -75,7 +76,7 @@ public class createIPDGES {
         if (hayProblema() && haySubProblema() && hayDiagnostico() && hayFundamento() && hayTratamiento() && hayFechaLimite()) {
             Date today = new Date();
             if(deadline.after(today)){
-                PersonId = personaFacade.findByRut(PersonRut);
+                PersonId = personaFacade.findByRut(Rut);
                 searchPaciente = pacienteFacade.searchByPerson(PersonId);
                 searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
                 searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));

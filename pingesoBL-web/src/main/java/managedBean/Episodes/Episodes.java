@@ -44,6 +44,7 @@ public class Episodes {
     private List<Episodios> searchEpisode;
     
     private String rut;
+    private Integer Rut = 6972769;
     private String name;    
     private int episode = 0;
     private Map<String,String> episodes = new HashMap<String,String>();
@@ -51,7 +52,7 @@ public class Episodes {
     @PostConstruct
     public void init(){
         rut = "69727697";
-        personId = personFacade.findByRut(rut);
+        personId = personFacade.findByRut(Rut);
         searchPatient = patientFacade.searchByPerson(personId);
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
         searchEpisode = episodesFacade.searchByClinicalRegister(searchClinicalRecord.get(0));

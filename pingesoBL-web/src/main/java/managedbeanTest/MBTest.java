@@ -45,6 +45,7 @@ public class MBTest {
 
     private Integer PersonId;
     private String PersonRut = "69727697";
+    private Integer Rut = 6972769;
     /**
      * Creates a new instance of MBTest
      */
@@ -52,7 +53,7 @@ public class MBTest {
     }
     
     public void searchPerson(){
-        PersonId = personaFacade.findByRut(PersonRut);
+        PersonId = personaFacade.findByRut(Rut);
         System.out.println("Id del paciente: " + PersonId);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
         System.out.println("Paciente estado: " + searchPaciente.get(0).getPaciFallecido());

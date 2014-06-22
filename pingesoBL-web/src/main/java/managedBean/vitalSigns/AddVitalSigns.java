@@ -55,6 +55,7 @@ public class AddVitalSigns {
 
     private Integer PersonId;
     private String PersonRut = "69727697";
+    private Integer Rut = 6972769;
 
     private List<Muesta> createSamples = new ArrayList<Muesta>();
     private List<Muesta> createSamplesAlways = new ArrayList<Muesta>();
@@ -93,7 +94,7 @@ public class AddVitalSigns {
     }
 
     public void createVitalSignsPatients() {
-        PersonId = personFacade.findByRut(PersonRut);
+        PersonId = personFacade.findByRut(Rut);
         searchPatient = patientFacade.searchByPerson(PersonId);
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
 
@@ -185,7 +186,7 @@ public class AddVitalSigns {
     }
 
     public void addVitalSignsPatients() {
-        PersonId = personFacade.findByRut(PersonRut);
+        PersonId = personFacade.findByRut(Rut);
         searchPatient = patientFacade.searchByPerson(PersonId);
         selectedVitalSign = vitalSignsFacade.searchById(vitalSignsId);
 

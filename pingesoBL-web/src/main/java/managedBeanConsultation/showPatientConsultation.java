@@ -57,7 +57,8 @@ public class showPatientConsultation {
 
     private Integer PersonId;
     private String PersonRut = "69727697";
-
+    private Integer Rut = 6972769;
+    
     private String Hdiagnostica;
     private Date date;
     private boolean cancel;
@@ -84,7 +85,7 @@ public class showPatientConsultation {
      */
     @PostConstruct
     public void init() {
-        PersonId = personaFacade.findByRut(PersonRut);
+        PersonId = personaFacade.findByRut(Rut);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
         searchRegistroClinico = registroClinicoFacade.searchByPaciente(searchPaciente.get(0));
         searchEpisode = episodiosFacade.searchByClinicalRegister(searchRegistroClinico.get(0));
@@ -108,7 +109,7 @@ public class showPatientConsultation {
     }
 
     public void showConsultation() {
-        PersonId = personaFacade.findByRut(PersonRut);
+        PersonId = personaFacade.findByRut(Rut);
         //System.out.println("Id del paciente: " + PersonId);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
         //System.out.println("Paciente estado: " + searchPaciente.get(0).getPaciFallecido());
@@ -121,7 +122,7 @@ public class showPatientConsultation {
     }
 
     public void createConsultation() {
-        PersonId = personaFacade.findByRut(PersonRut);
+        PersonId = personaFacade.findByRut(Rut);
         //System.out.println("Id del paciente: " + PersonId);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
         //System.out.println("Paciente estado: " + searchPaciente.get(0).getPaciFallecido());

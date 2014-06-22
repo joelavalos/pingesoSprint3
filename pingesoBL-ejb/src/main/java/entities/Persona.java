@@ -53,15 +53,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Persona.findByPersPasaporte", query = "SELECT p FROM Persona p WHERE p.persPasaporte = :persPasaporte"),
     @NamedQuery(name = "Persona.findByPersTipopersona", query = "SELECT p FROM Persona p WHERE p.persTipopersona = :persTipopersona")})
 public class Persona implements Serializable {
+    @Column(name = "pers_rut")
+    private Integer persRut;
+    @Column(name = "pers_tipopersona")
+    private Integer persTipopersona;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id_persona")
     private Integer idPersona;
-    @Size(max = 12)
-    @Column(name = "pers_rut")
-    private String persRut;
     @Size(max = 1)
     @Column(name = "pers_dv")
     private String persDv;
@@ -108,10 +109,6 @@ public class Persona implements Serializable {
     private String persNacionalidad;
     @Column(name = "pers_pasaporte")
     private Integer persPasaporte;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "pers_tipopersona")
-    private int persTipopersona;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "persona")
     private Paciente paciente;
 
@@ -122,7 +119,7 @@ public class Persona implements Serializable {
         this.idPersona = idPersona;
     }
 
-    public Persona(Integer idPersona, String persNombres, int persTipopersona) {
+    public Persona(Integer idPersona, String persNombres, Integer persTipopersona) {
         this.idPersona = idPersona;
         this.persNombres = persNombres;
         this.persTipopersona = persTipopersona;
@@ -134,14 +131,6 @@ public class Persona implements Serializable {
 
     public void setIdPersona(Integer idPersona) {
         this.idPersona = idPersona;
-    }
-
-    public String getPersRut() {
-        return persRut;
-    }
-
-    public void setPersRut(String persRut) {
-        this.persRut = persRut;
     }
 
     public String getPersDv() {
@@ -264,11 +253,11 @@ public class Persona implements Serializable {
         this.persPasaporte = persPasaporte;
     }
 
-    public int getPersTipopersona() {
+    public Integer getPersTipopersona() {
         return persTipopersona;
     }
 
-    public void setPersTipopersona(int persTipopersona) {
+    public void setPersTipopersona(Integer persTipopersona) {
         this.persTipopersona = persTipopersona;
     }
 
@@ -304,5 +293,12 @@ public class Persona implements Serializable {
     public String toString() {
         return "entities.Persona[ idPersona=" + idPersona + " ]";
     }
-    
+
+    public Integer getPersRut() {
+        return persRut;
+    }
+
+    public void setPersRut(Integer persRut) {
+        this.persRut = persRut;
+    }
 }

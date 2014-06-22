@@ -40,6 +40,7 @@ public class ViewConsultation {
     private PacienteFacadeLocal patientFacade;
 
     private String rut;
+    private Integer Rut = 6972769;
     private String nombre;
     private Diagnostico selectedDiagnosis;
     private Consulta selectedConsultation;
@@ -61,7 +62,7 @@ public class ViewConsultation {
     @PostConstruct
     public void init() {
         rut = "69727697";
-        searchPatient = patientFacade.searchByPerson(personFacade.findByRut(rut));
+        searchPatient = patientFacade.searchByPerson(personFacade.findByRut(Rut));
         nombre = searchPatient.get(0).getPersona().getPersNombres() + " " + searchPatient.get(0).getPersona().getPersApepaterno()
                 + " " + searchPatient.get(0).getPersona().getPersApematerno();
     }

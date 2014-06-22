@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Paciente.findByPaciFallecido", query = "SELECT p FROM Paciente p WHERE p.paciFallecido = :paciFallecido"),
     @NamedQuery(name = "Paciente.findByPaciOtraprevision", query = "SELECT p FROM Paciente p WHERE p.paciOtraprevision = :paciOtraprevision")})
 public class Paciente implements Serializable {
+    @Column(name = "paci_fallecido")
+    private Boolean paciFallecido;
     @OneToMany(mappedBy = "idPersona")
     private Collection<Muesta> muestaCollection;
     private static final long serialVersionUID = 1L;
@@ -52,10 +54,6 @@ public class Paciente implements Serializable {
     @Column(name = "paci_ffallecimiento")
     @Temporal(TemporalType.DATE)
     private Date paciFfallecimiento;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "paci_fallecido")
-    private boolean paciFallecido;
     @Size(max = 50)
     @Column(name = "paci_otraprevision")
     private String paciOtraprevision;
@@ -159,5 +157,4 @@ public class Paciente implements Serializable {
     public void setMuestaCollection(Collection<Muesta> muestaCollection) {
         this.muestaCollection = muestaCollection;
     }
-    
 }

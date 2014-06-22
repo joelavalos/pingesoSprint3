@@ -7,6 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +21,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -35,6 +40,20 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Episodios.findByEpisodioid", query = "SELECT e FROM Episodios e WHERE e.episodioid = :episodioid"),
     @NamedQuery(name = "Episodios.findByRegistroClinico", query = "SELECT e FROM Episodios e WHERE e.registroclinicoid = :registroclinicoid")})
 public class Episodios implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "fecha")
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 128)
+    @Column(name = "nombre")
+    private String nombre;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "abierto")
+    private boolean abierto;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -103,6 +122,30 @@ public class Episodios implements Serializable {
     @Override
     public String toString() {
         return "entities.Episodios[ episodioid=" + episodioid + " ]";
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public boolean getAbierto() {
+        return abierto;
+    }
+
+    public void setAbierto(boolean abierto) {
+        this.abierto = abierto;
     }
 
 }

@@ -38,6 +38,7 @@ public class viewVitalSigns {
     private List<Muesta> searchSamples;
     private Integer PersonId;
     private String PersonRut = "69727697";
+    private Integer Rut = 6972769;
     private Integer personID;
     private int samplesId;
     private List<Integer> groups = new ArrayList<Integer>();
@@ -45,7 +46,7 @@ public class viewVitalSigns {
 
     @PostConstruct
     public void init() {
-        PersonId = personFacade.findByRut(PersonRut);
+        PersonId = personFacade.findByRut(Rut);
         searchPaciente = patientFacade.searchByPerson(PersonId);
         //Date fecha = new Date(1990, 17, 9);
         boolean exist = false;
@@ -106,7 +107,7 @@ public class viewVitalSigns {
     }
 
     public void showSamples() {
-        PersonId = personFacade.findByRut(PersonRut);
+        PersonId = personFacade.findByRut(Rut);
         searchPaciente = patientFacade.searchByPerson(PersonId);
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), samplesId);
         System.out.println("Fecha seleccionada: " + samplesId);

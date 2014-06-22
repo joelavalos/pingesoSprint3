@@ -255,16 +255,12 @@
                                         <f:selectItem itemLabel="-" itemValue="-" />
                                     </p:selectOneRadio>  
                                     <p:calendar id="VDRL" value="#{perinatalHistory.VDRL}" />
-                                    <p:selectOneRadio id="VDRLOption2" value="#{perinatalHistory.VDRLOption2}">
-                                        <f:selectItem itemLabel="+" itemValue="+" />
-                                        <f:selectItem itemLabel="-" itemValue="-" />
-                                    </p:selectOneRadio>  
-                                    <p:calendar id="VDRL2" value="#{perinatalHistory.VDRL2}" />
+                                    
                                 </p:column>
                                 <p:column>
-                                    <p:selectOneRadio id="HCTOCheck" value="#{perinatalHistory.HCTOCheck}">
-                                        <f:selectItem itemLabel="HCTO." itemValue="HCTO." />                                        
-                                    </p:selectOneRadio>
+                                    <p:selectManyCheckbox id="HCTOCheck" value="#{perinatalHistory.HCTOCheck}" layout="grid" columns="1" >
+                                        <f:selectItem itemLabel="HCTO." itemValue="HCTO." /> 
+                                    </p:selectManyCheckbox>
                                     <p:spinner id="HTCTOFloat" value="#{perinatalHistory.HTCTOFloat}" stepFactor="0.1" size="1" />
                                     <p:calendar id="HCTODate" value="#{perinatalHistory.HCTODate}" />   
                                     <p:outputLabel />

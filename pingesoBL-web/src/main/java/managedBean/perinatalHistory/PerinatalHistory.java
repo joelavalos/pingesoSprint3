@@ -18,9 +18,9 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class PerinatalHistory {
 
-    String[] familyHistory = new String[5];
+    String[] familyHistory;
     
-    String[] personalHistory = new String[5];
+    String[] personalHistory;
     String reasonAbortion;
     String[] bornCheck;
     int deeds;
@@ -62,8 +62,6 @@ public class PerinatalHistory {
     
     Date VDRL;
     String VDRLOption;
-    Date VDRL2;
-    String VDRLOption2;
     
     String HCTOCheck;
     double HTCTOFloat;
@@ -111,14 +109,7 @@ public class PerinatalHistory {
     public void setCantCigars(int cantCigars) {
         this.cantCigars = cantCigars;
     }
-    
-    public Date getVDRL2() {
-        return VDRL2;
-    }
-
-    public void setVDRL2(Date VDRL2) {
-        this.VDRL2 = VDRL2;
-    }
+   
     public String getExaminationCN() {
         return examinationCN;
     }
@@ -189,21 +180,7 @@ public class PerinatalHistory {
 
     public void setVDRLOption(String VDRLOption) {
         this.VDRLOption = VDRLOption;
-    }
-
-
-    public String getVDRLOption2() {
-        return VDRLOption2;
-    }
-
-    public void setVDRLOption2(String VDRLOption2) {
-        this.VDRLOption2 = VDRLOption2;
-    }
-    
-    
-    
-    
-    
+    }  
     
 
     public String getBlood() {

@@ -3,12 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package managedBean.perinatalHistory;
 
+import entities.Antecedentes;
+import entities.Antmedidos;
+import entities.Episodios;
+import entities.Paciente;
+import entities.RegistroClinico;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import sessionbeans.AntecedentesFacadeLocal;
+import sessionbeans.AntmedidosFacadeLocal;
+import sessionbeans.EpisodiosFacadeLocal;
+import sessionbeans.PacienteFacadeLocal;
+import sessionbeans.PersonaFacadeLocal;
+import sessionbeans.RegistroClinicoFacadeLocal;
 
 /**
  *
@@ -18,13 +31,38 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class PerinatalHistory {
 
-    String[] familyHistory;    
+    @EJB
+    private AntmedidosFacadeLocal antmedidosFacade;
+    @EJB
+    private EpisodiosFacadeLocal episodeFacade;
+    @EJB
+    private RegistroClinicoFacadeLocal clinicalRecordFacade;
+    @EJB
+    private PacienteFacadeLocal patientFacade;
+    @EJB
+    private PersonaFacadeLocal personFacade;
+    @EJB
+    private AntecedentesFacadeLocal antecedentesFacade;
+
+    private int personId;
+    private Integer Rut = 6972769;
+    private String name;
+    private List<Paciente> searchPatient;
+    private List<RegistroClinico> searchClinicalRecord;
+    private List<Episodios> searchEpisode;
+    private Paciente patient;
+
+    private List<Antmedidos> listAntMedidos = new ArrayList<Antmedidos>();
+    private List<Antecedentes> searchAntecedente;
+    private Antmedidos newAntmedido;
+
+    String[] familyHistory;
     String[] personalHistory;
-    String reasonAbortion;
+    String reasonAbortion = "";
     String[] bornCheck;
     int deeds;
     int abortions;
-    int births;           
+    int births;
     int born;
     int stillbirths;
     int living;
@@ -32,7 +70,7 @@ public class PerinatalHistory {
     int deadSecondWeek;
     Date lastPregnancy;
     int RNHeavier;
-    
+
     //embarazo actual
     int currentWeight;
     int usualWeight;
@@ -49,8 +87,7 @@ public class PerinatalHistory {
     String blood;
     String bloodType;
     String sensitized;
-    
-    
+
     String examinationCN;
     String examinationMN;
     String examinationON;
@@ -58,20 +95,81 @@ public class PerinatalHistory {
     String normalPapanic;
     String normalCervix;
     String VIH;
-    
+
     Date VDRL;
     String VDRLOption;
-    
+
     String[] HCTOCheck;
     double HTCTOFloat;
     Date HCTODate;
-    
+
     String smoker;
-    int cantCigars ;
-    
-    public void save(){
-        System.out.println(HCTOCheck[0]);
-        System.out.println(familyHistory[0]);
+    int cantCigars;
+
+    public void save() {
+        Date fecha = new Date();
+        listAntMedidos.clear();
+
+        personId = personFacade.findByRut(Rut);
+        searchPatient = patientFacade.searchByPerson(personId);
+        patient = searchPatient.get(0);
+        searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
+        searchEpisode = episodeFacade.searchByClinicalRegister(searchClinicalRecord.get(0));
+
+        for (int i = 0; i < familyHistory.length; i++) {
+            newAntmedido = new Antmedidos();
+            System.out.println(familyHistory[i]);
+
+            searchAntecedente = antecedentesFacade.searchByName(familyHistory[i]);
+
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor("Seleccionado");
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+
+        }
+
+        for (int i = 0; i < personalHistory.length; i++) {
+            newAntmedido = new Antmedidos();
+            System.out.println(personalHistory[i]);
+
+            searchAntecedente = antecedentesFacade.searchByName(personalHistory[i]);
+
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor("Seleccionado");
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (reasonAbortion.equals("")) {
+
+        } else {
+            System.out.println(reasonAbortion);
+        }
+
+        for (int i = 0; i < bornCheck.length; i++) {
+            System.out.println(bornCheck[i]);
+        }
+
+        for (int i = 0; i < estimated.length; i++) {
+            System.out.println(estimated[i]);
+        }
+
+        for (int i = 0; i < HCTOCheck.length; i++) {
+            System.out.println(HCTOCheck[i]);
+        }
+
+        System.out.println("Personales: " + listAntMedidos.size());
+
+        for (int j = 0; j < listAntMedidos.size(); j++) {
+            antmedidosFacade.create(listAntMedidos.get(j));
+        }
     }
 
     public String[] getHCTOCheck() {
@@ -81,8 +179,6 @@ public class PerinatalHistory {
     public void setHCTOCheck(String[] HCTOCheck) {
         this.HCTOCheck = HCTOCheck;
     }
-    
-
 
     public double getHTCTOFloat() {
         return HTCTOFloat;
@@ -115,7 +211,7 @@ public class PerinatalHistory {
     public void setCantCigars(int cantCigars) {
         this.cantCigars = cantCigars;
     }
-   
+
     public String getExaminationCN() {
         return examinationCN;
     }
@@ -186,8 +282,7 @@ public class PerinatalHistory {
 
     public void setVDRLOption(String VDRLOption) {
         this.VDRLOption = VDRLOption;
-    }  
-    
+    }
 
     public String getBlood() {
         return blood;
@@ -212,7 +307,7 @@ public class PerinatalHistory {
     public void setSensitized(String sensitized) {
         this.sensitized = sensitized;
     }
-    
+
     public int getSize() {
         return size;
     }
@@ -220,8 +315,7 @@ public class PerinatalHistory {
     public void setSize(int size) {
         this.size = size;
     }
-   
-    
+
     public int getCurrentWeight() {
         return currentWeight;
     }
@@ -309,7 +403,7 @@ public class PerinatalHistory {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
+
     public int getDeeds() {
         return deeds;
     }
@@ -398,7 +492,6 @@ public class PerinatalHistory {
         this.RNHeavier = RNHeavier;
     }
 
-    
     public String getReasonAbortion() {
         return reasonAbortion;
     }
@@ -422,7 +515,5 @@ public class PerinatalHistory {
     public void setPersonalHistory(String[] personalHistory) {
         this.personalHistory = personalHistory;
     }
-    
-    
-    
+
 }

@@ -26,6 +26,26 @@ import javax.servlet.http.HttpServletResponse;
  * @author Gustavo Salvo Lara
  */
 public class ConcentForm extends HttpServlet {
+    
+    private String institution = "Hospital Barros Luco";
+    private String address = "Calle tanto numero tanto";
+    private String city = "Santiago";
+    private String personName = "Nombre de la persona que notifica";
+    private Integer rut = 17409487;
+    
+    private String patientName = "Bernarda";
+    private Integer patientRut = 6972769;
+    private String patientFonasa = "Fonasa del paciente";
+    private String patientIsapre = "Isapre del paciente";
+    private String home = "Casa tanto bla bla";
+    private String commune = "La florida";
+    private String region = "Metropolitana";
+    private String phoneNumber = "2972493";
+    private String celularNumber = "86652272";
+    private String mail = "proyectista@hotmail.com";
+    
+    private String ges = "true";
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -92,15 +112,15 @@ public class ConcentForm extends HttpServlet {
             cellRow1.setBorderWidthRight(1);
             cellRow1.setBorderWidthBottom(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "INSTITUCIÓN (Hospital, Clínica, Consultorio,etc): " + "-", type);
+            p1 = new Paragraph(space, "INSTITUCIÓN (Hospital, Clínica, Consultorio,etc): " + institution, type);
             cellRow1 = new PdfPCell(p1);
             cellRow1.setColspan(2);
             formatCellBorder(cellRow1, 20);
             cellRow1.setBorderWidthLeft(1);
             cellRow1.setBorderWidthRight(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "DIRECCION: " + "-", type);
-            p2 = new Paragraph(space, "CIUDAD: " + "-", type);
+            p1 = new Paragraph(space, "DIRECCION: " + address, type);
+            p2 = new Paragraph(space, "CIUDAD: " + city, type);
             cellRow1 = new PdfPCell(p1);
             cellRow2 = new PdfPCell(p2);
             formatCellBorder(cellRow1, 20);
@@ -109,8 +129,8 @@ public class ConcentForm extends HttpServlet {
             cellRow2.setBorderWidthRight(1);
             table.addCell(cellRow1);
             table.addCell(cellRow2);
-            p1 = new Paragraph(space, "NOMBRE PERSONA QUE NOTIFICA: " + "-", type);
-            p2 = new Paragraph(space, "RUT: " + "-", type);
+            p1 = new Paragraph(space, "NOMBRE PERSONA QUE NOTIFICA: " + personName, type);
+            p2 = new Paragraph(space, "RUT: " + rut, type);
             cellRow1 = new PdfPCell(p1);
             cellRow2 = new PdfPCell(p2);
             formatCellBorder(cellRow1, 20);
@@ -136,15 +156,15 @@ public class ConcentForm extends HttpServlet {
             cellRow1.setBorderWidthRight(1);
             cellRow1.setBorderWidthBottom(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "NOMBRE: " + "-", type);
+            p1 = new Paragraph(space, "NOMBRE: " + patientName, type);
             cellRow1 = new PdfPCell(p1);
             cellRow1.setColspan(2);
             formatCellBorder(cellRow1, 20);
             cellRow1.setBorderWidthLeft(1);
             cellRow1.setBorderWidthRight(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "RUT: " + "-", type);
-            p2 = new Paragraph(space, "FONASA: " + "-", type);
+            p1 = new Paragraph(space, "RUT: " + patientRut, type);
+            p2 = new Paragraph(space, "FONASA: " + patientFonasa, type);
             cellRow1 = new PdfPCell(p1);
             cellRow2 = new PdfPCell(p2);
             formatCellBorder(cellRow1, 20);
@@ -153,8 +173,8 @@ public class ConcentForm extends HttpServlet {
             cellRow2.setBorderWidthRight(1);
             table.addCell(cellRow1);
             table.addCell(cellRow2);
-            p1 = new Paragraph(space, "ISAPRE: " + "-", type);
-            p2 = new Paragraph(space, "DOMICILIO: " + "-", type);
+            p1 = new Paragraph(space, "ISAPRE: " + patientIsapre, type);
+            p2 = new Paragraph(space, "DOMICILIO: " + home, type);
             cellRow1 = new PdfPCell(p1);
             cellRow2 = new PdfPCell(p2);
             formatCellBorder(cellRow1, 20);
@@ -163,8 +183,8 @@ public class ConcentForm extends HttpServlet {
             cellRow2.setBorderWidthRight(1);            
             table.addCell(cellRow1);
             table.addCell(cellRow2);
-            p1 = new Paragraph(space, "COMUNA: " + "-", type);
-            p2 = new Paragraph(space, "REGION: " + "-", type);
+            p1 = new Paragraph(space, "COMUNA: " + commune, type);
+            p2 = new Paragraph(space, "REGION: " + region, type);
             cellRow1 = new PdfPCell(p1);
             cellRow2 = new PdfPCell(p2);
             formatCellBorder(cellRow1, 20);
@@ -173,8 +193,8 @@ public class ConcentForm extends HttpServlet {
             cellRow2.setBorderWidthRight(1);            
             table.addCell(cellRow1);
             table.addCell(cellRow2);
-            p1 = new Paragraph(space, "N° TELÉFONO FIJO: " + "-", type);
-            p2 = new Paragraph(space, "N° TELÉFONO CELULAR: " + "-", type);
+            p1 = new Paragraph(space, "N° TELÉFONO FIJO: " + phoneNumber, type);
+            p2 = new Paragraph(space, "N° TELÉFONO CELULAR: " + celularNumber, type);
             cellRow1 = new PdfPCell(p1);
             cellRow2 = new PdfPCell(p2);
             formatCellBorder(cellRow1, 20);
@@ -183,7 +203,7 @@ public class ConcentForm extends HttpServlet {
             cellRow2.setBorderWidthRight(1);            
             table.addCell(cellRow1);
             table.addCell(cellRow2);
-            p1 = new Paragraph(space, "DIRECCIÓN CORREO ELECTRÓNICO (E-MAIL): " + "-", type);
+            p1 = new Paragraph(space, "DIRECCIÓN CORREO ELECTRÓNICO (E-MAIL): " + mail, type);
             cellRow1 = new PdfPCell(p1);
             cellRow1.setColspan(2);
             formatCellBorder(cellRow1, 20);
@@ -214,7 +234,7 @@ public class ConcentForm extends HttpServlet {
             cellRow1.setBorderWidthLeft(1);
             cellRow1.setBorderWidthRight(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "___", type);
+            p1 = new Paragraph(space, ges, type);
             cellRow1 = new PdfPCell(p1);
             cellRow1.setColspan(2);
             formatCellBorder(cellRow1, 20);

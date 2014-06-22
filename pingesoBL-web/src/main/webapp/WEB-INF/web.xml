@@ -14,23 +14,23 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>testPDF</servlet-name>
-        <servlet-class>managedbeanTest.testPDF</servlet-class>
+        <servlet-name>IPD</servlet-name>
+        <servlet-class>IPDGES.IPD</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>concentForm</servlet-name>
-        <servlet-class>managedbeanTest.concentForm</servlet-class>
+        <servlet-name>ConcentForm</servlet-name>
+        <servlet-class>IPDGES.ConcentForm</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>testPDF</servlet-name>
-        <url-pattern>/testPDF</url-pattern>
+        <servlet-name>IPD</servlet-name>
+        <url-pattern>/IPD</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>concentForm</servlet-name>
+        <servlet-name>ConcentForm</servlet-name>
         <url-pattern>/concentForm</url-pattern>
     </servlet-mapping>
     <session-config>

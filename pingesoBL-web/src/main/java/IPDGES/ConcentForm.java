@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package managedbeanTest;
+package IPDGES;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Gustavo Salvo Lara
  */
-public class concentForm extends HttpServlet {
+public class ConcentForm extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -74,39 +74,40 @@ public class PerinatalHistory {
     int RNHeavier = -1;
 
     //embarazo actual
-    int currentWeight;
-    int usualWeight;
-    int size;
-    Date FUR;
-    Date FURO;
+    int currentWeight = -1;
+    int usualWeight = -1;
+    int size = -1;
+    Date FUR = null;
+    Date FURO = null;
     String[] estimated;
-    String doubts;
-    Date FPBirth;
-    int gestationalAge;
-    int numberDays;
-    String doubtsHEA;
-    String reason;
-    String blood;
-    String bloodType;
-    String sensitized;
+    String doubts = "";
+    
+    Date FPBirth = null;
+    int gestationalAge = -1;
+    int numberDays = -1;
+    String doubtsHEA = "";
+    String reason = "";
+    String blood = "";
+    String bloodType = "";
+    String sensitized = "";
 
-    String examinationCN;
-    String examinationMN;
-    String examinationON;
-    String normalPelvis;
-    String normalPapanic;
-    String normalCervix;
-    String VIH;
+    String examinationCN = "";
+    String examinationMN = "";
+    String examinationON = "";
+    String normalPelvis = "";
+    String normalPapanic = "";
+    String normalCervix = "";
+    String VIH = "";
 
-    Date VDRL;
-    String VDRLOption;
+    Date VDRL = null;
+    String VDRLOption = "";
 
     String[] HCTOCheck;
-    double HTCTOFloat;
-    Date HCTODate;
+    double HTCTOFloat = -0.1;
+    Date HCTODate = null;
 
-    String smoker;
-    int cantCigars;
+    String smoker = "";
+    int cantCigars = -1;
 
     public void save() {
         Date fecha = new Date();
@@ -120,7 +121,6 @@ public class PerinatalHistory {
 
         for (int i = 0; i < familyHistory.length; i++) {
             newAntmedido = new Antmedidos();
-            System.out.println(familyHistory[i]);
 
             searchAntecedente = antecedentesFacade.searchByName(familyHistory[i]);
 
@@ -136,7 +136,6 @@ public class PerinatalHistory {
 
         for (int i = 0; i < personalHistory.length; i++) {
             newAntmedido = new Antmedidos();
-            System.out.println(personalHistory[i]);
 
             searchAntecedente = antecedentesFacade.searchByName(personalHistory[i]);
 
@@ -151,7 +150,6 @@ public class PerinatalHistory {
 
         if (deeds > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Gestas");
             newAntmedido.setIdAntmedidos(null);
@@ -165,7 +163,6 @@ public class PerinatalHistory {
 
         if (abortions > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Abortos");
             newAntmedido.setIdAntmedidos(null);
@@ -179,7 +176,6 @@ public class PerinatalHistory {
 
         if (births > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Partos");
             newAntmedido.setIdAntmedidos(null);
@@ -195,9 +191,8 @@ public class PerinatalHistory {
 
         } else {
             newAntmedido = new Antmedidos();
-            System.out.println(reasonAbortion);
 
-            searchAntecedente = antecedentesFacade.searchByName("Abortos");
+            searchAntecedente = antecedentesFacade.searchByName("Abortos razón");
             newAntmedido.setIdAntmedidos(null);
             newAntmedido.setEpisodioid(searchEpisode.get(0));
             newAntmedido.setIdAntecedente(searchAntecedente.get(0));
@@ -209,8 +204,6 @@ public class PerinatalHistory {
 
         for (int i = 0; i < bornCheck.length; i++) {
             newAntmedido = new Antmedidos();
-
-            System.out.println(bornCheck[i]);
 
             searchAntecedente = antecedentesFacade.searchByName(bornCheck[i]);
 
@@ -225,7 +218,6 @@ public class PerinatalHistory {
 
         if (born > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Nacidos vivos");
             newAntmedido.setIdAntmedidos(null);
@@ -239,7 +231,6 @@ public class PerinatalHistory {
 
         if (stillbirths > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Nacidos Muertos");
             newAntmedido.setIdAntmedidos(null);
@@ -253,7 +244,6 @@ public class PerinatalHistory {
 
         if (living > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Vivos");
             newAntmedido.setIdAntmedidos(null);
@@ -267,7 +257,6 @@ public class PerinatalHistory {
 
         if (deadFirstWeek > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Muertos 1° semana");
             newAntmedido.setIdAntmedidos(null);
@@ -281,7 +270,6 @@ public class PerinatalHistory {
 
         if (deadSecondWeek > -1) {
             newAntmedido = new Antmedidos();
-            System.out.println(deeds);
 
             searchAntecedente = antecedentesFacade.searchByName("Muertos 2° a 4° semana");
             newAntmedido.setIdAntmedidos(null);
@@ -319,6 +307,73 @@ public class PerinatalHistory {
 
             listAntMedidos.add(newAntmedido);
         }
+        
+        if (currentWeight > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Peso Actual");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(currentWeight));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (usualWeight > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Peso habitual");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(usualWeight));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (size > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Talla");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(size));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (FUR != null) {
+            String dateFOrmat = dfDateInstance.format(FUR);
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("F.U.R");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(dateFOrmat);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (FURO != null) {
+            String dateFOrmat = dfDateInstance.format(FURO);
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("F.U.R Operacional");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(dateFOrmat);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
 
         for (int i = 0; i < estimated.length; i++) {
             newAntmedido = new Antmedidos();
@@ -331,6 +386,270 @@ public class PerinatalHistory {
             newAntmedido.setEpisodioid(searchEpisode.get(0));
             newAntmedido.setIdAntecedente(searchAntecedente.get(0));
             newAntmedido.setValor("Seleccionado");
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (doubts.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Dudas");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(doubts);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (FPBirth != null) {
+            String dateFOrmat = dfDateInstance.format(FPBirth);
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("F.P. Parto");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(dateFOrmat);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (gestationalAge > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Edad Gestación ingreso");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(gestationalAge));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (numberDays > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("N° de Dias");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(numberDays));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        /*if (doubtsHEA.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Motivo");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(doubtsHEA);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }*/
+        
+        if (reason.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Motivo");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(reason);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (blood.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Grupo de Sangre");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(blood);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (bloodType.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("RH");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(bloodType);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (sensitized.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Sensibilizada");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(sensitized);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (examinationCN.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Ex. clínico normal");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(examinationCN);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (examinationMN.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Ex. mamas normal");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(examinationMN);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (examinationON.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Ex. odont. normal");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(examinationON);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (normalPelvis.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Pelvis normal");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(normalPelvis);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (normalPapanic.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Papanic. normal");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(normalPapanic);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (normalCervix.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Cervix normal");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(normalCervix);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (VIH.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("VIH");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(VIH);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (VDRLOption.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("VLDR valor");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(VDRLOption);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (VDRL != null) {
+            String dateFOrmat = dfDateInstance.format(VDRL);
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("VLDR fecha");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(dateFOrmat);
             newAntmedido.setFecha(fecha);
 
             listAntMedidos.add(newAntmedido);
@@ -351,6 +670,63 @@ public class PerinatalHistory {
 
             listAntMedidos.add(newAntmedido);
         }
+        
+        if (HTCTOFloat > -0.1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("HCTO valor");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(String.valueOf(HTCTOFloat));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (HCTODate != null) {
+            String dateFOrmat = dfDateInstance.format(HCTODate);
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("HCTO fecha");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(dateFOrmat);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (smoker.equals("")) {
+
+        } else {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Fuma");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(smoker);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        if (cantCigars > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Cigarros por día");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(cantCigars));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+        
+        
 
         System.out.println("Personales: " + listAntMedidos.size());
 

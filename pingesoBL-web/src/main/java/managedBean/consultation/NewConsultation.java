@@ -95,16 +95,17 @@ public class NewConsultation {
     private boolean consultationPaused = false;
     private String consultationNotes;
     private String physicalExamination;
+    private String consultationState;
     private int episodeId;
     private boolean pertinence;
     private boolean isGes = false;
-    
+
     @PostConstruct
     public void init() {
         rut = "69727697";
         personId = personFacade.findByRut(Rut);
         searchPatient = patientFacade.searchByPerson(personId);
-        patient= searchPatient.get(0);
+        patient = searchPatient.get(0);
         name = searchPatient.get(0).getPersona().getPersNombres() + " " + searchPatient.get(0).getPersona().getPersApepaterno()
                 + " " + searchPatient.get(0).getPersona().getPersApematerno();
         searchClinicalRecord = clinicalRecordFacade.searchByPaciente(searchPatient.get(0));
@@ -154,7 +155,7 @@ public class NewConsultation {
             }
         }
     }
-    
+
     public void addDiagnoses() {
         if (pathologyNotEmpty() && pathologyExists() && selectOneState()) {
             diagnosticDate = new Date();
@@ -162,7 +163,7 @@ public class NewConsultation {
             pathologyId = diagnosticPathology.getPatologiaid();
             pathologyGes = diagnosticPathology.getPatologiages();
             diagPath = new DiagnosesPathology(diagnosticDate, diagnosticGes, diagnosticState, pathologyId, pathologyName, pathologyGes);
-            if(diagnosticGes == true && diagnosticState.equals("confirmado")){
+            if (diagnosticGes == true && diagnosticState.equals("confirmado")) {
                 isGes = true;
             }
             diagPathList.add(diagPath);
@@ -198,11 +199,9 @@ public class NewConsultation {
     }
     /////////////////////////*Fin validación nuevo diagnostico*////////////////////////////
 
-    public void addConsultation(boolean canceled, boolean paused) {
-        consultationCanceled = canceled;
-        consultationPaused = paused;
-        if (consultationCanceled) {
-            if(notEmptyCanceled()){
+    public void addConsultation() {
+        if (consultationState.equals("cancelada")) {
+            if (notEmptyCanceled()) {
                 if (!notEmptyHipothesis()) {
                     diagnosticHipothesis = "no ingresada.";
                 }
@@ -228,78 +227,170 @@ public class NewConsultation {
                 consultationFacade.create(newConsultation);
                 RequestContext.getCurrentInstance().execute("cancelConsultationDialog.hide()");
                 RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
-                
+
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta cancelada", "");
-                FacesContext.getCurrentInstance().addMessage("", fm);                
-                resetConsultation();   
-            }else{
+                FacesContext.getCurrentInstance().addMessage("", fm);
+                resetConsultation();
+            } else {
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para cancelar la consulta.", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
             }
-        } else if ((notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses())) {
-            //System.out.println("Id del episodio: " + searchEpisode.get(0).getEpisodioid());
-            //searchConsulta = consultaFacade.searchByEpisodio(searchEpisode.get(0));
-            //System.out.println("Hay un total de :" + searchConsultas.size() + " consultas");
-
-            Date date = new Date();
-
-            Consulta newConsultation = new Consulta(null);
-
-            newConsultation.setEpisodioid(searchEpisode.get(0));
-            newConsultation.setHdiagnostica(diagnosticHipothesis);
-            newConsultation.setConsultafecha(date);
-            newConsultation.setCancelada(consultationCanceled);
-            newConsultation.setMotivocancel(canceledReason);
-            newConsultation.setPausada(consultationPaused);
-            newConsultation.setMotivoConsulta(consultationReason);
-            newConsultation.setNotas(consultationNotes);
-            newConsultation.setExploracionFisica(physicalExamination);
-            newConsultation.setPertinencia(pertinence);
-            newConsultation.setEstado("Creada");
-
-            consultationFacade.create(newConsultation);
-
-            for (DiagnosesPathology diagnostic : diagPathList) {
-                Patologia newPatologia = pathologyFacade.searchById(diagnostic.getPathologyId()).get(0);
-                Diagnostico newDiagnostico = new Diagnostico(null);
-                newDiagnostico.setPatologiaid(newPatologia);
-                newDiagnostico.setConsultaid(newConsultation);
-                newDiagnostico.setDiagnosticofecha(diagnostic.getDiagnosticDate());
-                newDiagnostico.setDiagnosticoges(diagnostic.isDiagnosticGes());
-                newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
-                diagnosticFacade.create(newDiagnostico);
-            }
-
-            if (consultationPaused) {
-                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta pausada", "");
-                FacesContext.getCurrentInstance().addMessage("", fm);
-            } else {
-                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta guardada exitosamente", "");
-                FacesContext.getCurrentInstance().addMessage("", fm);
-            }
-            RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
-            resetConsultation();
         } else {
-            if (!notEmptyHipothesis()) {
-                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
-                FacesContext.getCurrentInstance().addMessage("", fm);
-            }
-            if (!notEmptyReason()) {
-                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para la consulta", "");
-                FacesContext.getCurrentInstance().addMessage("", fm);
-            }
-            if (!notEmptyDiagnoses()) {
-                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnóstico", "");
-                FacesContext.getCurrentInstance().addMessage("", fm);
+            if (notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()) {
+                Date date = new Date();
+
+                Consulta newConsultation = new Consulta(null);
+
+                newConsultation.setEpisodioid(searchEpisode.get(0));
+                newConsultation.setHdiagnostica(diagnosticHipothesis);
+                newConsultation.setConsultafecha(date);
+                newConsultation.setCancelada(consultationCanceled);
+                newConsultation.setMotivocancel(canceledReason);
+                newConsultation.setPausada(consultationPaused);
+                newConsultation.setMotivoConsulta(consultationReason);
+                newConsultation.setNotas(consultationNotes);
+                newConsultation.setExploracionFisica(physicalExamination);
+                newConsultation.setPertinencia(pertinence);
+                newConsultation.setEstado(consultationState);
+
+                consultationFacade.create(newConsultation);
+
+                for (DiagnosesPathology diagnostic : diagPathList) {
+                    Patologia newPatologia = pathologyFacade.searchById(diagnostic.getPathologyId()).get(0);
+                    Diagnostico newDiagnostico = new Diagnostico(null);
+                    newDiagnostico.setPatologiaid(newPatologia);
+                    newDiagnostico.setConsultaid(newConsultation);
+                    newDiagnostico.setDiagnosticofecha(diagnostic.getDiagnosticDate());
+                    newDiagnostico.setDiagnosticoges(diagnostic.isDiagnosticGes());
+                    newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
+                    diagnosticFacade.create(newDiagnostico);
+                }
+                RequestContext.getCurrentInstance().execute("dialogEndConsultation.hide()");
+                RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
+                resetConsultation();
+                if(consultationReason.equals("pausada")){
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta pausada", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }else{
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta finalizada", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+            } else {
+                if (!notEmptyHipothesis()) {
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+                if (!notEmptyReason()) {
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para la consulta", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+                if (!notEmptyDiagnoses()) {
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnóstico", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
             }
         }
     }
+    
+    public void addConsultation(String consultationState) {
+        this.consultationState = consultationState;
+        if (consultationState.equals("cancelada")) {
+            if (notEmptyCanceled()) {
+                if (!notEmptyHipothesis()) {
+                    diagnosticHipothesis = "no ingresada.";
+                }
+                if (!notEmptyReason()) {
+                    consultationReason = "no ingresado.";
+                }
+                Date date = new Date();
 
+                Consulta newConsultation = new Consulta(null);
+
+                newConsultation.setEpisodioid(searchEpisode.get(0));
+                newConsultation.setHdiagnostica(diagnosticHipothesis);
+                newConsultation.setConsultafecha(date);
+                newConsultation.setCancelada(consultationCanceled);
+                newConsultation.setMotivocancel(canceledReason);
+                newConsultation.setPausada(consultationPaused);
+                newConsultation.setMotivoConsulta(consultationReason);
+                newConsultation.setNotas(consultationNotes);
+                newConsultation.setExploracionFisica(physicalExamination);
+                newConsultation.setPertinencia(pertinence);
+                newConsultation.setEstado("Creada");
+
+                consultationFacade.create(newConsultation);
+                RequestContext.getCurrentInstance().execute("cancelConsultationDialog.hide()");
+                RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
+
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta cancelada", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+                resetConsultation();
+            } else {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para cancelar la consulta.", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
+            }
+        } else {
+            if (notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()) {
+                Date date = new Date();
+
+                Consulta newConsultation = new Consulta(null);
+
+                newConsultation.setEpisodioid(searchEpisode.get(0));
+                newConsultation.setHdiagnostica(diagnosticHipothesis);
+                newConsultation.setConsultafecha(date);
+                newConsultation.setCancelada(consultationCanceled);
+                newConsultation.setMotivocancel(canceledReason);
+                newConsultation.setPausada(consultationPaused);
+                newConsultation.setMotivoConsulta(consultationReason);
+                newConsultation.setNotas(consultationNotes);
+                newConsultation.setExploracionFisica(physicalExamination);
+                newConsultation.setPertinencia(pertinence);
+                newConsultation.setEstado(consultationState);
+
+                consultationFacade.create(newConsultation);
+
+                for (DiagnosesPathology diagnostic : diagPathList) {
+                    Patologia newPatologia = pathologyFacade.searchById(diagnostic.getPathologyId()).get(0);
+                    Diagnostico newDiagnostico = new Diagnostico(null);
+                    newDiagnostico.setPatologiaid(newPatologia);
+                    newDiagnostico.setConsultaid(newConsultation);
+                    newDiagnostico.setDiagnosticofecha(diagnostic.getDiagnosticDate());
+                    newDiagnostico.setDiagnosticoges(diagnostic.isDiagnosticGes());
+                    newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
+                    diagnosticFacade.create(newDiagnostico);
+                }
+                RequestContext.getCurrentInstance().execute("dialogEndConsultation.hide()");
+                RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
+                resetConsultation();
+                if(consultationReason.equals("pausada")){
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta pausada", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }else{
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta finalizada", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+            } else {
+                if (!notEmptyHipothesis()) {
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una hipótesis", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+                if (!notEmptyReason()) {
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un motivo para la consulta", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+                if (!notEmptyDiagnoses()) {
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar un diagnóstico", "");
+                    FacesContext.getCurrentInstance().addMessage("", fm);
+                }
+            }
+        }
+    }
+    
     /////////////////////////*Validación nueva consulta*////////////////////////////
     public boolean notEmptyCanceled() {
         return !canceledReason.isEmpty();
     }
-    
+
     public boolean notEmptyHipothesis() {
         return !diagnosticHipothesis.isEmpty();
     }
@@ -368,7 +459,7 @@ public class NewConsultation {
     public void setIsGes(boolean isGes) {
         this.isGes = isGes;
     }
-    
+
     public String getRut() {
         return rut;
     }
@@ -512,7 +603,7 @@ public class NewConsultation {
     public void setPertinence(boolean pertinence) {
         this.pertinence = pertinence;
     }
-    
+
     //<!--aqui-->
     public Paciente getPatient() {
         return patient;
@@ -521,8 +612,7 @@ public class NewConsultation {
     public void setPatient(Paciente patient) {
         this.patient = patient;
     }
-    
-    
+
     public List<Muesta> getSearchSamples() {
         return searchSamples;
     }
@@ -561,6 +651,14 @@ public class NewConsultation {
 
     public void setEpisodeId(int episodeId) {
         this.episodeId = episodeId;
+    }
+
+    public String getConsultationState() {
+        return consultationState;
+    }
+
+    public void setConsultationState(String consultationState) {
+        this.consultationState = consultationState;
     }
 
 }

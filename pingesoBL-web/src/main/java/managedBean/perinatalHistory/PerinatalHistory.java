@@ -10,6 +10,7 @@ import entities.Antmedidos;
 import entities.Episodios;
 import entities.Paciente;
 import entities.RegistroClinico;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,16 +61,17 @@ public class PerinatalHistory {
     String[] personalHistory;
     String reasonAbortion = "";
     String[] bornCheck;
-    int deeds;
-    int abortions;
-    int births;
-    int born;
-    int stillbirths;
-    int living;
-    int deadFirstWeek;
-    int deadSecondWeek;
-    Date lastPregnancy;
-    int RNHeavier;
+    int deeds = -1;
+    int abortions = -1;
+    int births = -1;
+    int born = -1;
+    int stillbirths = -1;
+    int living = -1;
+    int deadFirstWeek = -1;
+    int deadSecondWeek = -1;
+    DateFormat dfDateInstance = DateFormat.getDateInstance();
+    Date lastPregnancy = null;
+    int RNHeavier = -1;
 
     //embarazo actual
     int currentWeight;
@@ -147,12 +149,54 @@ public class PerinatalHistory {
             listAntMedidos.add(newAntmedido);
         }
 
+        if (deeds > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Gestas");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(deeds));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (abortions > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Abortos");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(abortions));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (births > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Partos");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(births));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
         if (reasonAbortion.equals("")) {
 
         } else {
             newAntmedido = new Antmedidos();
             System.out.println(reasonAbortion);
-            
+
             searchAntecedente = antecedentesFacade.searchByName("Abortos");
             newAntmedido.setIdAntmedidos(null);
             newAntmedido.setEpisodioid(searchEpisode.get(0));
@@ -165,9 +209,9 @@ public class PerinatalHistory {
 
         for (int i = 0; i < bornCheck.length; i++) {
             newAntmedido = new Antmedidos();
-            
+
             System.out.println(bornCheck[i]);
-            
+
             searchAntecedente = antecedentesFacade.searchByName(bornCheck[i]);
 
             newAntmedido.setIdAntmedidos(null);
@@ -179,11 +223,108 @@ public class PerinatalHistory {
             listAntMedidos.add(newAntmedido);
         }
 
+        if (born > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Nacidos vivos");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(born));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (stillbirths > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Nacidos Muertos");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(stillbirths));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (living > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Vivos");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(living));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (deadFirstWeek > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Muertos 1° semana");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(deadFirstWeek));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (deadSecondWeek > -1) {
+            newAntmedido = new Antmedidos();
+            System.out.println(deeds);
+
+            searchAntecedente = antecedentesFacade.searchByName("Muertos 2° a 4° semana");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(deadSecondWeek));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (lastPregnancy != null) {
+            String dateFOrmat = dfDateInstance.format(lastPregnancy);
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("Término último embarazo");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(dateFOrmat);
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
+        if (RNHeavier > -1) {
+            newAntmedido = new Antmedidos();
+
+            searchAntecedente = antecedentesFacade.searchByName("RN con mayor peso");
+            newAntmedido.setIdAntmedidos(null);
+            newAntmedido.setEpisodioid(searchEpisode.get(0));
+            newAntmedido.setIdAntecedente(searchAntecedente.get(0));
+            newAntmedido.setValor(Integer.toString(RNHeavier));
+            newAntmedido.setFecha(fecha);
+
+            listAntMedidos.add(newAntmedido);
+        }
+
         for (int i = 0; i < estimated.length; i++) {
             newAntmedido = new Antmedidos();
-            
+
             System.out.println(estimated[i]);
-            
+
             searchAntecedente = antecedentesFacade.searchByName(estimated[i]);
 
             newAntmedido.setIdAntmedidos(null);
@@ -197,9 +338,9 @@ public class PerinatalHistory {
 
         for (int i = 0; i < HCTOCheck.length; i++) {
             newAntmedido = new Antmedidos();
-            
+
             System.out.println(HCTOCheck[i]);
-            
+
             searchAntecedente = antecedentesFacade.searchByName(HCTOCheck[i]);
 
             newAntmedido.setIdAntmedidos(null);

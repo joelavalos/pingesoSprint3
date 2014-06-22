@@ -40,6 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Episodios.findByEpisodioid", query = "SELECT e FROM Episodios e WHERE e.episodioid = :episodioid"),
     @NamedQuery(name = "Episodios.findByRegistroClinico", query = "SELECT e FROM Episodios e WHERE e.registroclinicoid = :registroclinicoid")})
 public class Episodios implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "episodioid")
+    private Collection<Antmedidos> antmedidosCollection;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha")
@@ -146,6 +148,15 @@ public class Episodios implements Serializable {
 
     public void setAbierto(boolean abierto) {
         this.abierto = abierto;
+    }
+
+    @XmlTransient
+    public Collection<Antmedidos> getAntmedidosCollection() {
+        return antmedidosCollection;
+    }
+
+    public void setAntmedidosCollection(Collection<Antmedidos> antmedidosCollection) {
+        this.antmedidosCollection = antmedidosCollection;
     }
 
 }

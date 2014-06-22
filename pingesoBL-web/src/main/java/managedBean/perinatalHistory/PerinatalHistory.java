@@ -18,8 +18,7 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class PerinatalHistory {
 
-    String[] familyHistory;
-    
+    String[] familyHistory;    
     String[] personalHistory;
     String reasonAbortion;
     String[] bornCheck;
@@ -40,7 +39,7 @@ public class PerinatalHistory {
     int size;
     Date FUR;
     Date FURO;
-    String[] estimated = new String[4];
+    String[] estimated;
     String doubts;
     Date FPBirth;
     int gestationalAge;
@@ -63,20 +62,27 @@ public class PerinatalHistory {
     Date VDRL;
     String VDRLOption;
     
-    String HCTOCheck;
+    String[] HCTOCheck;
     double HTCTOFloat;
     Date HCTODate;
     
     String smoker;
     int cantCigars ;
+    
+    public void save(){
+        System.out.println(HCTOCheck[0]);
+        System.out.println(familyHistory[0]);
+    }
 
-    public String getHCTOCheck() {
+    public String[] getHCTOCheck() {
         return HCTOCheck;
     }
 
-    public void setHCTOCheck(String HCTOCheck) {
+    public void setHCTOCheck(String[] HCTOCheck) {
         this.HCTOCheck = HCTOCheck;
     }
+    
+
 
     public double getHTCTOFloat() {
         return HTCTOFloat;
@@ -304,16 +310,6 @@ public class PerinatalHistory {
         this.reason = reason;
     }
     
-    
-    
-    
-    public void test(){
-        for(int i = 0 ; i< 5; i++){
-            System.out.println(familyHistory[i]);
-            System.out.println(personalHistory[i]);
-        }
-    }
-
     public int getDeeds() {
         return deeds;
     }

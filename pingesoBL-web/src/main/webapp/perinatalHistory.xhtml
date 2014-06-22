@@ -24,18 +24,18 @@
                             <p:outputLabel value="FAMILIARES"/>
                             <p:outputLabel value="PERSONALES"/>
                             <p:selectManyCheckbox id="familyHistory" value="#{perinatalHistory.familyHistory}"  layout="grid" columns="1">
-                                <f:selectItem itemLabel="Diabetes" itemValue="Diabetes" />
-                                <f:selectItem itemLabel="TBC Pulmonar" itemValue="TBC Pulmonar" />
-                                <f:selectItem itemLabel="Hipertensión" itemValue="Hipertensión" />
-                                <f:selectItem itemLabel="Gemelares" itemValue="Gemelares" />
-                                <f:selectItem itemLabel="Otros" itemValue="otros" />
+                                <f:selectItem itemLabel="Diabetes" itemValue="fDiabetes" />
+                                <f:selectItem itemLabel="TBC Pulmonar" itemValue="fTBC Pulmonar" />
+                                <f:selectItem itemLabel="Hipertensión" itemValue="fHipertensión" />
+                                <f:selectItem itemLabel="Gemelares" itemValue="fGemelares" />
+                                <f:selectItem itemLabel="Otros" itemValue="fotros" />
                             </p:selectManyCheckbox>
                             <p:selectManyCheckbox id="personalHistory" value="#{perinatalHistory.personalHistory}" layout="grid" columns="1" >
-                                <f:selectItem itemLabel="Diabetes" itemValue="Diabetes" />
-                                <f:selectItem itemLabel="TBC Pulmonar" itemValue="TBC Pulmonar" />
-                                <f:selectItem itemLabel="Hipertensión" itemValue="Hipertensión" />
-                                <f:selectItem itemLabel="CIE" itemValue="CIE" />
-                                <f:selectItem itemLabel="Otros" itemValue="otros" />
+                                <f:selectItem itemLabel="Diabetes" itemValue="pDiabetes" />
+                                <f:selectItem itemLabel="TBC Pulmonar" itemValue="pTBC Pulmonar" />
+                                <f:selectItem itemLabel="Hipertensión" itemValue="pHipertensión" />
+                                <f:selectItem itemLabel="CIE" itemValue="pCIE" />
+                                <f:selectItem itemLabel="Otros" itemValue="potros" />
                             </p:selectManyCheckbox>
 
 
@@ -46,13 +46,13 @@
                             <h:outputLabel for="abortions" value="Abortos" />
                             <p:spinner id="abortions" value="#{perinatalHistory.abortions}" min="0" max="99"  size="1" />
 
-                            <p:selectManyMenu id="basic" value="#{perinatalHistory.reasonAbortion}">
+                            <p:selectOneRadio id="basic" value="#{perinatalHistory.reasonAbortion}" layout="grid" columns="1">
                                 <f:selectItem itemLabel="Provocados" itemValue="Provocados"/>
                                 <f:selectItem itemLabel="Espontaneos" itemValue="Espontaneos"/>
                                 <f:selectItem itemLabel="Sépticos" itemValue="Sépticos"/>
                                 <f:selectItem itemLabel="Molar" itemValue="Molar"/>
                                 <f:selectItem itemLabel="Eptópico" itemValue="Eptópico"/>
-                            </p:selectManyMenu>
+                            </p:selectOneRadio>
 
 
                             <h:outputLabel for="births" value="Partos:" />
@@ -90,7 +90,7 @@
 
                         </p:panelGrid>
 
-                        <p:commandButton value="holo" actionListener="#{perinatalHistory.test()}"/>
+                        
                     </p:tab>
                     <p:tab title="Embarazo Actual">
 
@@ -255,7 +255,7 @@
                                         <f:selectItem itemLabel="-" itemValue="-" />
                                     </p:selectOneRadio>  
                                     <p:calendar id="VDRL" value="#{perinatalHistory.VDRL}" />
-                                    
+
                                 </p:column>
                                 <p:column>
                                     <p:selectManyCheckbox id="HCTOCheck" value="#{perinatalHistory.HCTOCheck}" layout="grid" columns="1" >
@@ -278,6 +278,10 @@
                         </p:panelGrid>
                     </p:tab>                
                 </p:tabView>
+                <p:panelGrid columns="2">                    
+                    <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{perinatalHistory.save}"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" />
+                </p:panelGrid>
             </h:form>
         </p:dialog>
 

@@ -201,7 +201,7 @@
                                 </p:column>
 
                                 <p:column headerText="Valor">
-                                    <h:outputText value="#{samplePatients.valor}" />
+                                    <h:outputText value="#{samplePatients.valor} #{samplePatients.idSvitales.unidad}" />
                                 </p:column>
                                 <f:facet name="footer">
                                     <p:commandButton value="Historial Signos Vitales" icon="ui-icon-calendar" onclick="previousVitalSignsDialog.show();" />
@@ -503,29 +503,36 @@
         <p:dialog header="Nuevos Signos Vitales" id="newVitalSigns" widgetVar="newVitalSignsDialog" minimizable="true">
             <p:ajax event="close" listener="#{viewVitalSigns.update()}" update=":newConsultationForm:samplePatientsTable"/>
             <h:form id="newVitalSignsForm">
-                <p:panelGrid styleClass="panelGridForm" columns="4">
+                <p:panelGrid styleClass="panelGridForm" columns="6">
                     <p:outputLabel value="Peso: "/>
-                    <p:inputText value="#{addVitalSigns.peso}"/>
+                    <p:spinner value="#{addVitalSigns.peso}" size="1" max="#{addVitalSigns.maxPeso}" min="#{addVitalSigns.minPeso}" />
+                    <p:outputLabel value="#{addVitalSigns.unitPeso}" />
                     <p:outputLabel value="Altura: "/>
-                    <p:inputText value="#{addVitalSigns.altura}"/>
+                    <p:spinner value="#{addVitalSigns.altura}" size="1" max="#{addVitalSigns.maxAltura}" min="#{addVitalSigns.minAltura}" />
+                    <p:outputLabel value="#{addVitalSigns.unitAltura}" />
                     <p:outputLabel value="Temperatura: "/>
-                    <p:inputText value="#{addVitalSigns.temperatura}"/>
+                    <p:spinner  value="#{addVitalSigns.temperatura}" size="1" max="#{addVitalSigns.maxTemperatura}" min="#{addVitalSigns.minTemperatura}" />
+                    <p:outputLabel value="#{addVitalSigns.unitTemperatura}" />
                     <p:outputLabel value="Saturación O2: "/>
-                    <p:inputText value="#{addVitalSigns.saturacion}"/>
+                    <p:spinner value="#{addVitalSigns.saturacion}" size="1" max="#{addVitalSigns.maxSaturacion}" min="#{addVitalSigns.minSaturacion}"/>
+                    <p:outputLabel value="#{addVitalSigns.unitSaturacion}" />
                     <p:outputLabel value="Presión Sistólica: "/>
-                    <p:inputText value="#{addVitalSigns.presionSistolica}"/>
+                    <p:spinner value="#{addVitalSigns.presionSistolica}" size="1" max="#{addVitalSigns.maxPresionSistolica}" min="#{addVitalSigns.minPresionSistolica}" />
+                    <p:outputLabel value="#{addVitalSigns.unitPresionSistolica}" />
                     <p:outputLabel value="Presión Diastólica: "/>
-                    <p:inputText value="#{addVitalSigns.presionDiastolica}"/>
+                    <p:spinner value="#{addVitalSigns.presionDiastolica}" size="1" max="#{addVitalSigns.maxPresionDiastolica}" min="#{addVitalSigns.minPresionDiastolica}"/>
+                    <p:outputLabel value="#{addVitalSigns.unitPresionDiastolica}" />
                 </p:panelGrid>
                 <p:separator/>
-                <p:panelGrid columns="4" styleClass="panelGridForm" >
+                <p:panelGrid id="otherSignal" columns="5" styleClass="panelGridForm" >
                     <p:outputLabel value="Nombre signo vital: "/>
-                    <p:selectOneMenu value="#{addVitalSigns.vitalSignsId}"> 
+                    <p:selectOneMenu value="#{addVitalSigns.vitalSignsId}">
+                        <p:ajax listener="#{addVitalSigns.returnGeneralUnit}" update="otherSignal" />
                         <f:selectItem itemLabel="Seleccione" itemValue="0"/>  
                         <f:selectItems id="resGrp" value="#{addVitalSigns.searchVitalSigns}" var="grp" itemLabel="#{grp.nombreSvital}" itemValue="#{grp.idSvitales}"/>  
                     </p:selectOneMenu>
-                    <p:inputText value="#{addVitalSigns.vitalSignsValue}"/>
-
+                    <p:spinner value="#{addVitalSigns.vitalSignsValue}" size="1" max="#{addVitalSigns.maxGeneralUnit}" min="#{addVitalSigns.minGeneralUnit}" />
+                    <p:outputLabel id="unitLabel" value="#{addVitalSigns.generalUnit}"/>
                     <p:commandButton icon="ui-icon-plus" value="Añadir" actionListener="#{addVitalSigns.addVitalSignsPatients()}" update="newVitalSignsForm"/>
                 </p:panelGrid>
                 <p:panelGrid styleClass="panelGridForm" columns="1">
@@ -539,7 +546,10 @@
                             <h:outputText value="#{vSigns.idSvitales.nombreSvital}" />
                         </p:column>
                         <p:column headerText="Valor">
-                            <h:outputText value="#{vSigns.valor}" />
+                            <h:outputText value="#{vSigns.valor} #{vSigns.idSvitales.unidad}" />
+                        </p:column>
+                        <p:column style="width:30px;text-align: center">
+                            <p:commandButton update="tableVitalSigns" actionListener="#{addVitalSigns.deleteVitalSignal(vSigns)}" icon="ui-icon-trash" title="Eliminar"/>                           
                         </p:column>
                     </p:dataTable>
                 </p:panelGrid>
@@ -655,7 +665,7 @@
                                 </p:column>
 
                                 <p:column headerText="Valor">
-                                    <h:outputText value="#{samplePatients.valor}" />
+                                    <h:outputText value="#{samplePatients.valor} #{samplePatients.idSvitales.unidad}" />
                                 </p:column>
                                 <f:facet name="footer">
                                     <p:outputLabel value="" />
@@ -719,7 +729,7 @@
                 </p:panelGrid>
             </h:form>
         </p:dialog>
-        
+
     </h:body>
 </html>
 

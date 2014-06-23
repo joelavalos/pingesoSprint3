@@ -98,7 +98,7 @@ public class AddVitalSigns {
     private int minGeneralUnit;
 
     private List<SignosVitales> controllerVitalSigns = new ArrayList<SignosVitales>();
-
+    
     public void returnUnit() {
         for (int i = 0; i < searchVitalSigns.size(); i++) {
 
@@ -137,16 +137,25 @@ public class AddVitalSigns {
     }
 
     public void returnGeneralUnit() {
+        vitalSignsValue = 0;
         if (vitalSignsId == 0) {
             GeneralUnit = "";
-            maxGeneralUnit=0;
-            minGeneralUnit=0;            
+            maxGeneralUnit = 0;
+            minGeneralUnit = 0;            
         } else {
             for (int i = 0; i < searchVitalSigns.size(); i++) {
                 if (searchVitalSigns.get(i).getIdSvitales() == vitalSignsId) {
+                    System.out.println("hola " + searchVitalSigns.get(i).getIdSvitales()+ " altura "+ altura +" Peso: "+ peso );
                     GeneralUnit = searchVitalSigns.get(i).getUnidad();
                     maxGeneralUnit = searchVitalSigns.get(i).getRangoMax();
                     minGeneralUnit = searchVitalSigns.get(i).getRangoMin();
+                    if(searchVitalSigns.get(i).getIdSvitales() == 17 && altura!=0){
+                        System.out.println("RESULTADO");
+                        vitalSignsValue = 87;
+                        System.out.println(peso/(altura)*(altura) +"");
+                        System.out.println("RESULTADO");
+                    }
+                    return;
                 }
             }
         }
@@ -268,10 +277,10 @@ public class AddVitalSigns {
 
         resetVitalSigns();
     }
-    
-    public void deleteVitalSignal(Muesta deleteSample){
-        for(int i = 0; i < createSamples.size(); i++){
-            if(deleteSample.getIdSvitales().equals(createSamples.get(i).getIdSvitales())){
+
+    public void deleteVitalSignal(Muesta deleteSample) {
+        for (int i = 0; i < createSamples.size(); i++) {
+            if (deleteSample.getIdSvitales().equals(createSamples.get(i).getIdSvitales())) {
                 createSamples.remove(i);
                 return;
             }
@@ -279,43 +288,47 @@ public class AddVitalSigns {
     }
 
     public void addVitalSignsPatients() {
-        boolean exists = false;
-        PersonId = personFacade.findByRut(Rut);
-        searchPatient = patientFacade.searchByPerson(PersonId);
-        selectedVitalSign = vitalSignsFacade.searchById(vitalSignsId);
-        List<Muesta> allSamples = sampleFacade.searchByPatient(searchPatient.get(0));
-        max = 0;
-        if (allSamples.isEmpty()) {
-            max = 0;
+        if (vitalSignsId == 0) {
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Seleccione un signo vital", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
         } else {
-            for (int i = 0; i < allSamples.size(); i++) {
-                if (allSamples.get(i).getGrupo() > max) {
-                    max = allSamples.get(i).getGrupo();
-                } else {
+            boolean exists = false;
+            PersonId = personFacade.findByRut(Rut);
+            searchPatient = patientFacade.searchByPerson(PersonId);
+            selectedVitalSign = vitalSignsFacade.searchById(vitalSignsId);
+            List<Muesta> allSamples = sampleFacade.searchByPatient(searchPatient.get(0));
+            max = 0;
+            if (allSamples.isEmpty()) {
+                max = 0;
+            } else {
+                for (int i = 0; i < allSamples.size(); i++) {
+                    if (allSamples.get(i).getGrupo() > max) {
+                        max = allSamples.get(i).getGrupo();
+                    } else {
 
+                    }
+                }
+                max++;
+            }
+            Date fecha = new Date();
+            Muesta newMuesta = new Muesta(null);
+            newMuesta.setValor(vitalSignsValue);
+            newMuesta.setFecha(fecha);
+            newMuesta.setIdPersona(searchPatient.get(0));
+            newMuesta.setIdSvitales(selectedVitalSign.get(0));
+            newMuesta.setGrupo(max);
+            for (Muesta createSample : createSamples) {
+                if (newMuesta.getIdSvitales().equals(createSample.getIdSvitales())) {
+                    exists = true;
                 }
             }
-            max++;
-        }
-        Date fecha = new Date();
-        Muesta newMuesta = new Muesta(null);
-        newMuesta.setValor(vitalSignsValue);
-        newMuesta.setFecha(fecha);
-        newMuesta.setIdPersona(searchPatient.get(0));
-        newMuesta.setIdSvitales(selectedVitalSign.get(0));
-        newMuesta.setGrupo(max);
-        for (Muesta createSample : createSamples) {
-            if (newMuesta.getIdSvitales().equals(createSample.getIdSvitales())) {
-                exists = true;
+            if (!exists) {
+                createSamples.add(newMuesta);
+            } else {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "El signo vital se ha ingresado.", "");
+                FacesContext.getCurrentInstance().addMessage("", fm);
             }
         }
-        if(!exists){
-            createSamples.add(newMuesta);
-        }else{
-            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "El signo vital ya está ingresado.", "");
-            FacesContext.getCurrentInstance().addMessage("", fm);
-        }
-        
     }
 
     public void resetVitalSigns() {
@@ -579,5 +592,5 @@ public class AddVitalSigns {
     public void setMinGeneralUnit(int minGeneralUnit) {
         this.minGeneralUnit = minGeneralUnit;
     }
-
+    
 }

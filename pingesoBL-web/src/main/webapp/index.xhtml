@@ -510,22 +510,26 @@
             <h:form id="newVitalSignsForm">
                 <p:panelGrid styleClass="panelGridForm" columns="6">
                     <p:outputLabel value="Peso: "/>
-                    <p:spinner value="#{addVitalSigns.peso}" size="1" max="#{addVitalSigns.maxPeso}" min="#{addVitalSigns.minPeso}"/>                        
+                    <p:spinner value="#{addVitalSigns.peso}" size="1" max="#{addVitalSigns.maxPeso}" stepFactor="0.1" min="#{addVitalSigns.minPeso}" >
+                        <p:ajax listener="#{addVitalSigns.resultIMC}" update="otherSignal" />
+                    </p:spinner>                        
                     <p:outputLabel value="#{addVitalSigns.unitPeso}" />
                     <p:outputLabel value="Altura: "/>
-                    <p:spinner value="#{addVitalSigns.altura}" size="1" max="#{addVitalSigns.maxAltura}" min="#{addVitalSigns.minAltura}"/>
+                    <p:spinner value="#{addVitalSigns.altura}" size="1" max="#{addVitalSigns.maxAltura}" stepFactor="0.1" min="#{addVitalSigns.minAltura}">
+                        <p:ajax listener="#{addVitalSigns.resultIMC}" update="otherSignal" />
+                    </p:spinner>
                     <p:outputLabel value="#{addVitalSigns.unitAltura}" />
                     <p:outputLabel value="Temperatura: "/>
-                    <p:spinner  value="#{addVitalSigns.temperatura}" size="1" max="#{addVitalSigns.maxTemperatura}" min="#{addVitalSigns.minTemperatura}" />
+                    <p:spinner  value="#{addVitalSigns.temperatura}" size="1" max="#{addVitalSigns.maxTemperatura}" stepFactor="0.1" min="#{addVitalSigns.minTemperatura}" />
                     <p:outputLabel value="#{addVitalSigns.unitTemperatura}" />
                     <p:outputLabel value="Saturación O2: "/>
-                    <p:spinner value="#{addVitalSigns.saturacion}" size="1" max="#{addVitalSigns.maxSaturacion}" min="#{addVitalSigns.minSaturacion}"/>
+                    <p:spinner value="#{addVitalSigns.saturacion}" size="1" max="#{addVitalSigns.maxSaturacion}" stepFactor="0.1" min="#{addVitalSigns.minSaturacion}"/>
                     <p:outputLabel value="#{addVitalSigns.unitSaturacion}" />
                     <p:outputLabel value="Presión Sistólica: "/>
-                    <p:spinner value="#{addVitalSigns.presionSistolica}" size="1" max="#{addVitalSigns.maxPresionSistolica}" min="#{addVitalSigns.minPresionSistolica}" />
+                    <p:spinner value="#{addVitalSigns.presionSistolica}" size="1" max="#{addVitalSigns.maxPresionSistolica}" stepFactor="0.1" min="#{addVitalSigns.minPresionSistolica}" />
                     <p:outputLabel value="#{addVitalSigns.unitPresionSistolica}" />
                     <p:outputLabel value="Presión Diastólica: "/>
-                    <p:spinner value="#{addVitalSigns.presionDiastolica}" size="1" max="#{addVitalSigns.maxPresionDiastolica}" min="#{addVitalSigns.minPresionDiastolica}"/>
+                    <p:spinner value="#{addVitalSigns.presionDiastolica}" size="1" max="#{addVitalSigns.maxPresionDiastolica}" stepFactor="0.1" min="#{addVitalSigns.minPresionDiastolica}"/>
                     <p:outputLabel value="#{addVitalSigns.unitPresionDiastolica}" />
                 </p:panelGrid>
                 <p:separator/>
@@ -536,7 +540,7 @@
                         <f:selectItem itemLabel="Seleccione" itemValue="0"/>  
                         <f:selectItems id="resGrp" value="#{addVitalSigns.searchVitalSigns}" var="grp" itemLabel="#{grp.nombreSvital}" itemValue="#{grp.idSvitales}"/>  
                     </p:selectOneMenu>
-                    <p:spinner value="#{addVitalSigns.vitalSignsValue}" size="1" max="#{addVitalSigns.maxGeneralUnit}" min="#{addVitalSigns.minGeneralUnit}" />
+                    <p:spinner value="#{addVitalSigns.vitalSignsValue}" size="1" max="#{addVitalSigns.maxGeneralUnit}" stepFactor="0.1" min="#{addVitalSigns.minGeneralUnit}" />
                     <p:outputLabel id="unitLabel" value="#{addVitalSigns.generalUnit}"/>
                     <p:commandButton icon="ui-icon-plus" value="Añadir" actionListener="#{addVitalSigns.addVitalSignsPatients()}" update="newVitalSignsForm :newVitalSignsValidation"/>
                 </p:panelGrid>

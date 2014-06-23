@@ -50,7 +50,7 @@ public class AddVitalSigns {
 
     private List<SignosVitales> selectedVitalSign;
     private int vitalSignsId;
-    private int vitalSignsValue;
+    private Double vitalSignsValue= new Double(0);
 
     private List<Paciente> searchPatient;
     private List<RegistroClinico> searchClinicalRecord;
@@ -63,97 +63,101 @@ public class AddVitalSigns {
     private List<Muesta> createSamplesAlways = new ArrayList<Muesta>();
     int max = 0;
 
-    private int peso;
-    private String unitPeso;
-    private int maxPeso;
-    private int minPeso;
+    private Double imc;
 
-    private int altura;
+    private Double peso = new Double(0);
+    private String unitPeso ;
+    private Double maxPeso;
+    private Double minPeso;
+
+    private Double altura= new Double(0);
     private String unitAltura;
-    private int maxAltura;
-    private int minAltura;
+    private Double maxAltura;
+    private Double minAltura;
 
-    private int temperatura;
+    private Double temperatura= new Double(0);
     private String unitTemperatura;
-    private int maxTemperatura;
-    private int minTemperatura;
+    private Double maxTemperatura;
+    private Double minTemperatura;
 
-    private int saturacion;
+    private Double saturacion= new Double(0);
     private String unitSaturacion;
-    private int maxSaturacion;
-    private int minSaturacion;
+    private Double maxSaturacion;
+    private Double minSaturacion;
 
-    private int presionSistolica;
+    private Double presionSistolica= new Double(0);
     private String unitPresionSistolica;
-    private int maxPresionSistolica;
-    private int minPresionSistolica;
+    private Double maxPresionSistolica;
+    private Double minPresionSistolica;
 
-    private int presionDiastolica;
+    private Double presionDiastolica= new Double(0);
     private String unitPresionDiastolica;
-    private int maxPresionDiastolica;
-    private int minPresionDiastolica;
+    private Double maxPresionDiastolica;
+    private Double minPresionDiastolica;
 
     private String GeneralUnit;
-    private int maxGeneralUnit;
-    private int minGeneralUnit;
+    private Double maxGeneralUnit;
+    private Double minGeneralUnit;
 
     private List<SignosVitales> controllerVitalSigns = new ArrayList<SignosVitales>();
-    
+
     public void returnUnit() {
         for (int i = 0; i < searchVitalSigns.size(); i++) {
 
             if (searchVitalSigns.get(i).getNombreSvital().equals("Peso")) {
                 unitPeso = searchVitalSigns.get(i).getUnidad();
-                minPeso = searchVitalSigns.get(i).getRangoMin();
-                maxPeso = searchVitalSigns.get(i).getRangoMax();
+                minPeso = (double) searchVitalSigns.get(i).getRangoMin();
+                maxPeso = (double) searchVitalSigns.get(i).getRangoMax();
             }
             if (searchVitalSigns.get(i).getNombreSvital().equals("Altura")) {
                 unitAltura = searchVitalSigns.get(i).getUnidad();
-                minAltura = searchVitalSigns.get(i).getRangoMin();
-                maxAltura = searchVitalSigns.get(i).getRangoMax();
+                minAltura = (double) searchVitalSigns.get(i).getRangoMin();
+                maxAltura = (double) searchVitalSigns.get(i).getRangoMax();
             }
             if (searchVitalSigns.get(i).getNombreSvital().equals("Temperatura")) {
                 unitTemperatura = searchVitalSigns.get(i).getUnidad();
-                minTemperatura = searchVitalSigns.get(i).getRangoMin();
-                maxTemperatura = searchVitalSigns.get(i).getRangoMax();
+                minTemperatura = (double) searchVitalSigns.get(i).getRangoMin();
+                maxTemperatura = (double) searchVitalSigns.get(i).getRangoMax();
             }
             if (searchVitalSigns.get(i).getNombreSvital().equals("Saturación O2")) {
                 unitSaturacion = searchVitalSigns.get(i).getUnidad();
-                minSaturacion = searchVitalSigns.get(i).getRangoMin();
-                maxSaturacion = searchVitalSigns.get(i).getRangoMax();
+                minSaturacion = (double) searchVitalSigns.get(i).getRangoMin();
+                maxSaturacion = (double) searchVitalSigns.get(i).getRangoMax();
             }
             if (searchVitalSigns.get(i).getNombreSvital().equals("Presión Sistólica")) {
                 unitPresionSistolica = searchVitalSigns.get(i).getUnidad();
-                minPresionSistolica = searchVitalSigns.get(i).getRangoMin();
-                maxPresionSistolica = searchVitalSigns.get(i).getRangoMax();
+                minPresionSistolica = (double) searchVitalSigns.get(i).getRangoMin();
+                maxPresionSistolica = (double) searchVitalSigns.get(i).getRangoMax();
             }
             if (searchVitalSigns.get(i).getNombreSvital().equals("Presión Diastólica")) {
                 unitPresionDiastolica = searchVitalSigns.get(i).getUnidad();
-                minPresionDiastolica = searchVitalSigns.get(i).getRangoMin();
-                maxPresionDiastolica = searchVitalSigns.get(i).getRangoMax();
+                minPresionDiastolica = (double) searchVitalSigns.get(i).getRangoMin();
+                maxPresionDiastolica = (double) searchVitalSigns.get(i).getRangoMax();
             }
 
         }
     }
 
+    public void resultIMC() {
+        if(altura!=0 && peso !=0){
+            imc = Math.rint((peso/((altura/100)*(altura/100)))*100)/100;
+        }
+    }
+
     public void returnGeneralUnit() {
-        vitalSignsValue = 0;
+        vitalSignsValue = 0.0;
         if (vitalSignsId == 0) {
             GeneralUnit = "";
-            maxGeneralUnit = 0;
-            minGeneralUnit = 0;            
+            maxGeneralUnit = 0.0;
+            minGeneralUnit = 0.0;
         } else {
             for (int i = 0; i < searchVitalSigns.size(); i++) {
                 if (searchVitalSigns.get(i).getIdSvitales() == vitalSignsId) {
-                    System.out.println("hola " + searchVitalSigns.get(i).getIdSvitales()+ " altura "+ altura +" Peso: "+ peso );
                     GeneralUnit = searchVitalSigns.get(i).getUnidad();
-                    maxGeneralUnit = searchVitalSigns.get(i).getRangoMax();
-                    minGeneralUnit = searchVitalSigns.get(i).getRangoMin();
-                    if(searchVitalSigns.get(i).getIdSvitales() == 17 && altura!=0){
-                        System.out.println("RESULTADO");
-                        vitalSignsValue = 87;
-                        System.out.println(peso/(altura)*(altura) +"");
-                        System.out.println("RESULTADO");
+                    maxGeneralUnit = (double) searchVitalSigns.get(i).getRangoMax();
+                    minGeneralUnit = (double) searchVitalSigns.get(i).getRangoMin();
+                    if (searchVitalSigns.get(i).getIdSvitales() == 17) {
+                        vitalSignsValue = imc;
                     }
                     return;
                 }
@@ -334,62 +338,61 @@ public class AddVitalSigns {
     public void resetVitalSigns() {
         createSamples.clear();
         max = 0;
-        peso = 0;
-        altura = 0;
-        temperatura = 0;
-        saturacion = 0;
-        presionSistolica = 0;
-        presionDiastolica = 0;
-        max = 0;
+        peso = 0.0;
+        altura = 0.0;
+        temperatura = 0.0;
+        saturacion = 0.0;
+        presionSistolica = 0.0;
+        presionDiastolica = 0.0;
         vitalSignsId = 0;
-        vitalSignsValue = 0;
+        vitalSignsValue = 0.0;
     }
 
-    public int getPeso() {
+    public Double getPeso() {
         return peso;
     }
 
-    public void setPeso(int peso) {
+    public void setPeso(Double peso) {
         this.peso = peso;
     }
 
-    public int getAltura() {
+    public Double getAltura() {
         return altura;
     }
 
-    public void setAltura(int altura) {
+    public void setAltura(Double altura) {
         this.altura = altura;
     }
 
-    public int getTemperatura() {
+    public Double getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(int temperatura) {
+    public void setTemperatura(Double temperatura) {
         this.temperatura = temperatura;
     }
 
-    public int getSaturacion() {
+    public Double getSaturacion() {
         return saturacion;
     }
 
-    public void setSaturacion(int saturacion) {
+    public void setSaturacion(Double saturacion) {
         this.saturacion = saturacion;
     }
 
-    public int getPresionSistolica() {
+    public Double getPresionSistolica() {
         return presionSistolica;
     }
 
-    public void setPresionSistolica(int presionSistolica) {
+    public void setPresionSistolica(Double presionSistolica) {
         this.presionSistolica = presionSistolica;
     }
 
-    public int getPresionDiastolica() {
+    public Double getPresionDiastolica() {
         return presionDiastolica;
     }
 
-    public void setPresionDiastolica(int presionDiastolica) {
+    public void setPresionDiastolica(Double presionDiastolica) {
         this.presionDiastolica = presionDiastolica;
     }
 
@@ -409,11 +412,11 @@ public class AddVitalSigns {
         this.vitalSignsId = vitalSignsId;
     }
 
-    public int getVitalSignsValue() {
+    public Double getVitalSignsValue() {
         return vitalSignsValue;
     }
 
-    public void setVitalSignsValue(int vitalSignsValue) {
+    public void setVitalSignsValue(Double vitalSignsValue) {
         this.vitalSignsValue = vitalSignsValue;
     }
 
@@ -481,116 +484,124 @@ public class AddVitalSigns {
         this.GeneralUnit = GeneralUnit;
     }
 
-    public int getMaxPeso() {
+    public Double getMaxPeso() {
         return maxPeso;
     }
 
-    public void setMaxPeso(int maxPeso) {
+    public void setMaxPeso(Double maxPeso) {
         this.maxPeso = maxPeso;
     }
 
-    public int getMinPeso() {
+    public Double getMinPeso() {
         return minPeso;
     }
 
-    public void setMinPeso(int minPeso) {
+    public void setMinPeso(Double minPeso) {
         this.minPeso = minPeso;
     }
 
-    public int getMaxAltura() {
+    public Double getMaxAltura() {
         return maxAltura;
     }
 
-    public void setMaxAltura(int maxAltura) {
+    public void setMaxAltura(Double maxAltura) {
         this.maxAltura = maxAltura;
     }
 
-    public int getMinAltura() {
+    public Double getMinAltura() {
         return minAltura;
     }
 
-    public void setMinAltura(int minAltura) {
+    public void setMinAltura(Double minAltura) {
         this.minAltura = minAltura;
     }
 
-    public int getMaxTemperatura() {
+    public Double getMaxTemperatura() {
         return maxTemperatura;
     }
 
-    public void setMaxTemperatura(int maxTemperatura) {
+    public void setMaxTemperatura(Double maxTemperatura) {
         this.maxTemperatura = maxTemperatura;
     }
 
-    public int getMinTemperatura() {
+    public Double getMinTemperatura() {
         return minTemperatura;
     }
 
-    public void setMinTemperatura(int minTemperatura) {
+    public void setMinTemperatura(Double minTemperatura) {
         this.minTemperatura = minTemperatura;
     }
 
-    public int getMaxSaturacion() {
+    public Double getMaxSaturacion() {
         return maxSaturacion;
     }
 
-    public void setMaxSaturacion(int maxSaturacion) {
+    public void setMaxSaturacion(Double maxSaturacion) {
         this.maxSaturacion = maxSaturacion;
     }
 
-    public int getMinSaturacion() {
+    public Double getMinSaturacion() {
         return minSaturacion;
     }
 
-    public void setMinSaturacion(int minSaturacion) {
+    public void setMinSaturacion(Double minSaturacion) {
         this.minSaturacion = minSaturacion;
     }
 
-    public int getMaxPresionSistolica() {
+    public Double getMaxPresionSistolica() {
         return maxPresionSistolica;
     }
 
-    public void setMaxPresionSistolica(int maxPresionSistolica) {
+    public void setMaxPresionSistolica(Double maxPresionSistolica) {
         this.maxPresionSistolica = maxPresionSistolica;
     }
 
-    public int getMinPresionSistolica() {
+    public Double getMinPresionSistolica() {
         return minPresionSistolica;
     }
 
-    public void setMinPresionSistolica(int minPresionSistolica) {
+    public void setMinPresionSistolica(Double minPresionSistolica) {
         this.minPresionSistolica = minPresionSistolica;
     }
 
-    public int getMaxPresionDiastolica() {
+    public Double getMaxPresionDiastolica() {
         return maxPresionDiastolica;
     }
 
-    public void setMaxPresionDiastolica(int maxPresionDiastolica) {
+    public void setMaxPresionDiastolica(Double maxPresionDiastolica) {
         this.maxPresionDiastolica = maxPresionDiastolica;
     }
 
-    public int getMinPresionDiastolica() {
+    public Double getMinPresionDiastolica() {
         return minPresionDiastolica;
     }
 
-    public void setMinPresionDiastolica(int minPresionDiastolica) {
+    public void setMinPresionDiastolica(Double minPresionDiastolica) {
         this.minPresionDiastolica = minPresionDiastolica;
     }
 
-    public int getMaxGeneralUnit() {
+    public Double getMaxGeneralUnit() {
         return maxGeneralUnit;
     }
 
-    public void setMaxGeneralUnit(int maxGeneralUnit) {
+    public void setMaxGeneralUnit(Double maxGeneralUnit) {
         this.maxGeneralUnit = maxGeneralUnit;
     }
 
-    public int getMinGeneralUnit() {
+    public Double getMinGeneralUnit() {
         return minGeneralUnit;
     }
 
-    public void setMinGeneralUnit(int minGeneralUnit) {
+    public void setMinGeneralUnit(Double minGeneralUnit) {
         this.minGeneralUnit = minGeneralUnit;
     }
-    
+
+    public Double getImc() {
+        return imc;
+    }
+
+    public void setImc(Double imc) {
+        this.imc = imc;
+    }
+
 }

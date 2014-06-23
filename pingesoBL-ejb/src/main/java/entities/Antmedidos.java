@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Antmedidos.findAll", query = "SELECT a FROM Antmedidos a"),
     @NamedQuery(name = "Antmedidos.findByIdAntmedidos", query = "SELECT a FROM Antmedidos a WHERE a.idAntmedidos = :idAntmedidos"),
     @NamedQuery(name = "Antmedidos.findByFecha", query = "SELECT a FROM Antmedidos a WHERE a.fecha = :fecha"),
-    @NamedQuery(name = "Antmedidos.findByValor", query = "SELECT a FROM Antmedidos a WHERE a.valor = :valor")})
+    @NamedQuery(name = "Antmedidos.findByValor", query = "SELECT a FROM Antmedidos a WHERE a.valor = :valor"),
+    @NamedQuery(name = "Antmedidos.findByGrupo", query = "SELECT a FROM Antmedidos a WHERE a.grupo = :grupo")})
 public class Antmedidos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,6 +55,8 @@ public class Antmedidos implements Serializable {
     @Size(min = 1, max = 140)
     @Column(name = "valor")
     private String valor;
+    @Column(name = "grupo")
+    private Integer grupo;
     @JoinColumn(name = "id_antecedente", referencedColumnName = "id_antecedente")
     @ManyToOne(optional = false)
     private Antecedentes idAntecedente;
@@ -96,6 +99,14 @@ public class Antmedidos implements Serializable {
 
     public void setValor(String valor) {
         this.valor = valor;
+    }
+
+    public Integer getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Integer grupo) {
+        this.grupo = grupo;
     }
 
     public Antecedentes getIdAntecedente() {

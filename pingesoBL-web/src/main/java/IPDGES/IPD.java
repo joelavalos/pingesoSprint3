@@ -14,6 +14,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import entities.IpdGes;
 import entities.Patologia;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +27,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sessionbeans.IpdGesFacadeLocal;
 import sessionbeans.PatologiaFacadeLocal;
 
 /**
@@ -36,6 +38,8 @@ public class IPD extends HttpServlet {
 
     @EJB
     private PatologiaFacadeLocal patologiaFacade;
+    @EJB
+    private IpdGesFacadeLocal ipdGESFacade;
     
     private String healthService = "Servicio de salud";
     private String speciality = "Especialidad";
@@ -50,12 +54,14 @@ public class IPD extends HttpServlet {
     private Date bornDate = new Date(1950-1900, 8-1, 21);
     
     private String healthProblem = "El paciente tiene diabetes";
-    private String augeProblem = "Problema auge";
-    private String augeSubProblem = "Sub diabetes";
-    private String diagnosis = "El paciente fue diagnisticado con diabetes";
-    private String diagnosticBasics = "Fundamento del diagnostico es el azucar";
-    private String treatment = "Insulina bajo esquema";
-    private Date treatmentInit = new Date(2014-1900, 8-1, 12);
+    private String augeProblem;
+    private String augeSubProblem;
+    private String diagnosis;
+    private String diagnosticBasics;
+    private String treatment;
+    private Boolean isGes;
+    private Date deadline;
+
     
     private String professionalName = "Joel";
     private Integer professionalRut = 17409487;
@@ -83,6 +89,16 @@ public class IPD extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        String idGES = request.getParameter("id");
+        IpdGes formulario = ipdGESFacade.searchById(Integer.parseInt(idGES)).get(0);
+        augeProblem = formulario.getProblemaauge();
+        augeSubProblem = formulario.getSubproblemaauge();
+        diagnosis = formulario.getDiagnostico();
+        diagnosticBasics = formulario.getFundamentodiagnostico();
+        treatment = formulario.getTratamientoind();
+        isGes = formulario.getConfirmages();
+        deadline = formulario.getFechalimite();
         
         response.setContentType("application/pdf");
 
@@ -244,7 +260,11 @@ public class IPD extends HttpServlet {
             cellRow1.setBorderWidthLeft(1);
             cellRow1.setBorderWidthRight(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "¿Confirma que el diagnóstico pertenece al sistema AUGE? " + "()SI ()NO", type);
+            if(isGes){
+                p1 = new Paragraph(space, "¿Confirma que el diagnóstico pertenece al sistema AUGE? " + "(X)SI ()NO", type);
+            }else{
+                p1 = new Paragraph(space, "¿Confirma que el diagnóstico pertenece al sistema AUGE? " + "()SI (X)NO", type);                
+            }
             cellRow1 = new PdfPCell(p1);
             cellRow1.setColspan(2);
             formatCellBorder(cellRow1, 20);
@@ -308,7 +328,7 @@ public class IPD extends HttpServlet {
             cellRow1.setBorderWidthLeft(1);
             cellRow1.setBorderWidthRight(1);
             table.addCell(cellRow1);
-            p1 = new Paragraph(space, "El tratamiento deberá iniciarce a más tardar el: " + dfDateInstance.format(treatmentInit), type);
+            p1 = new Paragraph(space, "El tratamiento deberá iniciarse a más tardar el: " + dfDateInstance.format(deadline), type);
             cellRow1 = new PdfPCell(p1);
             cellRow1.setColspan(2);
             formatCellBorder(cellRow1, 20);

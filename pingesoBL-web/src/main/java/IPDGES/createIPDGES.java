@@ -11,14 +11,17 @@ import entities.IpdGes;
 import entities.Paciente;
 import entities.Patologia;
 import entities.RegistroClinico;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import sessionbeans.ConsultaFacadeLocal;
 import sessionbeans.EpisodiosFacadeLocal;
@@ -32,7 +35,7 @@ import sessionbeans.RegistroClinicoFacadeLocal;
  * @author Joel
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class createIPDGES {
 
     @EJB
@@ -72,7 +75,7 @@ public class createIPDGES {
     public createIPDGES() {
     }
 
-    public void createIPDGES() {
+    public void createIPDGES() throws IOException {
         if (hayProblema() && haySubProblema() && hayDiagnostico() && hayFundamento() && hayTratamiento() && hayFechaLimite()) {
             Date today = new Date();
             if(deadline.after(today)){
@@ -100,6 +103,8 @@ public class createIPDGES {
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Formulario IPD agregado", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);
                 RequestContext.getCurrentInstance().execute("newIPDDialog.hide()");
+                
+                RequestContext.getCurrentInstance().execute("window.open('IPD?id="+newIPDGES.getIdIpd()+"')");
             }else{
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe ingresar una fecha posterior a hoy", "");
                 FacesContext.getCurrentInstance().addMessage("", fm);

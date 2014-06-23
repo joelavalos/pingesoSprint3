@@ -622,7 +622,9 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{createIPDGES.createIPDGES()}" update="newIPDForm :newConsultationForm:newConsultationValidation :newIPDValidation" />
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{createIPDGES.createIPDGES()}" update="newIPDForm :newConsultationForm:newConsultationValidation :newIPDValidation">
+                                <f:param name="id" value="1"/>
+                            </p:commandButton>                            
                             <p:commandButton value="Cancelar" icon="ui-icon-close" onclick="newIPDDialog.hide()"/>
                         </p:column>                   
                     </p:row>

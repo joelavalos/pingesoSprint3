@@ -88,10 +88,10 @@ public class NewConsultation {
     private List<DiagnosesPathology> diagPathList = new ArrayList<DiagnosesPathology>();
     private Patologia selectedPathology;
 
-    private String diagnosticHipothesis;
-    private String consultationReason;
+    private String diagnosticHipothesis = "";
+    private String consultationReason = "";
     private boolean consultationCanceled = false;
-    private String canceledReason;
+    private String canceledReason = "";
     private boolean consultationPaused = false;
     private String consultationNotes;
     private String physicalExamination;
@@ -99,6 +99,7 @@ public class NewConsultation {
     private int episodeId;
     private boolean pertinence;
     private boolean isGes = false;
+    private boolean disableEnd = true;
 
     @PostConstruct
     public void init() {
@@ -136,6 +137,7 @@ public class NewConsultation {
             pathologyName = selectedPathology.getPatologianombre();
             pathologyGes = selectedPathology.getPatologiages();
             diagnosticGes = selectedPathology.getPatologiages();
+            resetMoreDiagnoses();
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Diagnóstico seleccionado", "");
             FacesContext.getCurrentInstance().addMessage("", fm);
             RequestContext.getCurrentInstance().execute("pathologyListDialog.hide()");
@@ -222,7 +224,7 @@ public class NewConsultation {
                 newConsultation.setNotas(consultationNotes);
                 newConsultation.setExploracionFisica(physicalExamination);
                 newConsultation.setPertinencia(pertinence);
-                newConsultation.setEstado("Creada");
+                newConsultation.setEstado("Cancelada");
 
                 consultationFacade.create(newConsultation);
                 RequestContext.getCurrentInstance().execute("cancelConsultationDialog.hide()");
@@ -237,6 +239,7 @@ public class NewConsultation {
             }
         } else {
             if (notEmptyHipothesis() && notEmptyReason() && notEmptyDiagnoses()) {
+                System.out.println("ENTRIF");
                 Date date = new Date();
 
                 Consulta newConsultation = new Consulta(null);
@@ -359,9 +362,12 @@ public class NewConsultation {
                     newDiagnostico.setDiagnosticoestado(diagnostic.getDiagnosticState());
                     diagnosticFacade.create(newDiagnostico);
                 }
+                
                 RequestContext.getCurrentInstance().execute("dialogEndConsultation.hide()");
                 RequestContext.getCurrentInstance().execute("newConsultationDialog.hide()");
+                
                 resetConsultation();
+                
                 if(consultationReason.equals("pausada")){
                     FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "Consulta pausada", "");
                     FacesContext.getCurrentInstance().addMessage("", fm);
@@ -404,19 +410,23 @@ public class NewConsultation {
     }
     /////////////////////////*Fin validación nueva consulta*////////////////////////////
 
+    public void selectEnable(){
+        if(!consultationState.isEmpty()){
+            disableEnd = false;
+        }
+    }
+    
     public void resetConsultation() {
+        System.out.println("RESET");
         diagnosticDate = null;
         diagnosticGes = false;
         diagnosticState = "";
         pathologyId = "";
         pathologyName = "";
         pathologyGes = false;
-        //searchPatient.clear();
-        //searchClinicalRecord.clear();
-        //searchEpisode.clear();
+        disableEnd = true;
         diagPath = null;
         diagPathList = new ArrayList<DiagnosesPathology>();
-        selectedPathology = null;
         diagnosticHipothesis = "";
         consultationReason = "";
         consultationCanceled = false;
@@ -426,6 +436,7 @@ public class NewConsultation {
         physicalExamination = "";
         pertinence = false;
         isGes = false;
+        consultationState = "";
         resetDiagnostic();
     }
 
@@ -433,8 +444,13 @@ public class NewConsultation {
         pathologyName = "";
         diagnosticState = "0";
         diagnosticGes = false;
+        resetMoreDiagnoses();
     }
 
+    public void resetMoreDiagnoses(){
+        selectedPathology = null;
+    }
+    
     public void resetCancel() {
         canceledReason = "";
     }
@@ -660,5 +676,15 @@ public class NewConsultation {
     public void setConsultationState(String consultationState) {
         this.consultationState = consultationState;
     }
+
+    public boolean isDisableEnd() {
+        return disableEnd;
+    }
+
+    public void setDisableEnd(boolean disableEnd) {
+        this.disableEnd = disableEnd;
+    }
+    
+    
 
 }

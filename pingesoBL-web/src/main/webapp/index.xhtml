@@ -99,6 +99,7 @@
                             <p:menubar id="consultationMenu">
                                 <p:menuitem value="Datos del Paciente" icon="ui-icon-person" onclick="patientDataDialog.show()" url="#"/>
                                 <p:menuitem value="Ingresar signos vitales" onclick="newVitalSignsDialog.show()" icon="ui-icon-plusthick" url="#"/>
+                                <p:menuitem value="Antecedentes" onclick="" icon="ui-icon-plusthick" url="#"/>
                                 <p:submenu label="Formulario GES" rendered="#{newConsultation.isGes}">
                                     <p:menuitem value="Informe de proceso de diagnóstico" onclick="newIPDDialog.show()" url="#" />
                                     <p:menuitem value="Formulario de consentimiento de información" url="#" disabled="true"/>
@@ -204,7 +205,7 @@
                                     <h:outputText value="#{samplePatients.valor} #{samplePatients.idSvitales.unidad}" />
                                 </p:column>
                                 <f:facet name="footer">
-                                    <p:commandButton value="Historial Signos Vitales" icon="ui-icon-calendar" onclick="previousVitalSignsDialog.show();" />
+                                    <p:commandButton value="Historial Signos Vitales" icon="ui-icon-calendar" actionListener="#{showSamples.loadSamples}" oncomplete="previousVitalSignsDialog.show();" update=":previousVitalSignsForm"/>
                                 </f:facet>
                             </p:dataTable> 
                         </p:column>
@@ -244,7 +245,7 @@
                     <p:row>
                         <p:column colspan="2">
                             <p:commandButton value="Finalizar Consulta" icon="ui-icon-disk" onclick="dialogEndConsultation.show()"/>
-                            <p:commandButton value="Guardar Datos" icon="ui-icon-pause" actionListener="#{newConsultation.addConsultation('pausada')}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
+                            <p:commandButton value="Guardar Datos" icon="ui-icon-pause" actionListener="#{newConsultation.addConsultation('pausada')}" update=":newConsultationForm :newDiagnosticForm :endConsultationForm"/>
                             <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="cancelConsultationDialog.show()">
                                 <f:setPropertyActionListener target="#{newConsultation.consultationState}" value="cancelada"/>
                             </p:commandButton>
@@ -276,7 +277,7 @@
                             <h:outputText value="#{pathology.patologiages ? 'SI': 'NO'}" />
                         </p:column>
                         <f:facet name="footer">
-                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" update=":newDiagnosticForm"/>
+                            <p:commandButton icon="ui-icon-check" value="Seleccionar" actionListener="#{newConsultation.pathologyToAdd}" update=":newDiagnosticForm :pathologyListForm"/>
                             <p:commandButton icon="ui-icon-cancel" onclick="pathologyListDialog.hide()" value="Cancelar" />                             
                         </f:facet> 
                     </p:dataTable>
@@ -295,7 +296,7 @@
                     <p:inputTextarea id="cause" value="#{newConsultation.canceledReason}" cols="50" rows="4" autoResize="false"/>
                 </p:panelGrid>
                 <p:panelGrid columns="2" styleClass="panelGridForm">
-                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation()}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
+                    <p:commandButton id="yes" value="Sí" icon="ui-icon-check" actionListener="#{newConsultation.addConsultation()}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm :endConsultationForm"/>
                     <p:commandButton id="No" value="No" icon="ui-icon-closethick" actionListener="#{newConsultation.resetCancel()}" onclick="cancelConsultationDialog.hide()"/>
                 </p:panelGrid>
             </h:form>
@@ -502,6 +503,7 @@
         <!-- Nuevos signos vitales - ID: 10 -->
         <p:dialog header="Nuevos Signos Vitales" id="newVitalSigns" widgetVar="newVitalSignsDialog" minimizable="true">
             <p:ajax event="close" listener="#{viewVitalSigns.update()}" update=":newConsultationForm:samplePatientsTable"/>
+            <p:growl id="newVitalSignsValidation" life="5000"/>
             <h:form id="newVitalSignsForm">
                 <p:panelGrid styleClass="panelGridForm" columns="6">
                     <p:outputLabel value="Peso: "/>
@@ -533,7 +535,7 @@
                     </p:selectOneMenu>
                     <p:spinner value="#{addVitalSigns.vitalSignsValue}" size="1" max="#{addVitalSigns.maxGeneralUnit}" min="#{addVitalSigns.minGeneralUnit}" />
                     <p:outputLabel id="unitLabel" value="#{addVitalSigns.generalUnit}"/>
-                    <p:commandButton icon="ui-icon-plus" value="Añadir" actionListener="#{addVitalSigns.addVitalSignsPatients()}" update="newVitalSignsForm"/>
+                    <p:commandButton icon="ui-icon-plus" value="Añadir" actionListener="#{addVitalSigns.addVitalSignsPatients()}" update="newVitalSignsForm :newVitalSignsValidation"/>
                 </p:panelGrid>
                 <p:panelGrid styleClass="panelGridForm" columns="1">
                     <p:dataTable id="tableVitalSigns" var="vSigns" value="#{addVitalSigns.createSamples}" 
@@ -549,7 +551,7 @@
                             <h:outputText value="#{vSigns.valor} #{vSigns.idSvitales.unidad}" />
                         </p:column>
                         <p:column style="width:30px;text-align: center">
-                            <p:commandButton update="tableVitalSigns" actionListener="#{addVitalSigns.deleteVitalSignal(vSigns)}" icon="ui-icon-trash" title="Eliminar"/>                           
+                            <p:commandButton actionListener="#{addVitalSigns.deleteVitalSignal(vSigns)}" update="tableVitalSigns" icon="ui-icon-trash" title="Eliminar"/>                           
                         </p:column>
                     </p:dataTable>
                 </p:panelGrid>
@@ -685,7 +687,7 @@
         </p:dialog>
 
         <!-- Finalizar consulta - ID: 13 -->
-        <p:dialog header="Finalizar Consulta" id="endConsultation" widgetVar="dialogEndConsultation" minimizable="true">
+        <p:dialog header="Finalizar Consulta" id="endConsultation" widgetVar="dialogEndConsultation" minimizable="true" appendTo="newConsultation">
             <h:form id="endConsultationForm">
                 <p:outputPanel id="customPanel" style="margin-bottom:5px">
                     <p:outputLabel value="Seleccione un estado de la consulta actual:" />
@@ -721,8 +723,8 @@
                 <p:panelGrid styleClass="panelGridForm">
                     <p:row>
                         <p:column>
-                            <p:commandButton value="Aplicar" icon="ui-icon-check"/>
-                            <p:commandButton value="Finalizar" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation()}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :cancelConsultationForm"/>
+                            <p:commandButton value="Aplicar" icon="ui-icon-check" actionListener="#{newConsultation.selectEnable()}" update=":endConsultationForm:finalizarEnd"/>
+                            <p:commandButton id="finalizarEnd" value="Finalizar" icon="ui-icon-disk" actionListener="#{newConsultation.addConsultation()}" update=":newConsultationForm :newDiagnosticForm :viewEpisodesForm :endConsultationForm" disabled="#{newConsultation.disableEnd}"/>
                             <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="dialogEndConsultation.hide()"/>
                         </p:column>
                     </p:row>

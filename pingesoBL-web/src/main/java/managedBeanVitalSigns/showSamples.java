@@ -73,13 +73,34 @@ public class showSamples {
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
     }
 
+    public void loadSamples(){
+        PersonId = personaFacade.findByRut(Rut);
+        searchPaciente = pacienteFacade.searchByPerson(PersonId);
+        searchSamples = muestaFacade.searchByPatient(searchPaciente.get(0));
+        boolean existe = false;
+        int maxGroup = 0;
+        
+        for (Muesta searchSample : searchSamples) {
+            for (Integer grupo : grupos) {
+                if (grupo == searchSample.getGrupo()) {
+                    existe = true;
+                }
+            }
+            if (existe == false) {
+                grupos.add(searchSample.getGrupo());
+            }
+            existe = false;
+            maxGroup = searchSample.getGrupo();
+        }
+        searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
+    }
+    
     public void showSamples(){
         PersonId = personaFacade.findByRut(Rut);
         searchPaciente = pacienteFacade.searchByPerson(PersonId);
-        searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), samplesId);
-        System.out.println("Fecha seleccionada: " + samplesId);
-        
+        searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), samplesId);   
     }
+    
     public List<Muesta> getSearchSamples() {
         return searchSamples;
     }

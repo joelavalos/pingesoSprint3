@@ -14,8 +14,10 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import sessionbeans.MuestaFacadeLocal;
 import sessionbeans.PacienteFacadeLocal;
 import sessionbeans.PersonaFacadeLocal;
@@ -268,23 +270,19 @@ public class AddVitalSigns {
     }
     
     public void deleteVitalSignal(Muesta deleteSample){
-        System.out.println(deleteSample.getIdMuestra());
-        System.out.println(createSamples.get(0).getIdMuestra());
-//        for(int i = 0; i< createSamples.size();i++){
-//            System.out.println(createSamples.get(i).getIdMuestra());
-//            System.out.println(deleteSample.getIdMuestra());
-//            if(deleteSample.getIdMuestra() == createSamples.get(i).getIdMuestra()){
-//                createSamples.remove(deleteSample);
-//                return;
-//            }
-//        }
+        for(int i = 0; i < createSamples.size(); i++){
+            if(deleteSample.getIdSvitales().equals(createSamples.get(i).getIdSvitales())){
+                createSamples.remove(i);
+                return;
+            }
+        }
     }
 
     public void addVitalSignsPatients() {
+        boolean exists = false;
         PersonId = personFacade.findByRut(Rut);
         searchPatient = patientFacade.searchByPerson(PersonId);
         selectedVitalSign = vitalSignsFacade.searchById(vitalSignsId);
-
         List<Muesta> allSamples = sampleFacade.searchByPatient(searchPatient.get(0));
         max = 0;
         if (allSamples.isEmpty()) {
@@ -300,11 +298,24 @@ public class AddVitalSigns {
             max++;
         }
         Date fecha = new Date();
-        Muesta newMuesta = new Muesta(null, fecha, vitalSignsValue);
+        Muesta newMuesta = new Muesta(null);
+        newMuesta.setValor(vitalSignsValue);
+        newMuesta.setFecha(fecha);
         newMuesta.setIdPersona(searchPatient.get(0));
         newMuesta.setIdSvitales(selectedVitalSign.get(0));
         newMuesta.setGrupo(max);
-        createSamples.add(newMuesta);
+        for (Muesta createSample : createSamples) {
+            if (newMuesta.getIdSvitales().equals(createSample.getIdSvitales())) {
+                exists = true;
+            }
+        }
+        if(!exists){
+            createSamples.add(newMuesta);
+        }else{
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "El signo vital ya está ingresado.", "");
+            FacesContext.getCurrentInstance().addMessage("", fm);
+        }
+        
     }
 
     public void resetVitalSigns() {

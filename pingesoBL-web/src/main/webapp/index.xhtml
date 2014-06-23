@@ -1092,7 +1092,7 @@
                 </p:tabView>
                 <p:panelGrid columns="2" styleClass="panelGridForm">                    
                     <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{perinatalHistory.save}"/>
-                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" />
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="dialogPerinatalHistory.hide()"/>
                 </p:panelGrid>
             </h:form>
         </p:dialog>
@@ -1109,7 +1109,7 @@
                     <p:row>
                         <p:column>
                             <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{generalHistory.save}" update=":generalHistoryValidation"/>
-                            <p:commandButton value="Cancelar" icon="ui-icon-cancel" />
+                            <p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="dialogGeneralHistory.hide()"/>
                         </p:column>
                     </p:row>
                 </p:panelGrid>

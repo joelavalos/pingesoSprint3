@@ -35,15 +35,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Muesta.findByIdMuestra", query = "SELECT m FROM Muesta m WHERE m.idMuestra = :idMuestra"),
     @NamedQuery(name = "Muesta.findByFecha", query = "SELECT m FROM Muesta m WHERE m.fecha = :fecha"),
     @NamedQuery(name = "Muesta.findByValor", query = "SELECT m FROM Muesta m WHERE m.valor = :valor"),
+    @NamedQuery(name = "Muesta.findByGrupo", query = "SELECT m FROM Muesta m WHERE m.grupo = :grupo"),
     @NamedQuery(name = "Muesta.findByPacienteFecha", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona and m.fecha = :fecha"),
     @NamedQuery(name = "Muesta.findByPaciente", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona"),
     @NamedQuery(name = "Muesta.findByPacienteGrupo", query = "SELECT m FROM Muesta m WHERE m.idPersona = :idPersona and m.grupo = :grupo")})
 public class Muesta implements Serializable {
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "grupo")
-    private int grupo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,7 +55,11 @@ public class Muesta implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "valor")
-    private int valor;
+    private double valor;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "grupo")
+    private int grupo;
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
     @ManyToOne
     private Paciente idPersona;
@@ -74,10 +74,11 @@ public class Muesta implements Serializable {
         this.idMuestra = idMuestra;
     }
 
-    public Muesta(Integer idMuestra, Date fecha, int valor) {
+    public Muesta(Integer idMuestra, Date fecha, double valor, int grupo) {
         this.idMuestra = idMuestra;
         this.fecha = fecha;
         this.valor = valor;
+        this.grupo = grupo;
     }
 
     public Integer getIdMuestra() {
@@ -96,12 +97,20 @@ public class Muesta implements Serializable {
         this.fecha = fecha;
     }
 
-    public int getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    public int getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(int grupo) {
+        this.grupo = grupo;
     }
 
     public Paciente getIdPersona() {
@@ -143,14 +152,6 @@ public class Muesta implements Serializable {
     @Override
     public String toString() {
         return "entities.Muesta[ idMuestra=" + idMuestra + " ]";
-    }
-
-    public int getGrupo() {
-        return grupo;
-    }
-
-    public void setGrupo(int grupo) {
-        this.grupo = grupo;
     }
 
 }

@@ -51,7 +51,7 @@ public class vitalSigns {
 
     private List<SignosVitales> selectedVitalSign;
     private int vitalSignsId;
-    private int vitalSignsValor;
+    private float vitalSignsValor;
 
     private List<Paciente> searchPaciente;
     private List<RegistroClinico> searchRegistroClinico;
@@ -221,7 +221,10 @@ public class vitalSigns {
         }
 
         Date fecha = new Date();
-        Muesta newMuesta = new Muesta(null, fecha, vitalSignsValor);
+        Muesta newMuesta = new Muesta(null);
+        
+        newMuesta.setFecha(fecha);
+        newMuesta.setValor(vitalSignsValor);
         newMuesta.setIdPersona(searchPaciente.get(0));
         newMuesta.setIdSvitales(selectedVitalSign.get(0));
         newMuesta.setGrupo(max);
@@ -271,7 +274,7 @@ public class vitalSigns {
         this.selectedVitalSign = selectedVitalSign;
     }
 
-    public int getVitalSignsValor() {
+    public float getVitalSignsValor() {
         return vitalSignsValor;
     }
 

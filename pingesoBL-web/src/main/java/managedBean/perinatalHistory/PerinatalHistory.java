@@ -44,6 +44,9 @@ public class PerinatalHistory {
     private PersonaFacadeLocal personFacade;
     @EJB
     private AntecedentesFacadeLocal antecedentesFacade;
+    
+    private int grupo = 0;
+    private List<Antmedidos> allAntmedidos;
 
     private int personId;
     private Integer Rut = 6972769;
@@ -738,10 +741,27 @@ public class PerinatalHistory {
         
 
         System.out.println("Personales: " + listAntMedidos.size());
-
+        
+        allAntmedidos = antmedidosFacade.findAll();
+        if(allAntmedidos.isEmpty()){
+            grupo = 0;
+        }
+        else{
+            for(int i = 0; i < allAntmedidos.size() ; i++){
+                if(grupo < allAntmedidos.get(i).getGrupo()){
+                    grupo = allAntmedidos.get(i).getGrupo(); 
+                }
+            }
+        }
+        
+        grupo++;
+        
         for (int j = 0; j < listAntMedidos.size(); j++) {
+            listAntMedidos.get(j).setGrupo(grupo);
             antmedidosFacade.create(listAntMedidos.get(j));
         }
+        
+        grupo = 0;
     }
 
     public String[] getHCTOCheck() {

@@ -109,6 +109,15 @@ public class PerinatalHistory {
     String smoker = "";
     int cantCigars = -1;
 
+    public void addDeeds(){
+        
+        deeds = births + abortions;
+    }
+    
+    public void addBorn(){
+        born = living + deadFirstWeek + deadSecondWeek;
+    }
+    
     public void save() {
         Date fecha = new Date();
         listAntMedidos.clear();

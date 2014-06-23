@@ -47,7 +47,9 @@
                                 <p:column>
                                     <p:panelGrid columns="2" styleClass="panelGridForm">                                       
                                         <h:outputLabel for="abortions" value="Abortos" />
-                                        <p:spinner id="abortions" value="#{perinatalHistory.abortions}" min="0" max="99"  size="1" />
+                                        <p:spinner id="abortions" value="#{perinatalHistory.abortions}" min="0" max="99"  size="1">
+                                            <p:ajax event="change" update="deeds"  listener="#{perinatalHistory.addDeeds()}"/> 
+                                        </p:spinner>
                                     </p:panelGrid>
                                     <p:selectOneRadio id="basic" value="#{perinatalHistory.reasonAbortion}" layout="grid" columns="1">
                                         <f:selectItem itemLabel="Provocados" itemValue="Provocados"/>
@@ -62,7 +64,9 @@
                                         <h:outputLabel for="deeds" value="Gestas:" />
                                         <p:spinner id="deeds" value="#{perinatalHistory.deeds}" min="0" max="99"  size="1" />
                                         <h:outputLabel for="births" value="Partos:" />
-                                        <p:spinner id="births" value="#{perinatalHistory.births}" min="0" max="99"  size="1" />
+                                        <p:spinner id="births" value="#{perinatalHistory.births}" min="0" max="99"  size="1" >
+                                            <p:ajax event="change" update="deeds"  listener="#{perinatalHistory.addDeeds()}"/> 
+                                        </p:spinner>
                                     </p:panelGrid>
                                     <p:selectManyCheckbox id="bornCheck" value="#{perinatalHistory.bornCheck}"  layout="grid" columns="1">
                                         <f:selectItem itemLabel="Ninguno o más de 3 partos " itemValue="Ninguno o más de 3 partos" />
@@ -80,19 +84,27 @@
                                         <p:spinner id="born" value="#{perinatalHistory.born}" min="0" max="99"  size="1" />
 
                                         <h:outputLabel for="stillbirths" value="Nacidos Muertos: " />
-                                        <p:spinner id="stillbirths" value="#{perinatalHistory.stillbirths}" min="0" max="99"  size="1" />
+                                        <p:spinner id="stillbirths" value="#{perinatalHistory.stillbirths}" min="0" max="99"  size="1" >
+
+                                        </p:spinner>
 
                                         <h:outputLabel for="living" value="Vivos: " />
-                                        <p:spinner id="living" value="#{perinatalHistory.living}" min="0" max="99"  size="1" />
+                                        <p:spinner id="living" value="#{perinatalHistory.living}" min="0" max="99"  size="1" >
+                                            <p:ajax event="change" update="born"  listener="#{perinatalHistory.addBorn}"/> 
+                                        </p:spinner>
 
                                         <h:outputLabel for="deadFirstWeek" value="Muertos 1° semana: " />
-                                        <p:spinner id="deadFirstWeek" value="#{perinatalHistory.deadFirstWeek}" min="0" max="99"  size="1" />
+                                        <p:spinner id="deadFirstWeek" value="#{perinatalHistory.deadFirstWeek}" min="0" max="99"  size="1" >                                            
+                                            <p:ajax event="change" update="born"  listener="#{perinatalHistory.addBorn}"/> 
+                                        </p:spinner>
                                     </p:panelGrid>
                                 </p:column>
                                 <p:column>
                                     <p:panelGrid columns="2" styleClass="panelGridForm">         
                                         <h:outputLabel for="deadSecondWeek" value="Muertos 2° a 4° semana: " />
-                                        <p:spinner id="deadSecondWeek" value="#{perinatalHistory.deadSecondWeek}" min="0" max="99"  size="1" />
+                                        <p:spinner id="deadSecondWeek" value="#{perinatalHistory.deadSecondWeek}" min="0" max="99"  size="1" >
+                                            <p:ajax event="change" update="born"  listener="#{perinatalHistory.addBorn}"/> 
+                                        </p:spinner>
 
                                         <p:outputLabel for="lastPregnancy" value="Término último embarazo:" />
                                         <p:calendar id="lastPregnancy" value="#{perinatalHistory.lastPregnancy}" />

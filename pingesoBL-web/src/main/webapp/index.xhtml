@@ -196,7 +196,7 @@
                     <p:row>
                         <p:column>
                             <p:dataTable id="samplePatientsTable" var="samplePatients" value="#{viewVitalSigns.searchSamples}" scrollHeight="100" scrollable="true" 
-                                         style="width: 255px;">
+                                         style="width: 255px;" emptyMessage="No se han registrado signos vitales en este día.">
                                 <f:facet name="header">
                                     Signos vitales
                                 </f:facet>

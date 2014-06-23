@@ -5,10 +5,12 @@
  */
 package managedBean.vitalSigns;
 
+import com.sun.glass.ui.SystemClipboard;
 import entities.Muesta;
 import entities.Paciente;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -83,6 +85,16 @@ public class viewVitalSigns {
             maxGroup = searchSample.getGrupo();
         }
         searchSamples = muestaFacade.searchByPatientGroup(searchPaciente.get(0), maxGroup);
+        if (searchSamples.size() > 0) {
+            long dateSample = searchSamples.get(0).getFecha().getTime();
+            long today = (new Date()).getTime();
+            long diference = today - dateSample;
+            double diferenceDay = Math.floor(diference / (1000 * 60 * 60 * 24));
+            if (diferenceDay >= 1) {
+                searchSamples = null;
+            }
+        }
+
     }
 
     public void update() {

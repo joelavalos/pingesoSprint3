@@ -665,7 +665,8 @@
                         </p:outputPanel>
 
                         <p:outputPanel>
-                            <p:dataTable var="samplePatients" value="#{showSamples.searchSamples}" scrollable="true" scrollHeight="100" style="width: 300px;" >
+                            <p:dataTable var="samplePatients" value="#{showSamples.searchSamples}" scrollable="true" scrollHeight="100" style="width: 300px;"
+                                         emptyMessage="El paciente no registra signos vitales anteriores" >
                                 <f:facet name="header">
                                     Signos vitales
                                 </f:facet>

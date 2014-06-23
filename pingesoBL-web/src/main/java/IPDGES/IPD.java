@@ -14,11 +14,16 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import entities.Consulta;
+import entities.Episodios;
 import entities.IpdGes;
 import entities.Patologia;
+import entities.Persona;
+import entities.RegistroClinico;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -27,8 +32,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sessionbeans.ConsultaFacadeLocal;
+import sessionbeans.EpisodiosFacadeLocal;
 import sessionbeans.IpdGesFacadeLocal;
-import sessionbeans.PatologiaFacadeLocal;
+import sessionbeans.PersonaFacadeLocal;
+import sessionbeans.RegistroClinicoFacadeLocal;
 
 /**
  *
@@ -37,23 +45,28 @@ import sessionbeans.PatologiaFacadeLocal;
 public class IPD extends HttpServlet {
 
     @EJB
-    private PatologiaFacadeLocal patologiaFacade;
+    private ConsultaFacadeLocal consultaFacade;
     @EJB
     private IpdGesFacadeLocal ipdGESFacade;
+    @EJB
+    private EpisodiosFacadeLocal episodioFacade;
+    @EJB
+    private RegistroClinicoFacadeLocal registroFacade;
+    @EJB
+    private PersonaFacadeLocal personaFacade;
     
     private String healthService = "Servicio de salud";
     private String speciality = "Especialidad";
     private String establishment = "Establecimiento";
     private String unit = "unidad";
     
-    private String clinicalHistory = "historia clinica";
-    private String patientName = "Bernarda Pincheira";
-    private String sexo = "F";
-    private int age = 45;
-    private Integer Rut = 6972769;
-    private Date bornDate = new Date(1950-1900, 8-1, 21);
+    private String clinicalHistory;
+    private String patientName;
+    private String sexo;
+    private int age;
+    private Integer Rut;
+    private Date bornDate;
     
-    private String healthProblem = "El paciente tiene diabetes";
     private String augeProblem;
     private String augeSubProblem;
     private String diagnosis;
@@ -75,7 +88,7 @@ public class IPD extends HttpServlet {
     Date date = new Date();
     DateFormat dfDateInstance = DateFormat.getDateInstance();
 
-    int numberFolio = 0;
+    int numberFolio;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -92,6 +105,7 @@ public class IPD extends HttpServlet {
         
         String idGES = request.getParameter("id");
         IpdGes formulario = ipdGESFacade.searchById(Integer.parseInt(idGES)).get(0);
+        numberFolio = Integer.parseInt(idGES);
         augeProblem = formulario.getProblemaauge();
         augeSubProblem = formulario.getSubproblemaauge();
         diagnosis = formulario.getDiagnostico();
@@ -99,6 +113,19 @@ public class IPD extends HttpServlet {
         treatment = formulario.getTratamientoind();
         isGes = formulario.getConfirmages();
         deadline = formulario.getFechalimite();
+        Consulta consulta = consultaFacade.find(formulario.getConsultaid().getConsultaid());
+        Episodios episodio = episodioFacade.find(consulta.getEpisodioid().getEpisodioid());
+        RegistroClinico registro = registroFacade.find(episodio.getRegistroclinicoid().getRegistroclinicoid());
+        Persona persona = personaFacade.find(registro.getIdPersona().getIdPersona());
+        clinicalHistory = registro.getRegistroclinicoid().toString();
+        patientName = persona.getPersNombres() + " " + persona.getPersApepaterno() + " " + persona.getPersApematerno();
+        sexo = "F";
+        bornDate = persona.getPersFnacimiento();
+        Calendar today = Calendar.getInstance();
+        Calendar born = Calendar.getInstance();
+        born.setTime(bornDate);
+        age = today.get(Calendar.YEAR) - born.get(Calendar.YEAR);
+        Rut = persona.getPersRut();
         
         response.setContentType("application/pdf");
 
